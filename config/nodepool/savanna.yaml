@@ -1,0 +1,60 @@
+script-dir: /opt/ci/config/modules/openstack_project/files/nodepool/scripts/
+dburi: 'mysql://nodepool@localhost/nodepool'
+
+cron:
+  check: '*/1 * * * *'
+
+zmq-publishers:
+  - tcp://127.0.0.1:8888
+
+gearman-servers:
+  - host: 127.0.0.1
+
+providers:
+  - name: ci-lab
+    username: 'ci-user'
+    password: 'nova'
+    auth-url: 'http://172.18.168.42:5000/v2.0'
+    project-id: 'ci'
+    max-servers: 7
+    boot-timeout: 120
+    pool: public
+    networks:
+      - net-id: 'af9e5af9-38d6-47e4-a437-d7c2d7c6b4f3'
+    images:
+      - name: precise-itests
+        base-image: 'ubuntu-12.04.4'
+        min-ram: 1024
+        private-key: '/etc/nodepool/id_dsa'
+        setup: prepare_node_bare.sh
+      - name: ui
+        base-image: 'ubuntu-12.04.4'
+        min-ram: 4096
+        private-key: '/etc/nodepool/id_dsa'
+        setup: prepare_node_ui.sh
+      - name: precise
+        base-image: 'ubuntu-12.04.4'
+        min-ram: 1024
+        private-key: '/etc/nodepool/id_dsa'
+        setup: prepare_node_bare.sh
+
+targets:
+  - name: savanna-gate
+    jenkins:
+      url: http://127.0.0.1/jenkins
+      user: admin
+      apikey: <JENKINS_APIKEY>
+      credentials-id: <CREDENTIALS_ID>
+    images:
+      - name: ui
+        min-ready: 1
+        providers:
+          - name: ci-lab
+      - name: precise-itests
+        min-ready: 5
+        providers:
+          - name: ci-lab
+      - name: precise
+        min-ready: 1
+        providers:
+          - name: ci-lab

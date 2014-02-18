@@ -1,0 +1,73 @@
+- job-template:
+    name: 'gate-savanna-integration-{plugin}'
+    defaults:
+    concurrent: true
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf savanna-ci-config\
+              \ngit clone https://github.com/stackforge/savanna-ci-config\
+              \nbash -x savanna-ci-config/slave-scripts/gate-savanna-integration-new.sh"
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=$JOB_NAME"
+    node: 'precise-itests'
+
+- project:
+    name: savanna
+    github-org: openstack
+    plugin:
+     - vanilla
+     - hdp
+     - heat-vanilla
+     - heat-hdp
+     - idh
+    jobs:
+     - 'gate-savanna-integration-{plugin}'
+
+- job:                                                                          
+    name: integration-cleanup                                              
+    project-type: freestyle                                                     
+    defaults: global                                                            
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/savanna-ci-config\">https://github.com/stackforge/savanna-ci-config</a></b>\
+                 \n<p>This job destroys vms which were not deleted after integration tests"
+    disabled: false                                                             
+    concurrent: false
+    node: 'master'                                                           
+                                                                                
+    parameters:                                                                 
+      - string:                                                                 
+          name: PREV_BUILD                                                      
+          default: default                                                      
+          description:
+      - string:
+          name: PREV_JOB
+          default:
+          description:                                                          
+                                                                                
+    builders:                                                                   
+    - shell: "bash -x /opt/ci/jenkins-jobs/savanna-ci-config/slave-scripts/integration-cleanup.sh"
+    
+- job:                                                                          
+    name: gate-savanna-pep8-trunk                                             
+    project-type: freestyle                                                     
+    defaults: global                                                            
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/savanna-ci-config\">https://github.com/stackforge/savanna-ci-config</a></b>\
+                 \n<p>This job runs pep8 check using trunk version of hacking"
+    disabled: false                                                             
+    concurrent: true
+    node: 'precise-itests'                                                           
+                                                                                
+    builders:
+    - gerrit-git-prep
+    - shell: "rm -rf savanna-ci-config\
+              \ngit clone https://github.com/stackforge/savanna-ci-config\
+              \nbash -x savanna-ci-config/slave-scripts/gate-savanna-pep8-trunk.sh"
+
+    publishers:
+      - console-log
