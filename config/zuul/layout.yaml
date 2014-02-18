@@ -1,0 +1,64 @@
+includes:
+  - python-file: openstack_functions.py
+
+pipelines:
+  - name: check
+    manager: IndependentPipelineManager
+    trigger:
+      gerrit:
+        - event: patchset-created
+        - event: change-restored
+        - event: comment-added
+          comment_filter: (?i)^\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug)|( savanna-ci)|( sahara-ci))\s*$
+        - event: comment-added
+          require-approval:
+            - username: savanna-ci
+              older-than: 48h
+    start:
+      gerrit:
+        verified: 0
+    success:
+      gerrit:
+        verified: 1
+    failure:
+      gerrit:
+        verified: -1
+  - name: post
+    manager: IndependentPipelineManager
+    trigger:
+      gerrit:
+        - event: change-merged
+        - event: comment-added
+          comment_filter: (?i)^\s*rebuild(( sahara-ci))\s*$
+
+projects:
+  - name: openstack/sahara
+    check:
+      - gate-sahara-integration-vanilla1
+      - gate-sahara-integration-vanilla2
+      - gate-sahara-integration-heat-vanilla1
+      - gate-sahara-integration-hdp
+      - gate-sahara-integration-transient
+      - gate-sahara-integration-idh2
+      - gate-sahara-integration-idh3
+
+  - name: openstack/sahara-dashboard
+    check:
+      - gate-ui-tests
+      
+  - name: openstack/sahara-image-elements
+    check:
+      - diskimage-integration-ubuntu   
+      - diskimage-integration-fedora
+      - diskimage-integration-centos
+    post:
+      - diskimage-integration-ubuntu   
+      - diskimage-integration-fedora
+      - diskimage-integration-centos
+
+jobs:
+  - name: ^.*$
+    parameter-function: set_ci_tenant
+    branch: ^(master|milestone-proposed)$
+  - name: ^.*(idh2|idh3)$
+    branch: ^(stable/icehouse|milestone-proposed)$
