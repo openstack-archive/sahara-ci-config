@@ -1,0 +1,30 @@
+- job:
+    name: gate-ui-tests
+    project-type: freestyle
+    defaults:
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/savanna-ci-config\">https://github.com/stackforge/savanna-ci-config</a></b>\
+                  \n<p><b>Title</b>: Tests for savanna dashboard<br/>\
+                  \n<b>Description</b>: This job installs savanna-dashboars and run selenium tests.<br/>\
+                  \n<b>Maintainer</b>: Vadim Rovachev<br/>"
+    node: ui
+    disabled: false
+    concurrent: false
+
+    builders:
+    - gerrit-git-prep
+    - shell:  "rm -rf savanna-ci-config\
+             \ngit clone https://github.com/stackforge/savanna-ci-config\
+             \nbash -x savanna-ci-config/slave-scripts/gate-ui-tests.sh"
+
+    publishers:
+      - console-log
+      - workspace-cleanup:
+          dirmatch: true
+          fail-build: false
+          clean-if:
+            - success: true
+            - not-built: true
+            - unstable: true
+            - failure: true
+            - aborted: true
