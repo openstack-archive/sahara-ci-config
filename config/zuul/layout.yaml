@@ -1,0 +1,46 @@
+includes:
+  - python-file: openstack_functions.py
+
+pipelines:
+  - name: check
+    manager: IndependentPipelineManager
+    trigger:
+      gerrit:
+        - event: patchset-created
+        - event: change-restored
+        - event: comment-added
+          comment_filter: (?i)^\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug)|( savanna-ci))\s*$
+        - event: comment-added
+          require-approval:
+            - username: savanna-ci
+              older-than: 48h
+    start:
+      gerrit:
+        verified: 0
+    success:
+      gerrit:
+        verified: 1
+    failure:
+      gerrit:
+        verified: -1
+
+projects:
+  - name: openstack/savanna
+    check:
+      - gate-savanna-integration-hdp
+      - gate-savanna-integration-vanilla
+      - gate-savanna-integration-heat-vanilla
+      - gate-savanna-integration-heat-hdp
+      - gate-savanna-integration-idh
+
+  - name: openstack/savanna-dashboard
+    check:
+      - gate-ui-tests
+
+jobs:
+  - name: ^.*$
+    parameter-function: set_log_url
+  - name: gate-savanna-integration-idh
+    voting: true
+  - name: gate-ui-tests
+    parameter-function: single_use_node
