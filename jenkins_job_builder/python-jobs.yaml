@@ -1,0 +1,190 @@
+- job-template:
+    name: '{name}-coverage'
+
+    wrappers:
+      - timeout:
+          timeout: 40
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - coverage:
+          github-org: '{github-org}'
+          project: '{name}'
+
+    publishers:
+      - coverage-log
+      - console-log
+
+    node: '{node}'
+
+
+- job-template:
+    name: 'gate-{name}-pep8'
+
+    builders:
+      - gerrit-git-prep
+      - pep8:
+          github-org: '{github-org}'
+          project: '{name}'
+
+    publishers:
+      - console-log
+
+    node: '{node}'
+
+
+- job-template:
+    name: 'gate-{name}-pylint'
+
+    builders:
+      - gerrit-git-prep
+      - pylint:
+          github-org: '{github-org}'
+          project: '{name}'
+
+    publishers:
+      - console-log
+
+    node: '{node}'
+
+
+- job-template:
+    name: 'gate-{name}-python26'
+
+    wrappers:
+      - timeout:
+          timeout: 60
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - python26:
+          github-org: '{github-org}'
+          project: '{name}'
+      - assert-no-extra-files
+
+    publishers:
+      - test-results
+      - console-log
+
+    node: centos6
+
+- job-template:
+    name: 'gate-{name}-python27'
+
+    wrappers:
+      - timeout:
+          timeout: 40
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - python27:
+          github-org: '{github-org}'
+          project: '{name}'
+      - assert-no-extra-files
+
+    publishers:
+      - test-results
+      - console-log
+
+    node: '{node}'
+
+- job-template:
+    name: 'gate-{name}-python33'
+
+    wrappers:
+      - timeout:
+          timeout: 40
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - python33:
+          github-org: '{github-org}'
+          project: '{name}'
+      - assert-no-extra-files
+
+    publishers:
+      - test-results
+      - console-log
+
+    node: precisepy3k
+
+- job-template:
+    name: 'gate-{name}-pypy'
+
+    wrappers:
+      - timeout:
+          timeout: 40
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - pypy:
+          github-org: '{github-org}'
+          project: '{name}'
+      - assert-no-extra-files
+
+    publishers:
+      - test-results
+      - console-log
+
+    node: precisepy3k
+
+- job-template:
+    name: 'gate-{name}-tox-{envlist}'
+
+    wrappers:
+      - timeout:
+          timeout: 40
+          fail: true
+      - timestamps
+
+    builders:
+      - gerrit-git-prep
+      - tox:
+          envlist: '{envlist}'
+          github-org: '{github-org}'
+          project: '{name}'
+      - assert-no-extra-files
+
+    publishers:
+      - test-results
+      - console-log
+
+    node: '{node}'
+
+- job-template:
+    name: 'gate-{name}-requirements'
+    node: precise
+
+    builders:
+      - gerrit-git-prep
+      - shell: |
+          #!/bin/bash -xe
+          /usr/local/jenkins/slave_scripts/project-requirements-change.py $ZUUL_BRANCH
+
+    publishers:
+      - console-log
+
+
+- job-group:
+    name: python-jobs
+    jobs:
+      - '{name}-coverage'
+      - 'gate-{name}-pep8'
+      - 'gate-{name}-python26'
+      - 'gate-{name}-python27'
+      - 'gate-{name}-python33'
+      - 'gate-{name}-pypy'
+      - 'gate-{name}-requirements'
+      # pylint isn't standard
+      # gate-{name}-tox-{envlist} also isn't standard, but is reserved for
+      # projects that want to run specific jobs via tox
