@@ -1,0 +1,27 @@
+- job-template:
+    name: 'diskimage-integration-{image}'
+    defaults:
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nbash -x sahara-ci-config/scripts/diskimage-creating-integration.sh {image}"
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - console-log
+    node: 'precise'
+
+
+- project:
+    name: sahara-image-elements
+    github-org: openstack
+    image:
+     - ubuntu
+     - fedora
+     - centos
+    jobs:
+     - 'diskimage-integration-{image}'
