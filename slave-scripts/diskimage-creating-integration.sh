@@ -71,7 +71,7 @@ LOG_FILE=/tmp/tox_log.log
 
 SCR_CHECK=$(ps aux | grep screen | grep sahara)
 if [ -n "$SCR_CHECK" ]; then
-     screen -S sahara-api -X quit
+     screen -S sahara-all -X quit
 fi
 
 rm -rf /tmp/cache
@@ -141,7 +141,7 @@ index_url = https://sahara.mirantis.com/pypi/
 
 sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
 
-screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
+screen -dmS sahara-all /bin/bash -c "PYTHONUNBUFFERED=1 sahara-all --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
 
 cd /tmp/sahara
 export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
@@ -238,7 +238,7 @@ fi
 echo "-----------Python integration env-----------"
 cd /tmp/sahara && .tox/integration/bin/pip freeze
 
-screen -S sahara-api -X quit
+screen -S sahara-all -X quit
 
 echo "-----------Python sahara env-----------"
 cd /tmp/sahara && .tox/venv/bin/pip freeze
