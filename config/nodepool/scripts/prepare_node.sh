@@ -27,13 +27,13 @@ sudo bash -xe install_puppet.sh
 sudo git clone https://review.openstack.org/p/openstack-infra/config.git \
     /root/config
 sudo /bin/bash /root/config/install_modules.sh
-if [ -z "$NODEPOOL_SSH_KEY" ] ; then
-    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-	-e "class {'openstack_project::single_use_slave': sudo => $SUDO, bare => $BARE, }"
-else
-    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-	-e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, bare => $BARE, ssh_key => '$NODEPOOL_SSH_KEY', }"
-fi
+#if [ -z "$NODEPOOL_SSH_KEY" ] ; then
+sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
+    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, bare => $BARE, }"
+#else
+#    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
+#   -e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, bare => $BARE, ssh_key => '$NODEPOOL_SSH_KEY', }"
+#fi
 
 sudo mkdir -p /opt/git
 #sudo -i python /opt/nodepool-scripts/cache_git_repos.py
@@ -51,6 +51,12 @@ sudo service mysql stop
 sudo pip install python-glanceclient
 sudo apt-get install qemu kpartx -y
 
-sudo su - jenkins -c "echo 'JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
+#install Sahara requirements
+sudo pip install mysql-python
+cd /tmp && git clone https://github.com/openstack/sahara
+cd sahara && sudo pip install -U -r requirements.txt
+
+sudo su - jenkins -c "echo '
+JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
 sync
 sleep 20

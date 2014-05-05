@@ -18,7 +18,7 @@
     - gerrit-git-prep
     - shell:  "rm -rf sahara-ci-config\
              \ngit clone https://github.com/stackforge/sahara-ci-config\
-             \nbash -x sahara-ci-config/scripts/gate-ui-tests.sh"
+             \nbash -x sahara-ci-config/slave-scripts/gate-ui-tests.sh"
 
     publishers:
       - console-log

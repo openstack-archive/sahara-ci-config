@@ -6,9 +6,14 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/scripts/gate-savanna-integration-new.sh"
+              \nbash -x sahara-ci-config/slave-scripts/gate-savanna-integration-new.sh"
     properties:
       - zeromq-event
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - timestamps
     publishers:
       - console-log
       - trigger-parameterized-builds:
@@ -28,8 +33,6 @@
      - heat-vanilla1
      - heat-vanilla2
      - heat-hdp
-     - idh2
-     - idh3
      - transient
     jobs:
      - 'gate-sahara-integration-{plugin}'
@@ -56,7 +59,9 @@
           description:
 
     builders:
-    - shell: "bash -x /opt/ci/jenkins-jobs/sahara-ci-config/scripts/integration-cleanup.sh"
+    - shell: "rm -rf sahara-ci-config\
+            \ngit clone https://github.com/stackforge/sahara-ci-config\
+            \nbash -x sahara-ci-config/slave-scripts/integration-cleanup.sh"
 
 - job:
     name: gate-savanna-pep8-trunk
@@ -73,7 +78,7 @@
     - gerrit-git-prep
     - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/scripts/gate-savanna-pep8-trunk.sh"
+              \nbash -x sahara-ci-config/slave-scripts/gate-savanna-pep8-trunk.sh"
 
     publishers:
       - console-log

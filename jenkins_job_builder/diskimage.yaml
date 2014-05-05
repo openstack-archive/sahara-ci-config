@@ -6,7 +6,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/scripts/diskimage-creating-integration.sh {image}"
+              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {image}"
 
     properties:
       - zeromq-event
