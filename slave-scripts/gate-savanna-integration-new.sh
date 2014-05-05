@@ -3,6 +3,7 @@
 #this is to fix bug with testtools==0.9.35
 #sed 's/testtools>=0.9.32/testtools==0.9.34/' -i test-requirements.txt
 
+sudo pip install .
 
 export PIP_USE_MIRRORS=True
 
@@ -64,13 +65,7 @@ then
 fi
 if [ $JOB_TYPE == 'transient' ]
 then
-   SSH_USERNAME=ubuntu
-   CINDER_TEST=True
-   CLUSTER_CONFIG_TEST=True
-   EDP_TEST=True
-   MAP_REDUCE_TEST=True
-   SWIFT_TEST=True
-   SCALING_TEST=True
+   EDP_TEST=False
    TRANSIENT_TEST=False
    ONLY_TRANSIENT_TEST=True
    HEAT_JOB=False
@@ -125,10 +120,15 @@ os_admin_password=nova
 os_admin_tenant_name=ci
 use_identity_api_v3=true
 use_neutron=true
-min_transient_cluster_active_time=120
-plugins=vanilla,hdp,idh
 [database]
-connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8" >> etc/sahara/sahara.conf
+connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
+[keystone_authtoken]
+auth_uri=http://172.18.168.42:5000/v2.0/
+identity_uri=http://172.18.168.42:35357/
+admin_user=ci-user
+admin_password=nova
+admin_tenant_name=ci
+" >> etc/sahara/sahara.conf
 
 echo "----------- sahara.conf -----------"
 cat etc/sahara/sahara.conf
@@ -162,14 +162,14 @@ echo "
 index_url = https://sahara.mirantis.com/pypi/
 " > ~/.pydistutils.cfg
 
-tox -evenv -- sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
+sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
 STATUS=`echo $?`
 if [[ "$STATUS" != 0 ]]
 then
     exit 1
 fi
 
-screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 tox -evenv -- sahara-api --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
+screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
 
 
 export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
@@ -314,7 +314,7 @@ cd $WORKSPACE && .tox/integration/bin/pip freeze
 screen -S sahara-api -X quit
 
 echo "-----------Python sahara env-----------"
-cd $WORKSPACE && .tox/venv/bin/pip freeze
+pip freeze
 
 echo "-----------Sahara Log------------"
 cat $WORKSPACE/log.txt

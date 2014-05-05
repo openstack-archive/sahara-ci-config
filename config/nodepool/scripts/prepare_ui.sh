@@ -15,7 +15,7 @@ sudo ufw disable
 
 sudo add-apt-repository ppa:openstack-ubuntu-testing/icehouse -y
 sudo apt-get update
-sudo apt-get install libstdc++5 xvfb nodejs openstack-dashboard xserver-xorg -y
+sudo apt-get install libstdc++5 nodejs openstack-dashboard xserver-xorg -y
 /usr/bin/yes | sudo pip install lesscpy mox
 sudo iptables -F
 sudo sed -i "s/'openstack_dashboard'/'saharadashboard',\n    'openstack_dashboard'/g" /usr/share/openstack-dashboard/openstack_dashboard/settings.py

@@ -56,7 +56,7 @@ CLUSTER_CONFIG_TEST=True
 EDP_TEST=False
 MAP_REDUCE_TEST=False
 SWIFT_TEST=True
-SCALING_TEST=False
+SCALING_TEST=True
 TRANSIENT_TEST=True
 VANILLA_IMAGE=ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
 VANILLA_TWO_IMAGE=ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
@@ -89,6 +89,7 @@ export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
 
 git clone https://review.openstack.org/openstack/sahara
 cd sahara
+sudo pip install .
 
 echo "[DEFAULT]
 " >> etc/sahara/sahara.conf
@@ -104,7 +105,6 @@ os_admin_password=nova
 os_admin_tenant_name=ci
 use_identity_api_v3=true
 use_neutron=true
-plugins=vanilla,hdp,idh
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8" >> etc/sahara/sahara.conf
 
@@ -139,9 +139,9 @@ echo "
 index_url = https://sahara.mirantis.com/pypi/
 " > ~/.pydistutils.cfg
 
-tox -evenv -- sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
+sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
 
-screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 tox -evenv -- sahara-api --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
+screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
 
 cd /tmp/sahara
 export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`

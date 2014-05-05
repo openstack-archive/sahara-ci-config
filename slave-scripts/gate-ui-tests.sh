@@ -65,17 +65,15 @@ os_admin_password=nova
 os_admin_tenant_name=ci
 use_floating_ips=true
 use_neutron=true
-
-plugins=vanilla,hdp,idh
-
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8"  > sahara.conf
 
 git clone https://github.com/openstack/sahara
 cd sahara
+sudo pip install .
 export PIP_USE_MIRRORS=True
-tox -evenv -- sahara-db-manage --config-file $HOME/sahara.conf upgrade head
-screen -dmS sahara /bin/bash -c "PYTHONUNBUFFERED=1 tox -evenv -- sahara-api --config-file $HOME/sahara.conf -d --log-file /tmp/sahara.log"
+sahara-db-manage --config-file $HOME/sahara.conf upgrade head
+screen -dmS sahara /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file $HOME/sahara.conf -d --log-file /tmp/sahara.log"
 
 i=0
 while true
@@ -104,7 +102,7 @@ base_url = 'http://127.0.0.1/horizon'
 user = 'ci-user'
 password = 'nova'
 tenant = 'ci'
-flavor = 'm1.small'
+flavor = 'qa-flavor'
 neutron_management_network = 'private'
 floationg_ip_pool = 'public'
 keystone_url = 'http://172.18.168.42:5000/v2.0'

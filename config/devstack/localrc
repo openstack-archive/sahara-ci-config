@@ -1,6 +1,13 @@
-DEST=/srv/stack
-DATA_DIR=/srv/stack/data
+#CINDER_BRANCH=milestone-proposed
+#GLANCE_BRANCH=milestone-proposed
+#HORIZON_BRANCH=milestone-proposed
+#KEYSTONE_BRANCH=milestone-proposed
+#NOVA_BRANCH=milestone-proposed
+#NEUTRON_BRANCH=milestone-proposed
+#SWIFT_BRANCH=milestone-proposed
+#HEAT_BRANCH=milestone-proposed
 
+#EXTRA_OPTS=(force_config_drive=true libvirt_images_type=qcow2 force_raw_images=false instances_path=/mnt/ramdisk)
 EXTRA_OPTS=(force_config_drive=true libvirt_images_type=qcow2 force_raw_images=false)
 
 ADMIN_PASSWORD=nova
@@ -15,8 +22,6 @@ enable_service s-proxy s-object s-container s-account
 SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
 SWIFT_REPLICAS=1
 SWIFT_LOOPBACK_DISK_SIZE=50G
-SWIFT_DATA_DIR=/opt/swift
-SWIFT_DISK_IMAGE=/opt/swift/drives/swift.img
 
 # Force checkout prerequsites
 # FORCE_PREREQ=1
@@ -25,7 +30,7 @@ VOLUME_BACKING_FILE_SIZE=100000M
 
 # keystone is now configured by default to use PKI as the token format which produces huge tokens.
 # set UUID as keystone token format which is much shorter and easier to work with.
-#KEYSTONE_TOKEN_FORMAT=UUID
+KEYSTONE_TOKEN_FORMAT=UUID
 
 # Change the FLOATING_RANGE to whatever IPs VM is working in.
 # In NAT mode it is subnet VMWare Fusion provides, in bridged mode it is your local network.
