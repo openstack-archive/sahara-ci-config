@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 sudo iptables -F
-sudo apt-get install xserver-xorg -y
 sudo pip install $WORKSPACE
 
 SAVANNA_LOG=/tmp/sahara.log
@@ -98,7 +97,7 @@ sleep 20
 
 echo "
 [common]
-base_url = 'http://127.0.0.1/horizon'
+base_url = 'http://localhost'
 user = 'ci-user'
 password = 'nova'
 tenant = 'ci'
