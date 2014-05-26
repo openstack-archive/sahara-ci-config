@@ -18,6 +18,6 @@
 
 HOSTNAME=$1
 SUDO='true'
-BARE='true'
+THIN='true'
 
-./prepare_node.sh "$HOSTNAME" "$SUDO" "$BARE"
+./prepare_node.sh "$HOSTNAME" "$SUDO" "$THIN"

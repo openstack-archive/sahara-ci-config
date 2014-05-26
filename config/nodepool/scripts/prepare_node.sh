@@ -18,7 +18,7 @@
 
 HOSTNAME=$1
 SUDO=$2
-BARE=$3
+THIN=$3
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
 sudo hostname $HOSTNAME
@@ -29,10 +29,10 @@ sudo git clone https://review.openstack.org/p/openstack-infra/config.git \
 sudo /bin/bash /root/config/install_modules.sh
 #if [ -z "$NODEPOOL_SSH_KEY" ] ; then
 sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, bare => $BARE, }"
+    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, }"
 #else
 #    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-#   -e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, bare => $BARE, ssh_key => '$NODEPOOL_SSH_KEY', }"
+#   -e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, thin => $THIN, ssh_key => '$NODEPOOL_SSH_KEY', }"
 #fi
 
 sudo mkdir -p /opt/git
