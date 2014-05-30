@@ -12,6 +12,14 @@ then
      JOB_TYPE=vanilla-v2
 fi
 
+if [ $JOB_TYPE == 'hdp1' ]                                                  
+then                                                                            
+     JOB_TYPE=hdp-v1                                                        
+elif [ $JOB_TYPE == 'hdp2' ]                                                
+then                                                                            
+     JOB_TYPE=hdp-v2                                                        
+fi
+
 if [ $JOB_TYPE == 'heat' ]
 then
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')

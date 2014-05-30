@@ -19,7 +19,8 @@ SWIFT_TEST=False
 SCALING_TEST=False
 TRANSIENT_TEST=True
 ONLY_TRANSIENT_TEST=False
-HDP_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
+HDP1_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
+HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
 IDH2_IMAGE=intel-noepel
 IDH3_IMAGE=centos-idh-3.0.2
 VANILLA_IMAGE=savanna-itests-ci-vanilla-image
@@ -35,12 +36,19 @@ then
     TRANSIENT_TEST=True
 fi
 
-if [ $JOB_TYPE == 'hdp' ]
+if [ $JOB_TYPE == 'hdp1' ]
 then
-   HDP_JOB=True
-   HDP_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
-   echo "HDP detected"
+   HDP1_JOB=True
+   echo "HDP1 detected"
 fi
+
+if [ $JOB_TYPE == 'hdp2' ]
+then
+   HDP2_JOB=True
+   SSH_USERNAME=root
+   echo "HDP2 detected"
+fi
+
 if [ $JOB_TYPE == 'vanilla1' ]
 then
    VANILLA_JOB=True
@@ -217,14 +225,20 @@ $VANILLA_PARAMS
 
 echo "[HDP]
 SSH_USERNAME = '$SSH_USERNAME'
-IMAGE_NAME = '$HDP_IMAGE'
+IMAGE_NAME = '$HDP1_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_CINDER_TEST = '$CINDER_TEST'
 SKIP_EDP_TEST = $EDP_TEST
 SKIP_MAP_REDUCE_TEST = $MAP_REDUCE_TEST
 SKIP_SWIFT_TEST = $SWIFT_TEST
 SKIP_SCALING_TEST = $SCALING_TEST
-$HDP_PARAMS
+$HDP1_PARAMS
+" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+
+echo "[HDP2]                                                                     
+SSH_USERNAME = '$SSH_USERNAME'                                                  
+IMAGE_NAME = '$HDP2_IMAGE'                                                       
+SKIP_ALL_TESTS_FOR_PLUGIN = False
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 echo "[IDH2]
@@ -270,9 +284,15 @@ if [ "$FAILURE" = 0 ]; then
     export PYTHONUNBUFFERED=1
 
     cd $WORKSPACE
-    if [ $HDP_JOB ]
+    if [ $HDP1_JOB ]
     then
-        tox -e integration -- hdp --concurrency=1
+        tox -e integration -- hdp1 --concurrency=1
+        STATUS=`echo $?`
+    fi
+
+    if [ $HDP2_JOB ]
+    then
+        tox -e integration -- hdp2 --concurrency=1
         STATUS=`echo $?`
     fi
 
