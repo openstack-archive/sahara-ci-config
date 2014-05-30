@@ -10,6 +10,18 @@ zmq-publishers:
 gearman-servers:
   - host: 127.0.0.1
 
+labels:
+  - name:  precise
+    image: precise
+    min-ready: 5
+    providers:
+      - name: ci-lab
+  - name:  ui
+    image: ui
+    min-ready: 1
+    providers:
+      - name: ci-lab
+
 providers:
   - name: ci-lab
     username: 'ci-user'
@@ -39,12 +51,3 @@ targets:
       user: admin
       apikey: JENKINS_API_KEY
       credentials-id: CREDENTIALS_ID
-    images:
-      - name: ui
-        min-ready: 1
-        providers:
-          - name: ci-lab
-      - name: precise
-        min-ready: 5
-        providers:
-          - name: ci-lab
