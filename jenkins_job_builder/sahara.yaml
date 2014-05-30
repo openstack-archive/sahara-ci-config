@@ -29,7 +29,8 @@
     plugin:
      - vanilla1
      - vanilla2
-     - hdp
+     - hdp1
+     - hdp2
      - heat-vanilla1
      - heat-vanilla2
      - heat-hdp
