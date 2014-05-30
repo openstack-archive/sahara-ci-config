@@ -5,7 +5,8 @@ export OS_AUTH_URL=http://127.0.0.1:5000/v2.0/
 
 VANILLA2_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-2.3.0-ubuntu-13.10.qcow2
 VANILLA_IMAGE_PATH=/home/ubuntu/QA/sahara-icehouse-vanilla-1.2.1-ubuntu-13.10.qcow2
-HDP_IMAGE_PATH=/home/ubuntu/QA/centos-6_4-64-hdp-1.3-sk
+HDP1_IMAGE_PATH=/home/ubuntu/QA/centos-6_4-64-hdp-1.3-sk
+HDP2_IMAGE_PATH=/home/ubuntu/images/centos-6_4-64-hdp-2-0.qcow2
 UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04.qcow2
 # setup ci tenant and ci users
 
@@ -43,7 +44,8 @@ wget http://cloud-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server
 
 glance image-create --name ubuntu-vanilla-2.3-latest --file $VANILLA2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name savanna-itests-ci-vanilla-image --file $VANILLA_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name savanna-itests-ci-hdp-image-jdk-iptables-off --file $HDP_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
+glance image-create --name savanna-itests-ci-hdp-image-jdk-iptables-off --file $HDP1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
+glance image-create --name centos-6_4-64-hdp-2-0-hw --file $HDP2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
 glance image-create --name ubuntu-12.04 --file ubuntu-12.04-server-cloudimg-amd64-disk1.img --disk-format qcow2 --container-format bare --is-public=true
 
 rm ubuntu-12.04-server-cloudimg-amd64-disk1.img
