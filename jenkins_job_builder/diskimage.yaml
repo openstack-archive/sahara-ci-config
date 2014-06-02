@@ -13,6 +13,11 @@
 
     publishers:
       - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=vanilla"
     node: 'precise'
 
 
