@@ -57,4 +57,4 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
-    branch: ^(master|milestone-proposed)$
+    branch: ^(master|milestone-proposed|stable/icehouse)$
