@@ -9,6 +9,12 @@ export PIP_USE_MIRRORS=True
 
 JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 TIMEOUT=60
+if [ "$ZUUL_BRANCH" == "stable/icehouse" ]
+then
+   SAHARA_BIN=sahara-api
+else
+   SAHARA_BIN=sahara-all
+fi
 
 #False value for this variables means that tests are enabled
 CINDER_TEST=False
@@ -169,7 +175,7 @@ then
     exit 1
 fi
 
-screen -dmS sahara-all /bin/bash -c "PYTHONUNBUFFERED=1 sahara-all --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
+screen -dmS sahara-all /bin/bash -c "PYTHONUNBUFFERED=1 $SAHARA_BIN --config-file etc/sahara/sahara.conf -d --log-file log.txt | tee /tmp/tox-log.txt"
 
 
 export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
