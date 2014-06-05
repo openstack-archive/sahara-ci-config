@@ -14,7 +14,7 @@ fi
 
 if [ $JOB_TYPE == 'hdp1' ]
 then
-     JOB_TYPE=hdp-v1
+     JOB_TYPE=hdp
 elif [ $JOB_TYPE == 'hdp2' ]
 then
      JOB_TYPE=hdp-v2
