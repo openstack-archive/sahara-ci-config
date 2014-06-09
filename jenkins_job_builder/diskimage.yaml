@@ -1,12 +1,34 @@
 - job-template:
-    name: 'diskimage-integration-{image}'
+    name: 'diskimage-integration-{plugin}'
     defaults:
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {image}"
+              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {plugin} {image}"
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB={plugin}"
+    node: 'precise'
+
+- job-template:
+    name: 'diskimage-integration-vanilla-{image}'
+    defaults:
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image}"
 
     properties:
       - zeromq-event
@@ -20,13 +42,17 @@
                \nPREV_JOB=vanilla"
     node: 'precise'
 
-
 - project:
     name: sahara-image-elements
     github-org: openstack
+    plugin:
+     - hdp1
+     - hdp2
+     - spark
     image:
      - ubuntu
      - fedora
      - centos
     jobs:
-     - 'diskimage-integration-{image}'
+     - 'diskimage-integration-vanilla-{image}'
+     - 'diskimage-integration-{plugin}'

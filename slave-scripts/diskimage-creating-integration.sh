@@ -1,55 +1,63 @@
 #!/bin/bash
 
-image_type=$1
-GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
-
-
-sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
-sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2
-
-if [ ${image_type} == "ubuntu" ]
-then
-     if [ ! -f ${image_type}_sahara_vanilla_hadoop_1_latest.qcow2 -o ! -f ${image_type}_sahara_vanilla_hadoop_2_latest.qcow2 ]; then
-       echo "Images aren't built"
+check_error_code() {
+   if [ "$1" != "0" ]; then
+       echo "$2 image $3 doesn't build"
        exit 1
-     fi
-     mv ${image_type}_sahara_vanilla_hadoop_1_latest.qcow2 ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1.qcow2
-     mv ${image_type}_sahara_vanilla_hadoop_2_latest.qcow2 ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.qcow2
-else
-     if [ ! -f ${image_type}_sahara_vanilla_hadoop_1_latest.selinux-permissive.qcow2 -o ! -f ${image_type}_sahara_vanilla_hadoop_2_latest.selinux-permissive.qcow2 ]; then
-       echo "Images aren't built"
-       exit 1
-     fi
-     mv ${image_type}_sahara_vanilla_hadoop_1_latest.selinux-permissive.qcow2 ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1.qcow2
-     mv ${image_type}_sahara_vanilla_hadoop_2_latest.selinux-permissive.qcow2 ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.qcow2
-fi
+   fi
+}
 
+register_vanilla_image() {
+   # 1 - hadoop version, 2 - username, 3 - image name
+   case "$1" in
+           1)
+             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             ;;
+           2)
+             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             ;;
+   esac
+}
 
-glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
-glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
+register_hdp_image() {
+   # 1 - hadoop version, 2 - username, 3 - image name
+   case "$1" in
+           1)
+             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
+             ;;
+   esac
+}
 
-case "$image_type" in
-        ubuntu)
-            SSH_USERNAME=ubuntu
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-            ;;
+delete_image() {
+   glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $1
+}
 
-        fedora)
-            SSH_USERNAME=fedora
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='fedora'
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='fedora'
-            ;;
+upload_image() {
+   # 1 - plugin, 2 - username, 3 - image name
+   delete_image $3
 
-        centos)
-            SSH_USERNAME=cloud-user
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='cloud-user'
-            glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2 --file ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='cloud-user'
-            ;;
-esac
+   case "$1" in
+           vanilla-1)
+             register_vanilla_image "1" "$2" "$3"
+           ;;
+           vanilla-2)
+             register_vanilla_image "2" "$2" "$3"
+           ;;
+           hdp1)
+             register_hdp_image "1" "$2" "$3"
+           ;;
+   esac
+}
 
+rename_image() {
+   # 1 - source image, 2 - target image
+   glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-update $1 --name $2
+}
+
+plugin="$1"
+image_type=${2:-ubuntu}
 TIMEOUT=60
-
+GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 #False value for this variables means that tests are enabled
 CINDER_TEST=True
 CLUSTER_CONFIG_TEST=True
@@ -58,9 +66,58 @@ MAP_REDUCE_TEST=False
 SWIFT_TEST=True
 SCALING_TEST=True
 TRANSIENT_TEST=True
-VANILLA_IMAGE=ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
-VANILLA_TWO_IMAGE=ci-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
+VANILLA_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
+VANILLA_TWO_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
+HDP_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
+HDP_TWO_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
+SPARK_IMAGE=ci-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
+SSH_USERNAME="ubuntu"
 
+case $plugin in
+    vanilla)
+    sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+    check_error_code $? "vanilla-1" ${image_type}
+    mv "${image_type}"_sahara_vanilla_hadoop_1_latest*.qcow2 ${VANILLA_IMAGE}.qcow2
+
+    sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2
+    check_error_code $? "vanilla-2" ${image_type}
+    mv ${image_type}_sahara_vanilla_hadoop_2_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
+
+    if [ "${image_type}" == 'centos' ]; then
+        username='cloud-user'
+    else
+        username=${image_type}
+    fi
+    SSH_USERNAME=${username}
+    upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
+    upload_image "vanilla-2" "${username}" ${VANILLA_TWO_IMAGE}
+    ;;
+
+    spark)
+    sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
+    check_error_code $? "spark" "ubuntu"
+    mv ubuntu_sahara_spark_latest.qcow2 ${SPARK_IMAGE}.qcow2
+    exit $?
+    ;;
+
+    hdp1)
+    sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
+    check_error_code $? "hdp1" "centos"
+    mv centos-6_4-64-hdp-1-3.qcow2 ${HDP_IMAGE}.qcow2
+    SSH_USERNAME="root"
+    upload_image "hdp1" "root" ${HDP_IMAGE}.qcow2
+    ;;
+
+    hdp2)
+    sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
+    check_error_code $? "hdp2" "centos"
+    mv centos-6_4-64-hdp-2-0.qcow2 ${HDP_TWO_IMAGE}.qcow2
+    SSH_USERNAME="root"
+    exit $?
+    ;;
+esac
+
+# Run test
 export PYTHONUNBUFFERED=1
 
 cd /tmp/
@@ -81,7 +138,6 @@ mysql -usavanna-citest -psavanna-citest -Bse "DROP DATABASE IF EXISTS savanna"
 mysql -usavanna-citest -psavanna-citest -Bse "create database savanna"
 
 BUILD_ID=dontKill
-
 #sudo pip install tox
 mkdir /tmp/cache
 
@@ -231,7 +287,12 @@ if [ "$FAILURE" = 0 ]; then
     export PYTHONUNBUFFERED=1
 
     cd /tmp/sahara
-    tox -e integration -- vanilla --concurrency=1
+    if ["${plugin}" == "vanilla" ]; then
+        tox -e integration -- vanilla --concurrency=1
+    fi
+    if ["${plugin}" == "hdp1"]; then
+        tox -e integration -- hdp1 --concurency=1
+    fi
     STATUS=`echo $?`
 fi
 
@@ -262,19 +323,34 @@ fi
 
 if [[ "$STATUS" != 0 ]]
 then
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $VANILLA_IMAGE
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $VANILLA_TWO_IMAGE
+    if [ "${plugin}" == "vanilla" ]; then
+        delete_image $VANILLA_IMAGE
+        delete_image $VANILLA_TWO_IMAGE
+    fi
+    if [ "${plugin}" == "hdp1" ]; then
+        delete_image $HDP_IMAGE
+    fi
     exit 1
 fi
 
 if [ "$ZUUL_PIPELINE" == "check" ]
 then
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $VANILLA_IMAGE
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $VANILLA_TWO_IMAGE
+    if [ "${plugin}" == "vanilla" ]; then
+        delete_image $VANILLA_IMAGE
+        delete_image $VANILLA_TWO_IMAGE
+    fi
+    if [ "${plugin}" == "hdp1" ]; then
+        delete_image $HDP_IMAGE
+    fi
 else
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete ${image_type}_sahara_vanilla_hadoop_1_latest
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-update $VANILLA_IMAGE --name ${image_type}_sahara_vanilla_hadoop_1_latest
-
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete ${image_type}_sahara_vanilla_hadoop_2_latest
-    glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-update $VANILLA_TWO_IMAGE --name ${image_type}_sahara_vanilla_hadoop_2_latest
+    if [ "${plugin}" == "vanilla" ]; then
+        delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
+        rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
+        delete_image ${image_type}_sahara_vanilla_hadoop_2_latest
+        rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_2_latest
+    fi
+    if [ "${plugin}" == "hdp1" ]; then
+        delete_image centos_sahara_hdp_hadoop_1_latest
+        rename_image $HDP_IMAGE centos_sahara_hdp_hadoop_1_latest
+    fi
 fi
