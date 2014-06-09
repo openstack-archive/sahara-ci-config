@@ -25,6 +25,9 @@ register_hdp_image() {
            1)
              glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
              ;;
+           2)
+             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
+             ;;
    esac
 }
 
@@ -45,6 +48,9 @@ upload_image() {
            ;;
            hdp1)
              register_hdp_image "1" "$2" "$3"
+           ;;
+           hdp2)
+             register_hdp_image "2" "$2" "$3"
            ;;
    esac
 }
@@ -116,7 +122,7 @@ case $plugin in
     check_error_code $? "hdp2" "centos"
     mv centos-6_4-64-hdp-2-0.qcow2 ${HDP_TWO_IMAGE}.qcow2
     SSH_USERNAME="root"
-    exit $?
+    upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
     ;;
 esac
 
@@ -264,6 +270,13 @@ SKIP_SCALING_TEST = $SCALING_TEST
 $HDP_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
+echo "[HDP2]
+SSH_USERNAME = '$SSH_USERNAME'
+IMAGE_NAME = '$HDP_TWO_IMAGE'
+SKIP_ALL_TESTS_FOR_PLUGIN = False
+SKIP_SCALING_TEST = $SCALING_TEST
+" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+
 touch $TMP_LOG
 i=0
 
@@ -294,6 +307,10 @@ if [ "$FAILURE" = 0 ]; then
     fi
     if [ "${plugin}" == "hdp1" ]; then
         tox -e integration -- hdp1 --concurrency=1
+        STATUS=`echo $?`
+    fi
+    if [ "${plugin}" == "hdp2" ]; then
+        tox -e integration -- hdp2 --concurency=1
         STATUS=`echo $?`
     fi
 fi
@@ -332,6 +349,9 @@ then
     if [ "${plugin}" == "hdp1" ]; then
         delete_image $HDP_IMAGE
     fi
+    if [ "${plugin}" == "hdp2" ]; then
+        delete_image $HDP_TWO_IMAGE
+    fi
     exit 1
 fi
 
@@ -344,6 +364,9 @@ then
     if [ "${plugin}" == "hdp1" ]; then
         delete_image $HDP_IMAGE
     fi
+    if [ "${plugin}" == "hdp2" ]; then
+        delete_image $HDP_TWO_IMAGE
+    fi
 else
     if [ "${plugin}" == "vanilla" ]; then
         delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
@@ -354,5 +377,9 @@ else
     if [ "${plugin}" == "hdp1" ]; then
         delete_image centos_sahara_hdp_hadoop_1_latest
         rename_image $HDP_IMAGE centos_sahara_hdp_hadoop_1_latest
+    fi
+    if [ "${plugin}" == "hdp2" ]; then
+        delete_image centos_sahara_hdp_hadoop_2_latest
+        rename_image $HDP_TWO_IMAGE centos_sahara_hdp_hadoop_2_latest
     fi
 fi
