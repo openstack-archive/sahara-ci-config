@@ -5,6 +5,8 @@
 
 sudo pip install .
 
+WORKSPACE=${1:-$WORKSPACE}
+
 export PIP_USE_MIRRORS=True
 
 JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
