@@ -65,7 +65,13 @@ os_admin_tenant_name=ci
 use_floating_ips=true
 use_neutron=true
 [database]
-connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8"  > sahara.conf
+connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
+[keystone_authtoken]
+auth_uri=http://172.18.168.42:5000/v2.0/
+identity_uri=http://172.18.168.42:35357/
+admin_user=ci-user
+admin_password=nova
+admin_tenant_name=ci"  > sahara.conf
 
 git clone https://github.com/openstack/sahara
 cd sahara
