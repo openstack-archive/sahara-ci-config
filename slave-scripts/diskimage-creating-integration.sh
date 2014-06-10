@@ -252,14 +252,6 @@ SKIP_SCALING_TEST = $SCALING_TEST
 $HDP_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
-echo "[IDH]
-IMAGE_NAME = '$IDH_IMAGE'
-IDH_REPO_URL = 'file:///var/repo/intel'
-OS_REPO_URL = 'http://172.18.87.221/mirror/centos/base/'
-SSH_USERNAME = 'cloud-user'
-MANAGER_FLAVOR_ID = '3'
-" >> sahara/tests/integration/configs/itest.conf
-
 touch $TMP_LOG
 i=0
 

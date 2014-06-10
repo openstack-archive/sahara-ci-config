@@ -27,8 +27,6 @@ TRANSIENT_TEST=True
 ONLY_TRANSIENT_TEST=False
 HDP1_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
 HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
-IDH2_IMAGE=intel-noepel
-IDH3_IMAGE=centos-idh-3.0.2
 VANILLA_IMAGE=savanna-itests-ci-vanilla-image
 HEAT_JOB=False
 
@@ -66,16 +64,6 @@ then
    VANILLA2_JOB=True
    VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
    echo "Vanilla2 detected"
-fi
-if [ $JOB_TYPE == 'idh2' ]
-then
-   IDH2_JOB=True
-   echo "IDH2 detected"
-fi
-if [ $JOB_TYPE == 'idh3' ]
-then
-   IDH3_JOB=True
-   echo "IDH3 detected"
 fi
 if [ $JOB_TYPE == 'transient' ]
 then
@@ -247,24 +235,6 @@ IMAGE_NAME = '$HDP2_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
-echo "[IDH2]
-IMAGE_NAME = '$IDH2_IMAGE'
-IDH_REPO_URL = 'file:///var/repo/intel'
-OS_REPO_URL = 'http://172.18.87.221/mirror/centos/base/'
-SSH_USERNAME = 'cloud-user'
-MANAGER_FLAVOR_ID = '3'
-" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
-
-echo "[IDH3]
-IMAGE_NAME = '$IDH3_IMAGE'
-IDH_REPO_URL = 'file:///var/repo/intel'
-OS_REPO_URL = 'http://172.18.87.221/mirror/centos/base/'
-SSH_USERNAME = 'cloud-user'
-MANAGER_FLAVOR_ID = '3'
-SKIP_SWIFT_TEST = $SWIFT_TEST
-SKIP_SCALING_TEST = True
-" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
-
 touch $TMP_LOG
 i=0
 
@@ -317,18 +287,6 @@ if [ "$FAILURE" = 0 ]; then
     if [ $VANILLA2_JOB ]
     then
         tox -e integration -- vanilla2 --concurrency=1
-        STATUS=`echo $?`
-    fi
-
-    if [ $IDH2_JOB ]
-    then
-        tox -e integration -- idh2 --concurrency=1
-        STATUS=`echo $?`
-    fi
-
-    if [ $IDH3_JOB ]
-    then
-        tox -e integration -- idh3 --concurrency=1
         STATUS=`echo $?`
     fi
 
