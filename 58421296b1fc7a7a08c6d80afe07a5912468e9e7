@@ -1,0 +1,14 @@
+Verified+2: Jenkins
+Code-Review+2: Sergey Lukjanov <slukjanov@mirantis.com>
+Code-Review+1: Yaroslav Lobankov <ylobankov@mirantis.com>
+Code-Review+1: Matthew Farrellee <matt@redhat.com>
+Code-Review+2: Sergey Kolekonov <skolekonov@mirantis.com>
+Workflow+1: Sergey Kolekonov <skolekonov@mirantis.com>
+Code-Review+1: Ivan Berezovskiy <iberezovskiy@mirantis.com>
+Code-Review+1: Andrew Lazarev <alazarev@mirantis.com>
+Code-Review+1: Michael McCune <mimccune@redhat.com>
+Submitted-by: Jenkins
+Submitted-at: Mon, 16 Jun 2014 11:59:49 +0000
+Reviewed-on: https://review.openstack.org/98993
+Project: stackforge/sahara-ci-config
+Branch: refs/heads/master
