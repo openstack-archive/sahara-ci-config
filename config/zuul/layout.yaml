@@ -56,15 +56,23 @@ projects:
 
   - name: openstack/sahara-image-elements
     check:
-      - diskimage-integration-ubuntu
-      - diskimage-integration-fedora
-      - diskimage-integration-centos
+      - diskimage-integration-vanilla-ubuntu
+      - diskimage-integration-vanilla-fedora
+      - diskimage-integration-vanilla-centos
+      - diskimage-integration-spark
+      - diskimage-integration-hdp1
+      - diskimage-integration-hdp2
     post:
-      - diskimage-integration-ubuntu
-      - diskimage-integration-fedora
-      - diskimage-integration-centos
+      - diskimage-integration-vanilla-ubuntu
+      - diskimage-integration-vanilla-fedora
+      - diskimage-integration-vanilla-centos
+      - diskimage-integration-spark
+      - diskimage-integration-hdp1
+      - diskimage-integration-hdp2
 
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
     branch: ^(master|milestone-proposed|stable/icehouse)$
+  - name: diskimage-integration-hdp2
+    voting: false
