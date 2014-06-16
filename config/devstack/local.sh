@@ -91,8 +91,8 @@ CI_TENANT_ID=$(keystone tenant-list | grep $1 | awk '{print $2}' | head -n 1)
 
 for group in $(neutron security-group-list | grep default | awk -F '|' '{ print $2 }')
 do
-    neutron security-group-show $group | grep $CI_TENANT_ID > /dev/null
-    if [ $? == 0 ]
+    tenant_id=$(neutron security-group-show $group | grep tenant_id | awk '{print $4}' | tail -n 1)
+    if [ $tenant_id == $CI_TENANT_ID ]
     then
         neutron security-group-rule-create --protocol icmp --direction ingress $group
         neutron security-group-rule-create --protocol icmp --direction egress $group
