@@ -56,6 +56,9 @@ sudo pip install mysql-python
 cd /tmp && git clone https://github.com/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
 
+# pep8-trunk job requirements
+sudo apt-get install gettext -y
+
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
 sync
