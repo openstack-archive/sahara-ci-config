@@ -144,28 +144,17 @@ echo "----------- end of sahara.conf -----------"
 #echo "
 #[global]
 #timeout = 60
-#index-url = http://savanna-ci.vm.mirantis.net/pypi/savanna/
-#extra-index-url = https://pypi.python.org/simple/
-#download-cache = /home/ubuntu/.pip/cache/
+#index-url = https://sahara.mirantis.com/pypi/
+#extra-index-url = http://pypi.openstack.org/openstack/
+#download-cache = /home/jenkins/.pip/cache/
 #[install]
 #use-mirrors = true
-#find-links = http://savanna-ci.vm.mirantis.net:8181/simple/
 #" > ~/.pip/pip.conf
 
-echo "
-[global]
-timeout = 60
-index-url = https://sahara.mirantis.com/pypi/
-extra-index-url = http://pypi.openstack.org/openstack/
-download-cache = /home/jenkins/.pip/cache/
-[install]
-use-mirrors = true
-" > ~/.pip/pip.conf
-
-echo "
-[easy_install]
-index_url = https://sahara.mirantis.com/pypi/
-" > ~/.pydistutils.cfg
+#echo "
+#[easy_install]
+#index_url = https://sahara.mirantis.com/pypi/
+#" > ~/.pydistutils.cfg
 
 sahara-db-manage --config-file etc/sahara/sahara.conf upgrade head
 STATUS=`echo $?`
