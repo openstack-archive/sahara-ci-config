@@ -106,6 +106,7 @@
     - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
               \nbash -x sahara-ci-config/slave-scripts/gate-savanna-pep8-trunk.sh"
-
+    properties:
+      - zeromq-event
     publishers:
       - console-log
