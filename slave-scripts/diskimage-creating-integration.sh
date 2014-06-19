@@ -126,6 +126,15 @@ case $plugin in
     ;;
 esac
 
+# This parameter is used for cluster name, because cluster name's length exceeds limit 64 characters with $image_type.
+image_os="uOS"
+if [ "$image_type" == "centos" ]; then
+    image_os="cOS"
+fi
+if [ "$image_type" == "fedora" ]; then
+    image_os="fOS"
+fi
+
 # Run test
 export PYTHONUNBUFFERED=1
 
@@ -226,7 +235,7 @@ OS_AUTH_URL = 'http://172.18.168.42:5000/v2.0'
 SAVANNA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = '$image_type-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
+CLUSTER_NAME = '$image_os-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
 FLOATING_IP_POOL = 'public'
 NEUTRON_ENABLED = True
 INTERNAL_NEUTRON_NETWORK = 'private'
