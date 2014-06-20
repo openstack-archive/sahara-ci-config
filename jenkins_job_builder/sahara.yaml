@@ -1,6 +1,6 @@
 - job-template:
     name: 'gate-saharaclient-integration-{plugin}'
-    defaults:
+    defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
@@ -25,7 +25,7 @@
 
 - job-template:
     name: 'gate-sahara-integration-{plugin}'
-    defaults:
+    defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep

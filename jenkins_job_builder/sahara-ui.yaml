@@ -1,7 +1,7 @@
 - job:
     name: gate-ui-tests
     project-type: freestyle
-    defaults:
+    defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
                   \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/sahara-ci-config\">https://github.com/stackforge/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Tests for savanna dashboard<br/>\
