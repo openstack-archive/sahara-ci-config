@@ -101,16 +101,16 @@ case $plugin in
 
     spark)
     sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
-    image_type="ubuntu"
     check_error_code $? "spark" "ubuntu"
+    image_type="ubuntu"
     mv ubuntu_sahara_spark_latest.qcow2 ${SPARK_IMAGE}.qcow2
     exit $?
     ;;
 
     hdp1)
     sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
-    image_type="centos"
     check_error_code $? "hdp1" "centos"
+    image_type="centos"
     mv centos-6_4-64-hdp-1-3.qcow2 ${HDP_IMAGE}.qcow2
     SSH_USERNAME="root"
     upload_image "hdp1" "root" ${HDP_IMAGE}
@@ -118,8 +118,8 @@ case $plugin in
 
     hdp2)
     sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
-    image_type="centos"
     check_error_code $? "hdp2" "centos"
+    image_type="centos"
     mv centos-6_4-64-hdp-2-0.qcow2 ${HDP_TWO_IMAGE}.qcow2
     SSH_USERNAME="root"
     upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
