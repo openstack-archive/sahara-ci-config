@@ -9,5 +9,6 @@ sed -i '/^hacking/d' test-requirements.txt
 echo -e "-f http://tarballs.openstack.org/hacking/hacking-master.tar.gz#egg=hacking-master\nhacking==master\n$(cat test-requirements.txt)" > test-requirements.txt
 
 sed -i '/^ignore/d' tox.ini
+sed -ie 's/\(^exclude.*\)/\1,*sahara-ci-config*/' tox.ini
 
 tox -v -epep8 -- --statistics | tee pep8.txt
