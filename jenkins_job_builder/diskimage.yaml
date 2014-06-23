@@ -1,6 +1,6 @@
 - job-template:
     name: 'diskimage-integration-{plugin}'
-    defaults:
+    defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
@@ -22,7 +22,7 @@
 
 - job-template:
     name: 'diskimage-integration-vanilla-{image}'
-    defaults:
+    defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
