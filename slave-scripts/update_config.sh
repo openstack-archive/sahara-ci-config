@@ -4,7 +4,7 @@ source $JENKINS_HOME/credentials
 sed "s%-CI_TENANT_ID-%$CI_TENANT_ID%g" -i $WORKSPACE/config/zuul/openstack_functions.py
 sed "s%-CI_TENANT_ID-%$CI_TENANT_ID%g" -i $WORKSPACE/slave-scripts/credentials.conf
 
-sudo su - jenkins -c "cat $WORKSPACE/slave-scripts/credentials.conf > /opt/ci/jenkins-jobs/credentials.conf"
+sudo su - jenkins -c "cat $WORKSPACE/slave-scripts/credentials.conf > /etc/jenkins_jobs/credentials.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/zuul.conf > /etc/zuul/zuul.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/gearman-logging.conf > /etc/zuul/gearman-logging.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/layout.yaml > /etc/zuul/layout.yaml"
@@ -19,4 +19,6 @@ sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/savanna.yaml > /etc/nodepo
 
 sed "s%MYSQL_PASS=MYSQL_ROOT_PASSWORD%MYSQL_PASS=$MYSQL_ROOT_PASSWORD%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh
 sed "s%JENKINS_PUBLIC_KEY%$JENKINS_PUBLIC_KEY%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh
-cp $WORKSPACE/config/nodepool/scripts/* /opt/ci/config/modules/openstack_project/files/nodepool/scripts/
+
+NODEPOOL_SCRIPTS_DIR=$(sudo su - -c "cat /etc/nodepool/nodepool.yaml | grep 'script-dir:'" | awk '{print $2}')
+cp $WORKSPACE/config/nodepool/scripts/* $NODEPOOL_SCRIPTS_DIR
