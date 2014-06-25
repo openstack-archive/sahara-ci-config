@@ -8,14 +8,21 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
     if [ $PLUGIN == 'vanilla' ]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
-        python cleanup.py cleanup $IMAGE_TYPE-$PREV_BUILD-vanilla-v1
-        python cleanup.py cleanup $IMAGE_TYPE-$PREV_BUILD-vanilla-v2
+        if [ "$IMAGE_TYPE" == "centos" ]; then
+            os="cos"
+        elif [ "$IMAGE_TYPE" == "fedora" ]; then
+            os="fos"
+        elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
+            os="uos"
+        fi
+        python cleanup.py cleanup $os-$PREV_BUILD-vanilla-v1
+        python cleanup.py cleanup $os-$PREV_BUILD-vanilla-v2
     elif [ $PLUGIN == 'hdp1' ]; then
-        python cleanup.py cleanup centos-$PREV_BUILD-hdp
+        python cleanup.py cleanup cos-$PREV_BUILD-hdp
     elif [ $PLUGIN == 'hdp2' ]; then
-        python cleanup.py cleanup centos-$PREV_BUILD-hdp-v2
+        python cleanup.py cleanup cos-$PREV_BUILD-hdp-v2
     else
-        python cleanup.py cleanup ubuntu-$PREV_BUILD-$PLUGIN
+        python cleanup.py cleanup uos-$PREV_BUILD-$PLUGIN
     fi
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
