@@ -161,6 +161,7 @@ mkdir /tmp/cache
 
 export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
 
+rm -rf sahara
 git clone https://review.openstack.org/openstack/sahara
 cd sahara
 sudo pip install .

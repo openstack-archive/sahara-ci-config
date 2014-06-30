@@ -52,7 +52,6 @@ export DISPLAY=:0
 #" > ~/.pydistutils.cfg
 
 cd $HOME
-rm -rf sahara
 
 echo "
 [DEFAULT]
@@ -73,6 +72,7 @@ admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci"  > sahara.conf
 
+rm -rf sahara
 git clone https://github.com/openstack/sahara
 cd sahara
 sudo pip install .

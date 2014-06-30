@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf /tmp/sahara
 git clone https://github.com/openstack/sahara /tmp/sahara
 cd /tmp/sahara
 # prepare test dependencies
