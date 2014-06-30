@@ -1,0 +1,14 @@
+# Python stuff
+*.pyc
+.idea
+.venv
+.tox
+tags
+.testrepository
+
+# Vim stuff
+.swp
+.swo
+.*.swp
+.*.swo
+.ropeproject
