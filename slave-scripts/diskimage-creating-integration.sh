@@ -1,10 +1,10 @@
 #!/bin/bash
 
-check_error_code() {
-   if [ "$1" != "0" ]; then
-       echo "$2 image $3 doesn't build"
+check_error() {
+   if [ "$1" != "0" -o ! -f $2 ]; then
+       echo "$2 image wasn't built"
        exit 1
-   fi
+   fi       
 }
 
 register_vanilla_image() {
@@ -86,10 +86,10 @@ case $plugin in
        popd
 
        sudo ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
-       check_error_code $? "vanilla-1" ${image_type}
+       check_error $? ${VANILLA_IMAGE}
 
        sudo ${image_type}_vanilla_hadoop_2_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2
-       check_error_code $? "vanilla-2" ${image_type}
+       check_error $? ${VANILLA_TWO_IMAGE}
 
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
@@ -103,14 +103,14 @@ case $plugin in
 
     spark)
        sudo ubuntu_spark_image_name=${SPARK_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
-       check_error_code $? "spark" "ubuntu"
+       check_error $? ${SPARK_IMAGE}
        image_type="ubuntu"
        exit $?
     ;;
 
     hdp1)
        sudo centos_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
-       check_error_code $? "hdp1" "centos"
+       check_error $? ${HDP_IMAGE}
        image_type="centos"
        SSH_USERNAME="root"
        upload_image "hdp1" "root" ${HDP_IMAGE}
@@ -118,7 +118,7 @@ case $plugin in
 
     hdp2)
        sudo centos_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
-       check_error_code $? "hdp2" "centos"
+       check_error $? ${HDP_TWO_IMAGE}
        image_type="centos"
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
