@@ -104,7 +104,11 @@ case $plugin in
     ;;
 
     spark)
-       sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
+       pushd /home/jenkins
+       python -m SimpleHTTPServer 8000 > /dev/null &
+       popd
+
+       sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? "spark" "ubuntu"
        image_type="ubuntu"
        mv ubuntu_sahara_spark_latest.qcow2 ${SPARK_IMAGE}.qcow2
