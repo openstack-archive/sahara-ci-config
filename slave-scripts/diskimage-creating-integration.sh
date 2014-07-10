@@ -13,8 +13,11 @@ register_vanilla_image() {
            1)
              glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
-           2)
+           2.3)
              glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             ;;
+           2.4)
+             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
    esac
 }
@@ -43,8 +46,11 @@ upload_image() {
            vanilla-1)
              register_vanilla_image "1" "$2" "$3"
            ;;
-           vanilla-2)
-             register_vanilla_image "2" "$2" "$3"
+           vanilla-2.3)
+             register_vanilla_image "2.3" "$2" "$3"
+           ;;
+           vanilla-2.4)
+             register_vanilla_image "2.4" "$2" "$3"
            ;;
            hdp1)
              register_hdp_image "1" "$2" "$3"
@@ -62,6 +68,7 @@ rename_image() {
 
 plugin="$1"
 image_type=${2:-ubuntu}
+hadoop_version=${3:-1}
 TIMEOUT=60
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 #False value for this variables means that tests are enabled
@@ -73,7 +80,7 @@ SWIFT_TEST=True
 SCALING_TEST=True
 TRANSIENT_TEST=True
 VANILLA_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
-VANILLA_TWO_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
+VANILLA_TWO_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_${hadoop_version}
 HDP_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=ci-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
@@ -85,22 +92,33 @@ case $plugin in
        python -m SimpleHTTPServer 8000 > /dev/null &
        popd
 
-       sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
-       check_error_code $? "vanilla-1" ${image_type}
-       mv ${image_type}_sahara_vanilla_hadoop_1_latest*.qcow2 ${VANILLA_IMAGE}.qcow2
-
-       sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2
-       check_error_code $? "vanilla-2" ${image_type}
-       mv ${image_type}_sahara_vanilla_hadoop_2_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
-
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
        else
            username=${image_type}
        fi
        SSH_USERNAME=${username}
-       upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
-       upload_image "vanilla-2" "${username}" ${VANILLA_TWO_IMAGE}
+
+       case $hadoop_version in
+           1)
+              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              check_error_code $? "vanilla-1" ${image_type}
+              mv ${image_type}_sahara_vanilla_hadoop_1_latest*.qcow2 ${VANILLA_IMAGE}.qcow2
+              upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
+              ;;
+           2.3)
+              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
+              check_error_code $? "vanilla-2.3" ${image_type}
+              mv ${image_type}_sahara_vanilla_hadoop_2_3_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
+              upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
+              ;;
+           2.4)
+              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              check_error_code $? "vanilla-2.4" ${image_type}
+              mv ${image_type}_sahara_vanilla_hadoop_2_4_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
+              upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
+              ;;
+       esac
     ;;
 
     spark)
@@ -131,6 +149,7 @@ case $plugin in
        mv centos-6_4-64-hdp-2-0.qcow2 ${HDP_TWO_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
+       hadoop_version="2"
     ;;
 esac
 
@@ -188,6 +207,7 @@ os_admin_password=nova
 os_admin_tenant_name=ci
 use_identity_api_v3=true
 use_neutron=true
+node_domain = nl
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
 [keystone_authtoken]
@@ -244,7 +264,7 @@ OS_AUTH_URL = 'http://172.18.168.42:5000/v2.0'
 SAVANNA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = '$image_os-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
+CLUSTER_NAME = '$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
 FLOATING_IP_POOL = 'public'
 NEUTRON_ENABLED = True
 INTERNAL_NEUTRON_NETWORK = 'private'
@@ -275,6 +295,12 @@ SKIP_SWIFT_TEST = $SWIFT_TEST
 SKIP_SCALING_TEST = $SCALING_TEST
 $VANILLA_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
+
+if [ "$plugin" == "vanilla" -a "$hadoop_version" == "2.4" ]; then
+   echo "HADOOP_VERSION = '2.4.0'
+   HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
+   " >> sahara/tests/integration/configs/itest.conf
+fi
 
 echo "[HDP]
 SSH_USERNAME = '$SSH_USERNAME'
@@ -320,8 +346,13 @@ if [ "$FAILURE" = 0 ]; then
 
     cd /tmp/sahara
     if [ "${plugin}" == "vanilla" ]; then
-        tox -e integration -- vanilla --concurrency=1
-        STATUS=`echo $?`
+        if [ "${hadoop_version}" == "1" ]; then
+           tox -e integration -- vanilla1 --concurrency=1
+           STATUS=`echo $?`
+        else
+           tox -e integration -- vanilla2 --concurrency=1
+           STATUS=`echo $?`
+        fi
     fi
     if [ "${plugin}" == "hdp1" ]; then
         tox -e integration -- hdp1 --concurrency=1
@@ -361,8 +392,11 @@ fi
 if [[ "$STATUS" != 0 ]]
 then
     if [ "${plugin}" == "vanilla" ]; then
-        delete_image $VANILLA_IMAGE
-        delete_image $VANILLA_TWO_IMAGE
+        if [ "${hadoop_version}" == "1" ]; then
+            delete_image $VANILLA_IMAGE
+        else
+            delete_image $VANILLA_TWO_IMAGE
+        fi
     fi
     if [ "${plugin}" == "hdp1" ]; then
         delete_image $HDP_IMAGE
@@ -376,8 +410,11 @@ fi
 if [ "$ZUUL_PIPELINE" == "check" ]
 then
     if [ "${plugin}" == "vanilla" ]; then
-        delete_image $VANILLA_IMAGE
-        delete_image $VANILLA_TWO_IMAGE
+        if [ "${hadoop_version}" == "1" ]; then
+            delete_image $VANILLA_IMAGE
+        else
+            delete_image $VANILLA_TWO_IMAGE
+        fi
     fi
     if [ "${plugin}" == "hdp1" ]; then
         delete_image $HDP_IMAGE
@@ -387,10 +424,13 @@ then
     fi
 else
     if [ "${plugin}" == "vanilla" ]; then
-        delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
-        rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
-        delete_image ${image_type}_sahara_vanilla_hadoop_2_latest
-        rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_2_latest
+        if [ "${hadoop_version}" == "1" ]; then
+            delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
+            rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
+        else
+            delete_image ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
+            rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
+        fi
     fi
     if [ "${plugin}" == "hdp1" ]; then
         delete_image centos_sahara_hdp_hadoop_1_latest

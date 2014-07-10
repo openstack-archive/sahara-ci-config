@@ -58,9 +58,15 @@ projects:
 
   - name: openstack/sahara-image-elements
     check:
-      - diskimage-integration-vanilla-ubuntu
-      - diskimage-integration-vanilla-fedora
-      - diskimage-integration-vanilla-centos
+      - diskimage-integration-vanilla-ubuntu-1
+      - diskimage-integration-vanilla-fedora-1
+      - diskimage-integration-vanilla-centos-1
+      - diskimage-integration-vanilla-ubuntu-2.3
+      - diskimage-integration-vanilla-fedora-2.3
+      - diskimage-integration-vanilla-centos-2.3
+      - diskimage-integration-vanilla-ubuntu-2.4
+      - diskimage-integration-vanilla-fedora-2.4
+      - diskimage-integration-vanilla-centos-2.4
       - diskimage-integration-spark
       - diskimage-integration-hdp1
       - diskimage-integration-hdp2
@@ -79,4 +85,10 @@ jobs:
   - name: diskimage-integration-hdp2
     voting: false
   - name: gate-savanna-pep8-trunk
+    voting: false
+  - name: diskimage-integration-vanilla-ubuntu-2.4
+    voting: false
+  - name: diskimage-integration-vanilla-fedora-2.4
+    voting: false
+  - name: diskimage-integration-vanilla-centos-2.4
     voting: false
