@@ -15,14 +15,18 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
             os="uos"
         fi
-        python cleanup.py cleanup $os-$PREV_BUILD-vanilla-v1
-        python cleanup.py cleanup $os-$PREV_BUILD-vanilla-v2
+        HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+        if [ "$HADOOP_VERSION" == '1' ]; then
+            python cleanup.py cleanup $os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
+        else
+            python cleanup.py cleanup $os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v2
+        fi
     elif [ $PLUGIN == 'hdp1' ]; then
-        python cleanup.py cleanup cos-$PREV_BUILD-hdp
+        python cleanup.py cleanup cos-1-$PREV_BUILD-hdp
     elif [ $PLUGIN == 'hdp2' ]; then
-        python cleanup.py cleanup cos-$PREV_BUILD-hdp-v2
+        python cleanup.py cleanup cos-2-$PREV_BUILD-hdp-v2
     else
-        python cleanup.py cleanup uos-$PREV_BUILD-$PLUGIN
+        python cleanup.py cleanup uos-1-$PREV_BUILD-$PLUGIN
     fi
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
