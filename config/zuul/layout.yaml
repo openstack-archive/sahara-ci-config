@@ -80,3 +80,5 @@ jobs:
     voting: false
   - name: gate-savanna-pep8-trunk
     voting: false
+  - name: diskimage-integration-vanilla-2.4
+    voting: false
