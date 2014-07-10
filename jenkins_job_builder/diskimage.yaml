@@ -21,14 +21,14 @@
     node: 'precise'
 
 - job-template:
-    name: 'diskimage-integration-vanilla-{image}'
+    name: 'diskimage-integration-vanilla-{image}-{hadoop-version}'
     defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image}"
+              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image} {hadoop-version}"
 
     properties:
       - zeromq-event
@@ -39,7 +39,7 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-vanilla-{image}"
+               \nPREV_JOB=diskimage-integration-vanilla-{image}-{hadoop-version}"
     node: 'precise'
 
 - project:
@@ -53,6 +53,11 @@
      - ubuntu
      - fedora
      - centos
+    hadoop-version:
+     - 1
+     - 2.3
+     - 2.4
     jobs:
-     - 'diskimage-integration-vanilla-{image}'
+     - 'diskimage-integration-vanilla-{image}-{hadoop-version}'
      - 'diskimage-integration-{plugin}'
+
