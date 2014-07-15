@@ -54,8 +54,9 @@
     name: savanna
     github-org: openstack
     plugin:
-     - vanilla1
-     - vanilla2
+     - vanilla-1
+     - vanilla-2.3
+     - vanilla-2.4
      - hdp1
      - hdp2
      - heat-vanilla1
