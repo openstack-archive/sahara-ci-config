@@ -29,6 +29,7 @@ else
    SAHARA_BIN=sahara-all
 fi
 
+HADOOP_VERSION=1
 #False value for this variables means that tests are enabled
 CINDER_TEST=False
 CLUSTER_CONFIG_TEST=False
@@ -63,20 +64,28 @@ if [ $JOB_TYPE == 'hdp2' ]
 then
    HDP2_JOB=True
    SSH_USERNAME=root
+   HADOOP_VERSION=2
    echo "HDP2 detected"
 fi
 
-if [ $JOB_TYPE == 'vanilla1' ]
+if [ $JOB_TYPE == 'vanilla' ]
 then
-   VANILLA_JOB=True
-   VANILLA_IMAGE=savanna-itests-ci-vanilla-image
-   echo "Vanilla detected"
-fi
-if [ $JOB_TYPE == 'vanilla2' ]
-then
-   VANILLA2_JOB=True
-   VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
-   echo "Vanilla2 detected"
+   HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+   if [ "$HADOOP_VERSION" == "1" ]; then
+       VANILLA_JOB=True
+       VANILLA_IMAGE=savanna-itests-ci-vanilla-image
+       echo "Vanilla detected"
+   else
+       VANILLA2_JOB=True
+       if [ "$HADOOP_VERSION" == "2.3" ]; then
+          VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
+          HADOOP_VERSION=2-3
+       else
+          VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
+          HADOOP_VERSION=2-4
+       fi
+       echo "Vanilla2 detected"
+   fi
 fi
 if [ $JOB_TYPE == 'transient' ]
 then
@@ -188,7 +197,7 @@ OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
 SAVANNA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = '$HOST-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
+CLUSTER_NAME = '$HOST-$HADOOP_VERSION-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
 FLOATING_IP_POOL = 'public'
 NEUTRON_ENABLED = True
 INTERNAL_NEUTRON_NETWORK = 'private'
@@ -210,6 +219,10 @@ ONLY_TRANSIENT_CLUSTER_TEST = $ONLY_TRANSIENT_TEST
 $VANILLA_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
+if [ "$HADOOP_VERSION" == "2.4" ]; then
+   SCALING_TEST=True
+fi
+
 echo "[VANILLA_TWO]
 SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_TWO_IMAGE'
@@ -219,6 +232,12 @@ SKIP_SWIFT_TEST = $SWIFT_TEST
 SKIP_SCALING_TEST = $SCALING_TEST
 $VANILLA_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+
+if [ "$JOB_TYPE" == "vanilla" -a "$hadoop_version" == "2-4" ]; then
+   echo "HADOOP_VERSION = '2.4.0'
+HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
+" >> sahara/tests/integration/configs/itest.conf
+fi
 
 echo "[HDP]
 SSH_USERNAME = '$SSH_USERNAME'
