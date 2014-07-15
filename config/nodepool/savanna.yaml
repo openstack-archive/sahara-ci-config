@@ -16,6 +16,7 @@ labels:
     min-ready: 5
     providers:
       - name: ci-lab
+      - name: stack-sahara
   - name:  ui
     image: ui
     min-ready: 1
@@ -44,6 +45,23 @@ providers:
         min-ram: 4096
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node_ui.sh
+  - name: stack-sahara
+    username: 'ci-user'
+    password: 'nova'
+    auth-url: 'http://172.18.168.43:5000/v2.0'
+    project-id: 'ci'
+    max-servers: 6
+    boot-timeout: 120
+    pool: public
+    networks:
+      - net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'
+    images:
+      - name: precise
+        base-image: 'ubuntu-12.04'
+        min-ram: 2048
+        private-key: '/etc/nodepool/id_dsa'
+        setup: prepare_node_bare.sh
+
 targets:
   - name: savanna-gate
     jenkins:
