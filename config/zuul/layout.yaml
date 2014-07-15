@@ -34,8 +34,9 @@ pipelines:
 projects:
   - name: openstack/sahara
     check:
-      - gate-sahara-integration-vanilla1
-      - gate-sahara-integration-vanilla2
+      - gate-sahara-integration-vanilla-1
+      - gate-sahara-integration-vanilla-2.3
+      - gate-sahara-integration-vanilla-2.4
       - gate-sahara-integration-heat-vanilla1
       - gate-sahara-integration-hdp1
       - gate-sahara-integration-hdp2
@@ -44,8 +45,9 @@ projects:
 
   - name: openstack/python-saharaclient
     check:
-      - gate-saharaclient-integration-vanilla1
-      - gate-saharaclient-integration-vanilla2
+      - gate-saharaclient-integration-vanilla-1
+      - gate-saharaclient-integration-vanilla-2.3
+      - gate-saharaclient-integration-vanilla-2.4
       - gate-saharaclient-integration-heat-vanilla1
       - gate-saharaclient-integration-hdp1
       - gate-saharaclient-integration-hdp2
@@ -97,4 +99,8 @@ jobs:
   - name: diskimage-integration-vanilla-fedora-2.4
     voting: false
   - name: diskimage-integration-vanilla-centos-2.4
+    voting: false
+  - name: gate-saharaclient-integration-vanilla-2.4
+    voting: false
+  - name: gate-sahara-integration-vanilla-2.4
     voting: false
