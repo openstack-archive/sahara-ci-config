@@ -3,6 +3,17 @@
 #this is to fix bug with testtools==0.9.35
 #sed 's/testtools>=0.9.32/testtools==0.9.34/' -i test-requirements.txt
 
+NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+if [ "$NETWORK" == "0" ]; then
+    OPENSTACK_HOST="172.18.168.42"
+    HOST="c1"
+    TENANT_ID="$CI_LAB_TENANT_ID"
+else
+    OPENSTACK_HOST="172.18.168.43"
+    HOST="c2"
+    TENANT_ID="$STACK_SAHARA_TENANT_ID"
+fi
+
 sudo pip install .
 
 WORKSPACE=${1:-$WORKSPACE}
@@ -117,7 +128,7 @@ else
 fi
 
 echo "
-os_auth_host=172.18.168.42
+os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
 os_admin_username=ci-user
 os_admin_password=nova
@@ -128,8 +139,8 @@ min_transient_cluster_active_time=30
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
 [keystone_authtoken]
-auth_uri=http://172.18.168.42:5000/v2.0/
-identity_uri=http://172.18.168.42:35357/
+auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
+identity_uri=http://$OPENSTACK_HOST:35357/
 admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci
@@ -172,12 +183,12 @@ echo "[COMMON]
 OS_USERNAME = 'ci-user'
 OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
-OS_TENANT_ID = '$CI_TENANT_ID'
-OS_AUTH_URL = 'http://172.18.168.42:5000/v2.0'
+OS_TENANT_ID = '$TENANT_ID'
+OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
 SAVANNA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = 'ci-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
+CLUSTER_NAME = '$HOST-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
 FLOATING_IP_POOL = 'public'
 NEUTRON_ENABLED = True
 INTERNAL_NEUTRON_NETWORK = 'private'

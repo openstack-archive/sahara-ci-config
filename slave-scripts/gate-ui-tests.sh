@@ -3,6 +3,13 @@
 sudo iptables -F
 sudo pip install $WORKSPACE
 
+NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+if [ "$NETWORK" == "0" ]; then
+    OPENSTACK_HOST="172.18.168.42"
+else
+    OPENSTACK_HOST="172.18.168.43"
+fi
+
 SAVANNA_LOG=/tmp/sahara.log
 
 SCR_CHECK=$(ps aux | grep screen | grep display)
@@ -56,7 +63,7 @@ cd $HOME
 echo "
 [DEFAULT]
 
-os_auth_host=172.18.168.42
+os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
 os_admin_username=ci-user
 os_admin_password=nova
@@ -66,8 +73,8 @@ use_neutron=true
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
 [keystone_authtoken]
-auth_uri=http://172.18.168.42:5000/v2.0/
-identity_uri=http://172.18.168.42:35357/
+auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
+identity_uri=http://$OPENSTACK_HOST:35357/
 admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci"  > sahara.conf
@@ -110,7 +117,7 @@ tenant = 'ci'
 flavor = 'qa-flavor'
 neutron_management_network = 'private'
 floationg_ip_pool = 'public'
-keystone_url = 'http://172.18.168.42:5000/v2.0'
+keystone_url = 'http://$OPENSTACK_HOST:5000/v2.0'
 await_element = 120
 image_name_for_register = 'ubuntu-12.04'
 image_name_for_edit = "savanna-itests-ci-vanilla-image"

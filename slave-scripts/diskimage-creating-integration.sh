@@ -1,5 +1,16 @@
 #!/bin/bash
 
+NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+if [ "$NETWORK" == "0" ]; then
+    OPENSTACK_HOST="172.18.168.42"
+    HOST="c1"
+    TENANT_ID="$CI_LAB_TENANT_ID"
+else
+    OPENSTACK_HOST="172.18.168.43"
+    HOST="c2"
+    TENANT_ID="$STACK_SAHARA_TENANT_ID"
+fi
+
 check_error_code() {
    if [ "$1" != "0" ]; then
        echo "$2 image $3 doesn't build"
@@ -11,13 +22,13 @@ register_vanilla_image() {
    # 1 - hadoop version, 2 - username, 3 - image name
    case "$1" in
            1)
-             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
            2.3)
-             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
            2.4)
-             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
    esac
 }
@@ -26,16 +37,16 @@ register_hdp_image() {
    # 1 - hadoop version, 2 - username, 3 - image name
    case "$1" in
            1)
-             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
              ;;
            2)
-             glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'="${2}"
              ;;
    esac
 }
 
 delete_image() {
-   glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $1
+   glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $1
 }
 
 upload_image() {
@@ -63,7 +74,7 @@ upload_image() {
 
 rename_image() {
    # 1 - source image, 2 - target image
-   glance --os-username ci-user --os-auth-url http://172.18.168.42:5000/v2.0/ --os-tenant-name ci --os-password nova image-update $1 --name $2
+   glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-update $1 --name $2
 }
 
 plugin="$1"
@@ -79,11 +90,11 @@ MAP_REDUCE_TEST=False
 SWIFT_TEST=True
 SCALING_TEST=True
 TRANSIENT_TEST=True
-VANILLA_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
-VANILLA_TWO_IMAGE=ci-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_${hadoop_version}
-HDP_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
-HDP_TWO_IMAGE=ci-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
-SPARK_IMAGE=ci-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
+VANILLA_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
+VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
+HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
+HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
+SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 SSH_USERNAME="ubuntu"
 
 case $plugin in
@@ -202,7 +213,7 @@ echo "infrastructure_engine=direct
 " >> etc/sahara/sahara.conf
 
 echo "
-os_auth_host=172.18.168.42
+os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
 os_admin_username=ci-user
 os_admin_password=nova
@@ -213,8 +224,8 @@ node_domain = nl
 [database]
 connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
 [keystone_authtoken]
-auth_uri=http://172.18.168.42:5000/v2.0/
-identity_uri=http://172.18.168.42:35357/
+auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
+identity_uri=http://$OPENSTACK_HOST:35357/
 admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci" >> etc/sahara/sahara.conf
@@ -261,12 +272,12 @@ echo "[COMMON]
 OS_USERNAME = 'ci-user'
 OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
-OS_TENANT_ID = '$CI_TENANT_ID'
-OS_AUTH_URL = 'http://172.18.168.42:5000/v2.0'
+OS_TENANT_ID = '$TENANT_ID'
+OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
 SAVANNA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = '$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
+CLUSTER_NAME = '$HOST-$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
 FLOATING_IP_POOL = 'public'
 NEUTRON_ENABLED = True
 INTERNAL_NEUTRON_NETWORK = 'private'
