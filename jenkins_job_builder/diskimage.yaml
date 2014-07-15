@@ -17,7 +17,8 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-{plugin}"
+               \nPREV_JOB=diskimage-integration-{plugin}\
+               \nHOST_NAME=$NODE_NAME""
     node: 'precise'
 
 - job-template:
@@ -39,7 +40,8 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-vanilla-{image}-{hadoop-version}"
+               \nPREV_JOB=diskimage-integration-vanilla-{image}-{hadoop-version}\
+               \nHOST_NAME=$NODE_NAME"
     node: 'precise'
 
 - project:

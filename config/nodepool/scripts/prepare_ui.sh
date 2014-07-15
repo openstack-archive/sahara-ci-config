@@ -11,6 +11,12 @@
 
 #Repository for Openstack Dashboard
 #sudo add-apt-repository cloud-archive:havana -y
+NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+if [ "$NETWORK" == "0" ]; then
+    OPENSTACK_HOST="172.18.168.42"
+else
+    OPENSTACK_HOST="172.18.168.43"
+fi
 
 sudo apt-get install libstdc++5 nodejs xserver-xorg libffi-dev apache2 libapache2-mod-wsgi  -y
 git clone https://github.com/openstack/horizon
@@ -18,7 +24,7 @@ cd horizon && sudo pip install -U -r requirements.txt
 python manage.py compress --force
 cp -r static/ openstack_dashboard/
 cp openstack_dashboard/local/local_settings.py.example openstack_dashboard/local/local_settings.py
-sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"172.18.168.42\"/g" openstack_dashboard/local/local_settings.py
+sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${OPENSTACK_HOST}\"/g" openstack_dashboard/local/local_settings.py
 cd .. && sudo mv horizon /opt/
 sudo chown -R www-data:www-data /opt/horizon
 sudo su -c "echo '
@@ -37,7 +43,7 @@ sudo sed -i "s/'openstack_dashboard'/'saharadashboard',\n    'openstack_dashboar
 sudo su -c "echo \"HORIZON_CONFIG['dashboards'] += ('sahara',)\" >> /opt/horizon/openstack_dashboard/settings.py"
 sudo sed -i "s/#from horizon.utils import secret_key/from horizon.utils import secret_key/g" /opt/horizon/openstack_dashboard/local/local_settings.py
 sudo sed -i "s/#SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(LOCAL_PATH, '.secret_key_store'))/SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(LOCAL_PATH, '.secret_key_store'))/g" /opt/horizon/openstack_dashboard/local/local_settings.py
-sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"172.18.168.42\"/g" /opt/horizon/openstack_dashboard/local/local_settings.py
+sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${OPENSTACK_HOST}\"/g" /opt/horizon/openstack_dashboard/local/local_settings.py
 sudo su -c 'echo -e "SAHARA_USE_NEUTRON = True" >> /opt/horizon/openstack_dashboard/local/local_settings.py'
 sudo su -c 'echo -e "AUTO_ASSIGNMENT_ENABLED = False" >> /opt/horizon/openstack_dashboard/local/local_settings.py'
 sudo su -c 'echo -e "SAHARA_URL = \"http://127.0.0.1:8386/v1.1\"" >> /opt/horizon/openstack_dashboard/local/local_settings.py'

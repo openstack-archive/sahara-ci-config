@@ -3,7 +3,16 @@
 cd /opt/ci/jenkins-jobs/sahara-ci-config/slave-scripts
 sleep 20
 
+source $WORKSPACE/credentials
 JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $1 }')
+HOST=$(echo $HOST_NAME | awk -F '-' '{ print $2 }' | cut -c1-2)
+if [ "$HOST" == "ci" ]; then
+    export os_auth_url="http://$OPENSTACK_HOST_CI_LAB:5000/v2.0"
+    export os_image_endpoint="http://$OPENSTACK_HOST_CI_LAB:8004/v1/$CI_LAB_TENANT_ID"
+else
+    export os_auth_url="http://$OPENSTACK_HOST_SAHARA_STACK:5000/v2.0"
+    export os_image_endpoint="http://$OPENSTACK_HOST_SAHARA_STACK:8004/v1/$STACK_SAHARA_TENANT_ID"
+fi
 if [ $JOB_TYPE == 'diskimage' ]; then
     PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
     if [ $PLUGIN == 'vanilla' ]; then
@@ -17,18 +26,18 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         fi
         HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
         if [ "$HADOOP_VERSION" == '1' ]; then
-            python cleanup.py cleanup $os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
+            python cleanup.py cleanup $HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
         elif [ "$HADOOP_VERSION" == '2.3' ]; then
-            python cleanup.py cleanup $os-2-3-$PREV_BUILD-vanilla-v2
+            python cleanup.py cleanup $HOST-$os-2-3-$PREV_BUILD-vanilla-v2
         else
-            python cleanup.py cleanup $os-2-4-$PREV_BUILD-vanilla-v2
+            python cleanup.py cleanup $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
         fi
     elif [ $PLUGIN == 'hdp1' ]; then
-        python cleanup.py cleanup cos-1-$PREV_BUILD-hdp
+        python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
     elif [ $PLUGIN == 'hdp2' ]; then
-        python cleanup.py cleanup cos-2-$PREV_BUILD-hdp-v2
+        python cleanup.py cleanup $HOST-cos-2-$PREV_BUILD-hdp-v2
     else
-        python cleanup.py cleanup uos-1-$PREV_BUILD-$PLUGIN
+        python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
     fi
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
@@ -53,8 +62,8 @@ else
         then
             JOB_TYPE=vanilla-v1
         fi
-        python cleanup.py cleanup-heat ci-$PREV_BUILD-$JOB_TYPE
+        python cleanup.py cleanup-heat $HOST-$PREV_BUILD-$JOB_TYPE
     else
-        python cleanup.py cleanup -$PREV_BUILD-$JOB_TYPE
+        python cleanup.py cleanup $HOST-$PREV_BUILD-$JOB_TYPE
     fi
 fi
