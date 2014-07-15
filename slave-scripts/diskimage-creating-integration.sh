@@ -300,8 +300,8 @@ $VANILLA_PARAMS
 
 if [ "$plugin" == "vanilla" -a "$hadoop_version" == "2-4" ]; then
    echo "HADOOP_VERSION = '2.4.0'
-   HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
-   " >> sahara/tests/integration/configs/itest.conf
+HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
+" >> sahara/tests/integration/configs/itest.conf
 fi
 
 echo "[HDP]
