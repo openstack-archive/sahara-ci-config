@@ -94,7 +94,7 @@
     builders:
     - shell: "rm -rf sahara-ci-config\
             \ngit clone https://github.com/stackforge/sahara-ci-config\
-            \nbash -x sahara-ci-config/slave-scripts/integration-cleanup.sh"
+            \nbash sahara-ci-config/slave-scripts/integration-cleanup.sh"
 
 - job:
     name: gate-savanna-pep8-trunk
