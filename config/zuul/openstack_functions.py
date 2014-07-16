@@ -36,4 +36,5 @@ def single_use_node(item, job, params):
 
 def set_ci_tenant(item, job, params):
     single_use_node(item, job, params)
-    params['CI_TENANT_ID'] = '-CI_TENANT_ID-'
+    params['CI_LAB_TENANT_ID'] = '-CI_TENANT_ID-'
+    params['STACK_SAHARA_TENANT_ID'] = '-STACK_SAHARA_TENANT_ID-'
