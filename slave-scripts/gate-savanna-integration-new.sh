@@ -233,7 +233,7 @@ SKIP_SCALING_TEST = $SCALING_TEST
 $VANILLA_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
-if [ "$JOB_TYPE" == "vanilla" -a "$hadoop_version" == "2-4" ]; then
+if [ "$JOB_TYPE" == "vanilla" -a "$HADOOP_VERSION" == "2-4" ]; then
    echo "HADOOP_VERSION = '2.4.0'
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
 " >> sahara/tests/integration/configs/itest.conf
