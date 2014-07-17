@@ -87,19 +87,13 @@ export PIP_USE_MIRRORS=True
 sahara-db-manage --config-file $HOME/sahara.conf upgrade head
 screen -dmS sahara /bin/bash -c "PYTHONUNBUFFERED=1 sahara-all --config-file $HOME/sahara.conf -d --log-file /tmp/sahara.log"
 
-i=0
-while true
-do
-        let "i=$i+1"
-        if [ "$i" -gt "120" ]; then
-                echo "project does not start" && FAILURE=1 && break
-        fi
-        if [ ! -f $SAVANNA_LOG ]; then
-                sleep 10
-        else
-                echo "project is started" && FAILURE=0 && break
-        fi
-done
+API_RESPONDING_TIMEOUT=30
+FAILURE=0
+
+if ! timeout ${API_RESPONDING_TIMEOUT} sh -c "while ! curl -s http://127.0.0.1:8386/v1.1/ 2>/dev/null | grep -q 'Authentication required' ; do sleep 1; done"; then
+    echo "Sahara API failed to respond within ${API_RESPONDING_TIMEOUT} seconds"
+    FAILURE=1
+fi
 
 if [ "$FAILURE" != 0 ]; then
     exit 1
