@@ -41,12 +41,20 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     fi
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
-    if [ $JOB_TYPE == 'vanilla1' ]
+    HADOOP_VERSION=1
+    if [ $JOB_TYPE == 'vanilla' ]
     then
-        JOB_TYPE=vanilla-v1
-    elif [ $JOB_TYPE == 'vanilla2' ]
-    then
-        JOB_TYPE=vanilla-v2
+        HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+        if [ "$HADOOP_VERSION" == '1' ]; then
+            JOB_TYPE=vanilla-v1
+        else
+            JOB_TYPE=vanilla-v2
+            if [ "$HADOOP_VERSION" == '2.3' ]; then
+                HADOOP_VERSION=2-3
+            else
+                HADOOP_VERSION=2-4
+            fi
+        fi
     fi
     if [ $JOB_TYPE == 'hdp1' ]
     then
@@ -54,6 +62,7 @@ else
     elif [ $JOB_TYPE == 'hdp2' ]
     then
         JOB_TYPE=hdp-v2
+        HADOOP_VERSION=2
     fi
     if [ $JOB_TYPE == 'heat' ]
     then
@@ -62,8 +71,8 @@ else
         then
             JOB_TYPE=vanilla-v1
         fi
-        python cleanup.py cleanup-heat $HOST-$PREV_BUILD-$JOB_TYPE
+        python cleanup.py cleanup-heat $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
     else
-        python cleanup.py cleanup $HOST-$PREV_BUILD-$JOB_TYPE
+        python cleanup.py cleanup $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
     fi
 fi
