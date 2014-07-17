@@ -240,22 +240,13 @@ SKIP_ALL_TESTS_FOR_PLUGIN = False
 
 touch $TMP_LOG
 i=0
+API_RESPONDING_TIMEOUT=30
 
-while true
-do
-        let "i=$i+1"
-        diff $TOX_LOG $TMP_LOG >> $LOG_FILE
-        cp -f $TOX_LOG $TMP_LOG
-        if [ "$i" -gt "120" ]; then
-                cat $LOG_FILE
-                echo "project does not start" && FAILURE=1 && break
-        fi
-        if [ ! -f $WORKSPACE/log.txt ]; then
-                sleep 10
-        else
-                echo "project is started" && FAILURE=0 && break
-        fi
-done
+if ! timeout ${API_RESPONDING_TIMEOUT} sh -c "while ! curl -s http://127.0.0.1:8386/v1.1/ 2>/dev/null | grep -q 'Authentication required' ; do sleep 1; done"; then
+    echo "Sahara API failed to respond within ${API_RESPONDING_TIMEOUT} seconds"
+    FAILURE=1
+fi
+echo "project is started" && FAILURE=0
 
 
 if [ "$FAILURE" = 0 ]; then
