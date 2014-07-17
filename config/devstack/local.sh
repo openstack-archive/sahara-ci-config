@@ -87,7 +87,7 @@ nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add pu
 
 #setup the default security group for Neutron
 
-CI_TENANT_ID=$(keystone tenant-list | grep $1 | awk '{print $2}' | head -n 1)
+CI_TENANT_ID=$(keystone tenant-list | grep ci | awk '{print $2}' | head -n 1)
 
 for group in $(neutron security-group-list | grep default | awk -F '|' '{ print $2 }')
 do
