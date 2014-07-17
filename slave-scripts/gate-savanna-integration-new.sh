@@ -70,7 +70,7 @@ fi
 
 if [ $JOB_TYPE == 'vanilla' ]
 then
-   HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+   HADOOP_VERSION=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
    if [ "$HADOOP_VERSION" == "1" ]; then
        VANILLA_JOB=True
        VANILLA_IMAGE=savanna-itests-ci-vanilla-image
