@@ -28,7 +28,7 @@ register_vanilla_image() {
              glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
            2.4)
-             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
    esac
 }
@@ -310,8 +310,8 @@ $VANILLA_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
 if [ "$plugin" == "vanilla" -a "$hadoop_version" == "2-4" ]; then
-   echo "HADOOP_VERSION = '2.4.0'
-HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.0.jar'
+   echo "HADOOP_VERSION = '2.4.1'
+HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
 " >> sahara/tests/integration/configs/itest.conf
 fi
 
