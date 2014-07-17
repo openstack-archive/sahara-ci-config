@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Sergey Kolekonov <skolekonov@mirantis.com>
+Workflow+1: Sergey Kolekonov <skolekonov@mirantis.com>
+Code-Review+1: Ivan Berezovskiy <iberezovskiy@mirantis.com>
+Submitted-by: Jenkins
+Submitted-at: Thu, 17 Jul 2014 14:15:45 +0000
+Reviewed-on: https://review.openstack.org/107066
+Project: stackforge/sahara-ci-config
+Branch: refs/heads/master
