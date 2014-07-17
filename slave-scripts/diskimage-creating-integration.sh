@@ -332,7 +332,7 @@ SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$HDP_TWO_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_SCALING_TEST = $SCALING_TEST
-" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+" >> sahara/tests/integration/configs/itest.conf
 
 touch $TMP_LOG
 API_RESPONDING_TIMEOUT=30
