@@ -236,6 +236,7 @@ $VANILLA_PARAMS
 if [ "$JOB_TYPE" == "vanilla" -a "$HADOOP_VERSION" == "2-4" ]; then
    echo "HADOOP_VERSION = '2.4.1'
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
+SKIP_EDP_JOB_TYPES = Pig
 " >> sahara/tests/integration/configs/itest.conf
 fi
 
