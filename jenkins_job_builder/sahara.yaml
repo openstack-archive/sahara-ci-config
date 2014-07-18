@@ -59,9 +59,7 @@
      - vanilla-2.4
      - hdp1
      - hdp2
-     - heat-vanilla1
-     - heat-vanilla2
-     - heat-hdp1
+     - heat_vanilla-1
      - transient
     jobs:
      - 'gate-sahara-integration-{plugin}'

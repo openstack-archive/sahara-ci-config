@@ -44,12 +44,12 @@ HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=savanna-itests-ci-vanilla-image
 HEAT_JOB=False
 
-if [ $JOB_TYPE == 'heat' ]
+if [ $JOB_TYPE == 'heat_vanilla' ]
 then
     HEAT_JOB=True
     SSH_USERNAME=ec2-user
     echo "Heat detected"
-    JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
+    JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
     CINDER_TEST=True
     TRANSIENT_TEST=True
 fi
