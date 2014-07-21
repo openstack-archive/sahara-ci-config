@@ -56,6 +56,9 @@ sudo pip install mysql-python
 cd /tmp && git clone https://github.com/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
 
+# install requirements for Cloudera plugin
+sudo pip install cm-api
+
 # pep8-trunk job requirements
 sudo apt-get install gettext -y
 
