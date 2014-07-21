@@ -12,8 +12,8 @@ else
 fi
 
 check_error_code() {
-   if [ "$1" != "0" ]; then
-       echo "$2 image $3 doesn't build"
+   if [ "$1" != "0" -o ! -f "$2" ]; then
+       echo "$2 image doesn't build"
        exit 1
    fi
 }
@@ -112,22 +112,19 @@ case $plugin in
 
        case $hadoop_version in
            1)
-              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
-              check_error_code $? "vanilla-1" ${image_type}
-              mv ${image_type}_sahara_vanilla_hadoop_1_latest*.qcow2 ${VANILLA_IMAGE}.qcow2
+              sudo ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              check_error_code $? ${VANILLA_IMAGE}.qcow2
               upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
               ;;
            2.3)
-              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
-              check_error_code $? "vanilla-2.3" ${image_type}
-              mv ${image_type}_sahara_vanilla_hadoop_2_3_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
+              sudo ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
+              check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-3
               ;;
            2.4)
-              sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
-              check_error_code $? "vanilla-2.4" ${image_type}
-              mv ${image_type}_sahara_vanilla_hadoop_2_4_latest*.qcow2 ${VANILLA_TWO_IMAGE}.qcow2
+              sudo ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
               ;;
@@ -139,27 +136,23 @@ case $plugin in
        python -m SimpleHTTPServer 8000 > /dev/null &
        popd
 
-       sudo JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
-       check_error_code $? "spark" "ubuntu"
        image_type="ubuntu"
-       mv ubuntu_sahara_spark_latest.qcow2 ${SPARK_IMAGE}.qcow2
-       exit $?
+       sudo ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
+       check_error_code $? ${SPARK_IMAGE}.qcow2
     ;;
 
     hdp1)
-       sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
-       check_error_code $? "hdp1" "centos"
        image_type="centos"
-       mv centos-6_4-64-hdp-1-3.qcow2 ${HDP_IMAGE}.qcow2
+       sudo ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
+       check_error_code $? ${HDP_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp1" "root" ${HDP_IMAGE}
     ;;
 
     hdp2)
-       sudo SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
-       check_error_code $? "hdp2" "centos"
        image_type="centos"
-       mv centos-6_4-64-hdp-2-0.qcow2 ${HDP_TWO_IMAGE}.qcow2
+       sudo ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
+       check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
