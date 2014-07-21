@@ -36,6 +36,8 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
     elif [ $PLUGIN == 'hdp2' ]; then
         python cleanup.py cleanup $HOST-cos-2-$PREV_BUILD-hdp-v2
+    elif [ $PLUGIN == 'cdh' ]; then
+        python cleanup.py cleanup $HOST-uos-2-$PREV_BUILD-cdh
     else
         python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
     fi
@@ -62,6 +64,11 @@ else
     elif [ $JOB_TYPE == 'hdp2' ]
     then
         JOB_TYPE=hdp-v2
+        HADOOP_VERSION=2
+    fi
+    if [ $JOB_TYPE == 'cdh' ]
+    then
+        JOB_TYPE=cdh
         HADOOP_VERSION=2
     fi
     if [ $JOB_TYPE == 'heat' ]
