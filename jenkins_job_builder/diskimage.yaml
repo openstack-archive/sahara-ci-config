@@ -51,6 +51,7 @@
      - hdp1
      - hdp2
      - spark
+     - cdh
     image:
      - ubuntu
      - fedora

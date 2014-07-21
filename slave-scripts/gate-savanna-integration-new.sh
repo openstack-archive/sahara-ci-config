@@ -42,6 +42,7 @@ ONLY_TRANSIENT_TEST=False
 HDP1_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
 HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=savanna-itests-ci-vanilla-image
+CDH_IMAGE=ubuntu_cdh_latest
 HEAT_JOB=False
 
 if [ $JOB_TYPE == 'heat_vanilla' ]
@@ -96,6 +97,12 @@ then
    TRANSIENT_JOB=True
 
    echo "Transient detected"
+fi
+if [ $JOB_TYPE == 'cdh' ]
+then
+   CDH_JOB=True
+   SSH_USERNAME=ubuntu
+   echo "CDH detected"
 fi
 
 export PYTHONUNBUFFERED=1
@@ -258,6 +265,11 @@ IMAGE_NAME = '$HDP2_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
+echo "[CDH]
+SSH_USERNAME = '$SSH_USERNAME'
+IMAGE_NAME = '$CDH_IMAGE'
+" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+
 touch $TMP_LOG
 API_RESPONDING_TIMEOUT=30
 FAILURE=0
@@ -306,6 +318,12 @@ if [ "$FAILURE" = 0 ]; then
     if [ $TRANSIENT_JOB ]
     then
         tox -e integration -- transient --concurrency=1
+        STATUS=`echo $?`
+    fi
+
+    if [ $CDH_JOB ]
+    then
+        tox -e integration -- cdh --concurrency=1
         STATUS=`echo $?`
     fi
 
