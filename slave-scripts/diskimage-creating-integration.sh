@@ -45,6 +45,11 @@ register_hdp_image() {
    esac
 }
 
+register_cdh_image() {
+   # 1 - username, 2 - image name
+   glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $2 --file $2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="${1}"
+}
+
 delete_image() {
    glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $1
 }
@@ -69,6 +74,8 @@ upload_image() {
            hdp2)
              register_hdp_image "2" "$2" "$3"
            ;;
+           cdh)
+           register_cdh_image "$2" "$3"
    esac
 }
 
@@ -96,6 +103,7 @@ HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 SSH_USERNAME="ubuntu"
+CDH_IMAGE=$HOST-ubuntu-cdh-${GERRIT_CHANGE_NUMBER}
 
 case $plugin in
     vanilla)
@@ -155,6 +163,14 @@ case $plugin in
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
+       hadoop_version="2"
+    ;;
+
+    cdh)
+       sudo cloudera_ubuntu_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i ubuntu
+       check_error_code $? "cdh" "ubuntu"
+       image_type="ubuntu"
+       SSH_USERNAME="ubuntu"
        hadoop_version="2"
     ;;
 esac
@@ -328,6 +344,11 @@ SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_SCALING_TEST = $SCALING_TEST
 " >> sahara/tests/integration/configs/itest.conf
 
+echo "[CDH]
+SSH_USERNAME = '$SSH_USERNAME'
+IMAGE_NAME = '$CDH_IMAGE'
+" >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
+
 touch $TMP_LOG
 API_RESPONDING_TIMEOUT=30
 FAILURE=0
@@ -357,6 +378,11 @@ if [ "$FAILURE" = 0 ]; then
     fi
     if [ "${plugin}" == "hdp2" ]; then
         tox -e integration -- hdp2 --concurrency=1
+        STATUS=`echo $?`
+    fi
+    if [ "${plugin}" == "cdh" ]
+    then
+        tox -e integration -- cdh --concurrency=1
         STATUS=`echo $?`
     fi
 fi
@@ -401,6 +427,9 @@ then
     if [ "${plugin}" == "hdp2" ]; then
         delete_image $HDP_TWO_IMAGE
     fi
+    if [ "${plugin}" == "cdh" ]; then
+        delete_image $CDH_IMAGE
+    fi
     exit 1
 fi
 
@@ -419,6 +448,9 @@ then
     if [ "${plugin}" == "hdp2" ]; then
         delete_image $HDP_TWO_IMAGE
     fi
+    if [ "${plugin}" == "cdh" ]; then
+        delete_image $CDH_IMAGE
+    fi
 else
     if [ "${plugin}" == "vanilla" ]; then
         if [ "${hadoop_version}" == "1" ]; then
@@ -436,5 +468,9 @@ else
     if [ "${plugin}" == "hdp2" ]; then
         delete_image centos_sahara_hdp_hadoop_2_latest
         rename_image $HDP_TWO_IMAGE centos_sahara_hdp_hadoop_2_latest
+    fi
+    if [ "${plugin}" == "cdh" ]; then
+        delete_image ubuntu_cdh_latest
+        rename_image $CDH_IMAGE ubuntu_cdh_latest
     fi
 fi
