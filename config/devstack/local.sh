@@ -9,6 +9,7 @@ VANILLA_IMAGE_PATH=/home/ubuntu/QA/sahara-icehouse-vanilla-1.2.1-ubuntu-13.10.qc
 HDP1_IMAGE_PATH=/home/ubuntu/QA/centos-6_4-64-hdp-1.3-sk
 HDP2_IMAGE_PATH=/home/ubuntu/images/centos-6_4-64-hdp-2-0.qcow2
 UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04.qcow2
+CDH_IMAGE_PATH=/home/ubuntu/images/ubuntu_cdh.qcow2
 # setup ci tenant and ci users
 
 CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep id | awk '{print $4}')
@@ -49,6 +50,7 @@ glance image-create --name savanna-itests-ci-vanilla-image --file $VANILLA_IMAGE
 glance image-create --name savanna-itests-ci-hdp-image-jdk-iptables-off --file $HDP1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
 glance image-create --name centos-6_4-64-hdp-2-0-hw --file $HDP2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
 glance image-create --name ubuntu-12.04 --file ubuntu-12.04-server-cloudimg-amd64-disk1.img --disk-format qcow2 --container-format bare --is-public=true
+glance image-create --name ubuntu_cdh_latest --file $CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
 
 rm ubuntu-12.04-server-cloudimg-amd64-disk1.img
 # make Neutron networks shared

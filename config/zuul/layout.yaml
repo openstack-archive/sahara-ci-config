@@ -40,6 +40,7 @@ projects:
       - gate-sahara-integration-heat_vanilla-1
       - gate-sahara-integration-hdp1
       - gate-sahara-integration-hdp2
+      - gate-sahara-integration-cdh
       - gate-sahara-integration-transient
       - gate-savanna-pep8-trunk
 
@@ -51,6 +52,7 @@ projects:
       - gate-saharaclient-integration-heat_vanilla-1
       - gate-saharaclient-integration-hdp1
       - gate-saharaclient-integration-hdp2
+      - gate-saharaclient-integration-cdh
       - gate-saharaclient-integration-transient
       - gate-savanna-pep8-trunk
 
@@ -70,6 +72,7 @@ projects:
       - diskimage-integration-vanilla-fedora-2.4
       - diskimage-integration-vanilla-centos-2.4
       - diskimage-integration-spark
+      - diskimage-integration-cdh
       - diskimage-integration-hdp1
       - diskimage-integration-hdp2
     post:
@@ -83,6 +86,7 @@ projects:
       - diskimage-integration-vanilla-fedora-2.4
       - diskimage-integration-vanilla-centos-2.4
       - diskimage-integration-spark
+      - diskimage-integration-cdh
       - diskimage-integration-hdp1
       - diskimage-integration-hdp2
 
@@ -103,4 +107,10 @@ jobs:
   - name: gate-saharaclient-integration-vanilla-2.4
     voting: false
   - name: gate-sahara-integration-vanilla-2.4
+    voting: false
+  - name: diskimage-integration-cdh
+    voting: false
+  - name: gate-saharaclient-integration-cdh
+    voting: false
+  - name: gate-sahara-integration-cdh
     voting: false
