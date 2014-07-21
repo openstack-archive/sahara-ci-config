@@ -139,6 +139,7 @@ case $plugin in
        image_type="ubuntu"
        sudo ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? ${SPARK_IMAGE}.qcow2
+       exit 0
     ;;
 
     hdp1)
