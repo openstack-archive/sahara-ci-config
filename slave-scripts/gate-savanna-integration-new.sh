@@ -226,10 +226,6 @@ ONLY_TRANSIENT_CLUSTER_TEST = $ONLY_TRANSIENT_TEST
 $VANILLA_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
-if [ "$JOB_TYPE" == "vanilla" -a "$HADOOP_VERSION" == "2-4" ]; then
-   SCALING_TEST=True
-fi
-
 echo "[VANILLA_TWO]
 SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_TWO_IMAGE'
