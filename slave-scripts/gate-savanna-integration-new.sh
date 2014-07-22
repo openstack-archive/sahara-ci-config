@@ -160,6 +160,7 @@ identity_uri=http://$OPENSTACK_HOST:35357/
 admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci
+plugins=vanilla,hdp,cdh
 " >> etc/sahara/sahara.conf
 
 echo "----------- sahara.conf -----------"
