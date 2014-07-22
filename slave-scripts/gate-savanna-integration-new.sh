@@ -162,6 +162,11 @@ admin_password=nova
 admin_tenant_name=ci
 " >> etc/sahara/sahara.conf
 
+if [ "$CDH_JOB" ]
+then
+    echo "plugins=vanilla,hdp,cdh" >> etc/sahara/sahara.conf
+fi
+
 echo "----------- sahara.conf -----------"
 cat etc/sahara/sahara.conf
 echo "----------- end of sahara.conf -----------"
