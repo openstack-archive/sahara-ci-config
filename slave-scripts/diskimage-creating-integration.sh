@@ -204,8 +204,8 @@ fi
 rm -rf /tmp/cache
 rm -f $LOG_FILE
 
-mysql -usavanna-citest -psavanna-citest -Bse "DROP DATABASE IF EXISTS savanna"
-mysql -usavanna-citest -psavanna-citest -Bse "create database savanna"
+mysql -usahara-citest -psahara-citest -Bse "DROP DATABASE IF EXISTS sahara"
+mysql -usahara-citest -psahara-citest -Bse "create database sahara"
 
 BUILD_ID=dontKill
 #sudo pip install tox
@@ -234,7 +234,7 @@ use_identity_api_v3=true
 use_neutron=true
 node_domain = nl
 [database]
-connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
+connection=mysql://sahara-citest:sahara-citest@localhost/sahara?charset=utf8
 [keystone_authtoken]
 auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
 identity_uri=http://$OPENSTACK_HOST:35357/
@@ -251,12 +251,12 @@ echo "----------- end of sahara.conf -----------"
 #echo "
 #[global]
 #timeout = 60
-#index-url = http://savanna-ci.vm.mirantis.net/pypi/savanna/
+#index-url = http://sahara-ci.vm.mirantis.net/pypi/sahara/
 #extra-index-url = https://pypi.python.org/simple/
 #download-cache = /home/ubuntu/.pip/cache/
 #[install]
 #use-mirrors = true
-#find-links = http://savanna-ci.vm.mirantis.net:8181/simple/
+#find-links = http://sahara-ci.vm.mirantis.net:8181/simple/
 #" > ~/.pip/pip.conf
 echo "
 [global]
@@ -286,7 +286,7 @@ OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
 OS_TENANT_ID = '$TENANT_ID'
 OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
-SAVANNA_HOST = '$ADDR'
+SAHARA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
 CLUSTER_NAME = '$HOST-$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'

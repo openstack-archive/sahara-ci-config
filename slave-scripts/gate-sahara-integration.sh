@@ -39,9 +39,9 @@ SWIFT_TEST=False
 SCALING_TEST=False
 TRANSIENT_TEST=True
 ONLY_TRANSIENT_TEST=False
-HDP1_IMAGE=savanna-itests-ci-hdp-image-jdk-iptables-off
+HDP1_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
-VANILLA_IMAGE=savanna-itests-ci-vanilla-image
+VANILLA_IMAGE=sahara-itests-ci-vanilla-image
 CDH_IMAGE=ubuntu_cdh_latest
 HEAT_JOB=False
 
@@ -74,7 +74,7 @@ then
    HADOOP_VERSION=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
    if [ "$HADOOP_VERSION" == "1" ]; then
        VANILLA_JOB=True
-       VANILLA_IMAGE=savanna-itests-ci-vanilla-image
+       VANILLA_IMAGE=sahara-itests-ci-vanilla-image
        echo "Vanilla detected"
    else
        VANILLA2_JOB=True
@@ -121,8 +121,8 @@ fi
 rm -rf /tmp/cache
 rm -f $LOG_FILE
 
-mysql -usavanna-citest -psavanna-citest -Bse "DROP DATABASE IF EXISTS savanna"
-mysql -usavanna-citest -psavanna-citest -Bse "create database savanna"
+mysql -usahara-citest -psahara-citest -Bse "DROP DATABASE IF EXISTS sahara"
+mysql -usahara-citest -psahara-citest -Bse "create database sahara"
 
 BUILD_ID=dontKill
 
@@ -158,9 +158,9 @@ os_admin_tenant_name=ci
 use_identity_api_v3=true
 use_neutron=true
 min_transient_cluster_active_time=30
-node_domain = nl
+node_domain=nl
 [database]
-connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
+connection=mysql://sahara-citest:sahara-citest@localhost/sahara?charset=utf8
 [keystone_authtoken]
 auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
 identity_uri=http://$OPENSTACK_HOST:35357/
@@ -208,7 +208,7 @@ OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
 OS_TENANT_ID = '$TENANT_ID'
 OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
-SAVANNA_HOST = '$ADDR'
+SAHARA_HOST = '$ADDR'
 FLAVOR_ID = '20'
 CLUSTER_CREATION_TIMEOUT = $TIMEOUT
 CLUSTER_NAME = '$HOST-$HADOOP_VERSION-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET'
