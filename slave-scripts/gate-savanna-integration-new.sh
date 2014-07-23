@@ -143,6 +143,12 @@ else
     " >> etc/sahara/sahara.conf
 fi
 
+if [ "$CDH_JOB" ]
+then
+    echo "plugins=vanilla,hdp,cdh
+    " >> etc/sahara/sahara.conf
+fi
+
 echo "
 os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
@@ -162,11 +168,6 @@ admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci
 " >> etc/sahara/sahara.conf
-
-if [ "$CDH_JOB" ]
-then
-    echo "plugins=vanilla,hdp,cdh" >> etc/sahara/sahara.conf
-fi
 
 echo "----------- sahara.conf -----------"
 cat etc/sahara/sahara.conf
