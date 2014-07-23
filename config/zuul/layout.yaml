@@ -56,7 +56,7 @@ projects:
       - gate-saharaclient-integration-cdh
       - gate-saharaclient-integration-transient
       - gate-saharaclient-integration-heat_transient
-      - gate-savanna-pep8-trunk
+      - gate-sahara-pep8-trunk
 
   - name: openstack/sahara-dashboard
     check:
@@ -98,7 +98,7 @@ jobs:
     branch: ^(master|milestone-proposed|stable/icehouse)$
   - name: diskimage-integration-hdp2
     voting: false
-  - name: gate-savanna-pep8-trunk
+  - name: gate-sahara-pep8-trunk
     voting: false
   - name: diskimage-integration-vanilla-ubuntu-2.4
     voting: false

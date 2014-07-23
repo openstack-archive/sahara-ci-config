@@ -63,7 +63,7 @@ providers:
         setup: prepare_node_bare.sh
 
 targets:
-  - name: savanna-gate
+  - name: sahara-gate
     jenkins:
       url: http://127.0.0.1/jenkins
       user: admin
