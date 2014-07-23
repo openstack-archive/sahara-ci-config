@@ -41,9 +41,9 @@ sudo mkdir -p /opt/git
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
 sudo apt-get -y install mysql-server libpq-dev libmysqlclient-dev
-mysql -uroot -p$MYSQL_PASS -Bse "create database savanna"
-mysql -uroot -p$MYSQL_PASS -Bse  "CREATE USER 'savanna-citest'@'localhost' IDENTIFIED BY 'savanna-citest'"
-mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON savanna.* TO 'savanna-citest'@'localhost'"
+mysql -uroot -p$MYSQL_PASS -Bse "create database sahara"
+mysql -uroot -p$MYSQL_PASS -Bse  "CREATE USER 'sahara-citest'@'localhost' IDENTIFIED BY 'sahara-citest'"
+mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON sahara.* TO 'sahara-citest'@'localhost'"
 mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 

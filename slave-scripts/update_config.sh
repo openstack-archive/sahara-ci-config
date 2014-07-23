@@ -12,11 +12,11 @@ sudo su - zuul -c "cat $WORKSPACE/config/zuul/logging.conf > /etc/zuul/logging.c
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/openstack_functions.py > /etc/zuul/openstack_functions.py"
 sudo service zuul reload
 
-sed "s%- net-id: 'CI_LAB_PRIVATE_NETWORK_ID'%- net-id: '$CI_LAB_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/savanna.yaml
-sed "s%- net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'%- net-id: '$STACK_SAHARA_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/savanna.yaml
-sed "s%apikey: JENKINS_API_KEY%apikey: $JENKINS_API_KEY%g" -i $WORKSPACE/config/nodepool/savanna.yaml
-sed "s%credentials-id: CREDENTIALS_ID%credentials-id: $CREDENTIALS_ID%g" -i $WORKSPACE/config/nodepool/savanna.yaml
-sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/savanna.yaml > /etc/nodepool/nodepool.yaml"
+sed "s%- net-id: 'CI_LAB_PRIVATE_NETWORK_ID'%- net-id: '$CI_LAB_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sed "s%- net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'%- net-id: '$STACK_SAHARA_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sed "s%apikey: JENKINS_API_KEY%apikey: $JENKINS_API_KEY%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sed "s%credentials-id: CREDENTIALS_ID%credentials-id: $CREDENTIALS_ID%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/sahara.yaml > /etc/nodepool/nodepool.yaml"
 
 sed "s%MYSQL_PASS=MYSQL_ROOT_PASSWORD%MYSQL_PASS=$MYSQL_ROOT_PASSWORD%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh
 sed "s%JENKINS_PUBLIC_KEY%$JENKINS_PUBLIC_KEY%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh

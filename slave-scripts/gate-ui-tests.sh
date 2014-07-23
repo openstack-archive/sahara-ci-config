@@ -10,7 +10,7 @@ else
     OPENSTACK_HOST="172.18.168.43"
 fi
 
-SAVANNA_LOG=/tmp/sahara.log
+SAHARA_LOG=/tmp/sahara.log
 
 SCR_CHECK=$(ps aux | grep screen | grep display)
 if [ -n "$SCR_CHECK" ]; then
@@ -27,11 +27,11 @@ fi
 
 ps aux | grep X
 
-#rm -f /tmp/savanna-server.db
+#rm -f /tmp/sahara-server.db
 rm -rf /tmp/cache
 
-mysql -usavanna-citest -psavanna-citest -Bse "DROP DATABASE IF EXISTS savanna"
-mysql -usavanna-citest -psavanna-citest -Bse "create database savanna"
+mysql -usahara-citest -psahara-citest -Bse "DROP DATABASE IF EXISTS sahara"
+mysql -usahara-citest -psahara-citest -Bse "create database sahara"
 
 BUILD_ID=dontKill
 
@@ -71,7 +71,7 @@ os_admin_tenant_name=ci
 use_floating_ips=true
 use_neutron=true
 [database]
-connection=mysql://savanna-citest:savanna-citest@localhost/savanna?charset=utf8
+connection=mysql://sahara-citest:sahara-citest@localhost/sahara?charset=utf8
 [keystone_authtoken]
 auth_uri=http://$OPENSTACK_HOST:5000/v2.0/
 identity_uri=http://$OPENSTACK_HOST:35357/
@@ -114,11 +114,11 @@ floationg_ip_pool = 'public'
 keystone_url = 'http://$OPENSTACK_HOST:5000/v2.0'
 await_element = 120
 image_name_for_register = 'ubuntu-12.04'
-image_name_for_edit = "savanna-itests-ci-vanilla-image"
+image_name_for_edit = "sahara-itests-ci-vanilla-image"
 [vanilla]
 skip_plugin_tests = False
 skip_edp_test = False
-base_image = "savanna-itests-ci-vanilla-image"
+base_image = "sahara-itests-ci-vanilla-image"
 [hdp]
 skip_plugin_tests = False
 hadoop_version = '1.3.2'
