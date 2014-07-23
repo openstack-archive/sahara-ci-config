@@ -21,10 +21,10 @@ fi
 sudo apt-get install libstdc++5 nodejs xserver-xorg libffi-dev apache2 libapache2-mod-wsgi  -y
 git clone https://github.com/openstack/horizon
 cd horizon && sudo pip install -U -r requirements.txt
-python manage.py compress --force
-cp -r static/ openstack_dashboard/
 cp openstack_dashboard/local/local_settings.py.example openstack_dashboard/local/local_settings.py
 sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${OPENSTACK_HOST}\"/g" openstack_dashboard/local/local_settings.py
+python manage.py compress --force
+cp -r static/ openstack_dashboard/
 cd .. && sudo mv horizon /opt/
 sudo chown -R www-data:www-data /opt/horizon
 sudo su -c "echo '
