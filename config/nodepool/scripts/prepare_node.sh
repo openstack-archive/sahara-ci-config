@@ -47,12 +47,12 @@ mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON savanna.* TO 'savanna-citest'@'loc
 mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 
+#workaround problem 'xslt-config: not found'
+sudo apt-get install libxslt1-dev -y
+
 #glance-client is required for diskimage-integration jobs
 sudo pip install python-glanceclient
 sudo apt-get install qemu kpartx -y
-
-#workaround problem 'xslt-config: not found'
-sudo apt-get install libxslt1-dev -y
 
 #install Sahara requirements
 sudo pip install mysql-python
