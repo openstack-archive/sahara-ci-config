@@ -32,7 +32,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/gate-savanna-integration-new.sh"
+              \nbash -x sahara-ci-config/slave-scripts/gate-sahara-integration-new.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -51,7 +51,7 @@
     node: 'precise'
 
 - project:
-    name: savanna
+    name: sahara
     github-org: openstack
     plugin:
      - vanilla-1
@@ -97,7 +97,7 @@
             \nbash sahara-ci-config/slave-scripts/integration-cleanup.sh"
 
 - job:
-    name: gate-savanna-pep8-trunk
+    name: gate-sahara-pep8-trunk
     project-type: freestyle
     defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
@@ -111,7 +111,7 @@
     - gerrit-git-prep
     - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/gate-savanna-pep8-trunk.sh"
+              \nbash -x sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh"
     properties:
       - zeromq-event
     publishers:

@@ -9,4 +9,4 @@ tox -e integration --notest
 # change sahara-client
 .tox/integration/bin/pip install $WORKSPACE
 
-bash -x /tmp/sahara-ci-config/slave-scripts/gate-savanna-integration-new.sh /tmp/sahara
+bash -x /tmp/sahara-ci-config/slave-scripts/gate-sahara-integration-new.sh /tmp/sahara
