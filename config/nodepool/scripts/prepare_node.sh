@@ -51,6 +51,9 @@ sudo service mysql stop
 sudo pip install python-glanceclient
 sudo apt-get install qemu kpartx -y
 
+#workaround problem 'xslt-config: not found'
+sudo apt-get install libxslt1-dev -y
+
 #install Sahara requirements
 sudo pip install mysql-python
 cd /tmp && git clone https://github.com/openstack/sahara
