@@ -51,7 +51,6 @@ then
     SSH_USERNAME=ec2-user
     echo "Heat detected"
     JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
-    CINDER_TEST=True
     TRANSIENT_TEST=True
 fi
 
