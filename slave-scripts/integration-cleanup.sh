@@ -71,12 +71,16 @@ else
         JOB_TYPE=cdh
         HADOOP_VERSION=2
     fi
-    if [ $JOB_TYPE == 'heat' ]
+    if [[ "$JOB_TYPE" =~ heat.* ]]
     then
-       JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
-        if [ $JOB_TYPE == 'vanilla1' ]
+       JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
+        if [ $JOB_TYPE == 'vanilla' ]
         then
             JOB_TYPE=vanilla-v1
+        fi
+        if [ $JOB_TYPE == 'transient' ]
+        then
+            JOB_TYPE=transient
         fi
         python cleanup.py cleanup-heat $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
     else
