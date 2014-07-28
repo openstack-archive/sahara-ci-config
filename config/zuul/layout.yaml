@@ -42,6 +42,7 @@ projects:
       - gate-sahara-integration-hdp2
       - gate-sahara-integration-cdh
       - gate-sahara-integration-transient
+      - gate-sahara-integration-heat_transient
       - gate-savanna-pep8-trunk
 
   - name: openstack/python-saharaclient
@@ -54,6 +55,7 @@ projects:
       - gate-saharaclient-integration-hdp2
       - gate-saharaclient-integration-cdh
       - gate-saharaclient-integration-transient
+      - gate-saharaclient-integration-heat_vanilla
       - gate-savanna-pep8-trunk
 
   - name: openstack/sahara-dashboard
@@ -113,4 +115,8 @@ jobs:
   - name: gate-saharaclient-integration-cdh
     voting: false
   - name: gate-sahara-integration-cdh
+    voting: false
+  - name: gate-sahara-integration-heat_vanilla
+    voting: false
+  - name: gate-saharaclient-integration-heat_vanilla
     voting: false
