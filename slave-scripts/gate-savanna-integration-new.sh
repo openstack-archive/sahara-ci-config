@@ -45,7 +45,7 @@ VANILLA_IMAGE=savanna-itests-ci-vanilla-image
 CDH_IMAGE=ubuntu_cdh_latest
 HEAT_JOB=False
 
-if [ $JOB_TYPE == 'heat_vanilla' ]
+if [[ $JOB_TYPE =~ heat ]]
 then
     HEAT_JOB=True
     SSH_USERNAME=ec2-user
@@ -92,9 +92,7 @@ then
    EDP_TEST=False
    TRANSIENT_TEST=False
    ONLY_TRANSIENT_TEST=True
-   HEAT_JOB=False
    TRANSIENT_JOB=True
-
    echo "Transient detected"
 fi
 if [ $JOB_TYPE == 'cdh' ]

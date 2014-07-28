@@ -61,6 +61,7 @@
      - hdp2
      - heat_vanilla-1
      - transient
+     - heat_transient
      - cdh
     jobs:
      - 'gate-sahara-integration-{plugin}'
