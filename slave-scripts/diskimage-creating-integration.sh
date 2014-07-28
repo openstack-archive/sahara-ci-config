@@ -224,6 +224,12 @@ echo "[DEFAULT]
 echo "infrastructure_engine=direct
 " >> etc/sahara/sahara.conf
 
+if [ "$plugin" == "cdh" ]
+then
+    echo "plugins=vanilla,hdp,cdh
+    " >> etc/sahara/sahara.conf
+fi
+
 echo "
 os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
@@ -365,7 +371,7 @@ if [ "$FAILURE" = 0 ]; then
 
     export PYTHONUNBUFFERED=1
 
-    cd /tmp/sahara
+    
     if [ "${plugin}" == "vanilla" ]; then
         if [ "${hadoop_version}" == "1" ]; then
            tox -e integration -- vanilla1 --concurrency=1
