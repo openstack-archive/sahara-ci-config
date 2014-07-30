@@ -80,7 +80,7 @@ else
         fi
         if [ $JOB_TYPE == 'transient' ]
         then
-            JOB_TYPE=transient
+            JOB_TYPE=transient-vanilla
         fi
         python cleanup.py cleanup-heat $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
     else
