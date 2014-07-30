@@ -96,8 +96,6 @@ jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
     branch: ^(master|milestone-proposed|stable/icehouse)$
-  - name: diskimage-integration-hdp2
-    voting: false
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: diskimage-integration-vanilla-ubuntu-2.4
