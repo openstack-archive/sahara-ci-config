@@ -98,23 +98,9 @@ jobs:
     branch: ^(master|milestone-proposed|stable/icehouse)$
   - name: gate-sahara-pep8-trunk
     voting: false
-  - name: diskimage-integration-vanilla-ubuntu-2.4
-    voting: false
-  - name: diskimage-integration-vanilla-fedora-2.4
-    voting: false
-  - name: diskimage-integration-vanilla-centos-2.4
-    voting: false
-  - name: gate-saharaclient-integration-vanilla-2.4
-    voting: false
-  - name: gate-sahara-integration-vanilla-2.4
-    voting: false
   - name: diskimage-integration-cdh
     voting: false
   - name: gate-saharaclient-integration-cdh
     voting: false
   - name: gate-sahara-integration-cdh
-    voting: false
-  - name: gate-sahara-integration-heat_transient
-    voting: false
-  - name: gate-saharaclient-integration-heat_transient
     voting: false
