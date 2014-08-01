@@ -103,7 +103,7 @@ HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 SSH_USERNAME="ubuntu"
-CDH_IMAGE=$HOST-ubuntu-cdh-${GERRIT_CHANGE_NUMBER}
+CDH_IMAGE=$HOST-centos-cdh-${GERRIT_CHANGE_NUMBER}
 
 case $plugin in
     vanilla)
@@ -168,11 +168,11 @@ case $plugin in
     ;;
 
     cdh)
-       image_type="ubuntu"
-       sudo cloudera_ubuntu_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i ubuntu
+       image_type="centos"
+       sudo cloudera_centos_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i centos
        check_error_code $? ${CDH_IMAGE}.qcow2
-       upload_image "cdh" "ubuntu" ${CDH_IMAGE}
-       SSH_USERNAME="ubuntu"
+       upload_image "cdh" "cloud-user" ${CDH_IMAGE}
+       SSH_USERNAME="cloud-user"
        hadoop_version="2"
     ;;
 esac
@@ -478,7 +478,7 @@ else
         rename_image $HDP_TWO_IMAGE centos_sahara_hdp_hadoop_2_latest
     fi
     if [ "${plugin}" == "cdh" ]; then
-        delete_image ubuntu_cdh_latest
-        rename_image $CDH_IMAGE ubuntu_cdh_latest
+        delete_image centos_cdh_latest
+        rename_image $CDH_IMAGE centos_cdh_latest
     fi
 fi
