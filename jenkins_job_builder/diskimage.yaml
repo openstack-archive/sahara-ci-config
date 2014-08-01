@@ -6,7 +6,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {plugin}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {plugin}"
 
     properties:
       - zeromq-event
@@ -29,7 +29,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image} {hadoop-version}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image} {hadoop-version}"
 
     properties:
       - zeromq-event

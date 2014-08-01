@@ -6,7 +6,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nbash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-integration.sh"
+              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-integration.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -32,7 +32,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/gate-sahara-integration.sh"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-integration.sh"
     properties:
       - zeromq-event
     wrappers:
