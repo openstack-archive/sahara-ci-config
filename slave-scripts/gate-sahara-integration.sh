@@ -41,7 +41,7 @@ SKIP_ONLY_TRANSIENT_TEST=False
 HDP1_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP2_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
-CDH_IMAGE=ubuntu_cdh_latest
+CDH_IMAGE=centos_cdh_latest
 HEAT_JOB=False
 
 if [[ $JOB_TYPE =~ heat ]]
@@ -97,7 +97,7 @@ fi
 if [ $JOB_TYPE == 'cdh' ]
 then
    CDH_JOB=True
-   SSH_USERNAME=ubuntu
+   SSH_USERNAME=cloud-user
    echo "CDH detected"
 fi
 
