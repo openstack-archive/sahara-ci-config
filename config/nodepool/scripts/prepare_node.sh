@@ -70,6 +70,13 @@ sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%
    -P /home/jenkins http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.tar.gz
 sudo chown jenkins:jenkins /home/jenkins/jdk-7u51-linux-x64.tar.gz
 
+pushd /opt
+DIB_RELEASE="0.1.17"
+wget https://github.com/openstack/diskimage-builder/archive/$DIB_RELEASE.tar.gz
+tar xzf $DIB_RELEASE.tar.gz
+rm -rf $DIB_RELEASE.tar.gz
+popd
+
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
 sync
