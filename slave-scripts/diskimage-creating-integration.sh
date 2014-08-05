@@ -121,18 +121,18 @@ case $plugin in
 
        case $hadoop_version in
            1)
-              sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${VANILLA_IMAGE}.qcow2
               upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
               ;;
            2.3)
-              sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-3
               ;;
            2.4)
-              sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
@@ -146,14 +146,14 @@ case $plugin in
        popd
 
        image_type="ubuntu"
-       sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? ${SPARK_IMAGE}.qcow2
        exit 0
     ;;
 
     hdp1)
        image_type="centos"
-       sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${HDP_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp1" "root" ${HDP_IMAGE}
@@ -161,7 +161,7 @@ case $plugin in
 
     hdp2)
        image_type="centos"
-       sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
@@ -170,7 +170,7 @@ case $plugin in
 
     cdh)
        image_type="ubuntu"
-       sudo DIB_REPO_PATH="/opt/diskimage-builder-$RELEASE_DIB" cloudera_ubuntu_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i ubuntu
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder-$RELEASE_DIB" cloudera_ubuntu_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i ubuntu
        check_error_code $? ${CDH_IMAGE}.qcow2
        upload_image "cdh" "ubuntu" ${CDH_IMAGE}
        SSH_USERNAME="ubuntu"
