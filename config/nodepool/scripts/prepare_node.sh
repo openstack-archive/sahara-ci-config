@@ -71,9 +71,8 @@ sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%
 
 pushd /home/jenkins
 RELEASE_DIB="0.1.17"
-sudo wget https://github.com/openstack/diskimage-builder/archive/$RELEASE_DIB.tar.gz
-sudo tar xzf $RELEASE_DIB.tar.gz
-sudo rm -rf $RELEASE_DIB.tar.gz
+sudo git clone https://git.openstack.org/openstack/diskimage-builder
+sudo git --git-dir=/home/jenkins/diskimage-builder/.git --work-tree=/home/jenkins/diskimage-builder/ checkout $RELEASE_DIB
 sudo chown -R jenkins:jenkins /home/jenkins
 popd
 
