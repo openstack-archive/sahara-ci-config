@@ -82,6 +82,7 @@ then
        else
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
           HADOOP_VERSION=2-4
+          [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
        fi
        echo "Vanilla2 detected"
    fi
@@ -93,12 +94,14 @@ then
    SKIP_ONLY_TRANSIENT_TEST=True
    SKIP_TRANSIENT_JOB=True
    TRANSIENT_JOB=True
+   [ $HEAT_JOB ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "Transient detected"
 fi
 if [ $JOB_TYPE == 'cdh' ]
 then
    CDH_JOB=True
    SSH_USERNAME=ubuntu
+   [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "CDH detected"
 fi
 
