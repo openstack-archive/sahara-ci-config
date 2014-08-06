@@ -131,6 +131,7 @@ case $plugin in
               hadoop_version=2-3
               ;;
            2.4)
+              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
@@ -168,6 +169,7 @@ case $plugin in
     ;;
 
     cdh)
+       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
        image_type="centos"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_centos_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i centos
        check_error_code $? ${CDH_IMAGE}.qcow2
