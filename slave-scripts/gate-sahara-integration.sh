@@ -92,6 +92,7 @@ then
    SKIP_TRANSIENT_TEST=False
    SKIP_ONLY_TRANSIENT_TEST=True
    SKIP_TRANSIENT_JOB=True
+   TRANSIENT_JOB=True
    echo "Transient detected"
 fi
 if [ $JOB_TYPE == 'cdh' ]
