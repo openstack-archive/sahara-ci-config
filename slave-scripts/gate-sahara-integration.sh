@@ -24,7 +24,6 @@ SKIP_ONLY_TRANSIENT_TEST=False
 HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
-CDH_IMAGE=centos_cdh_latest
 HEAT_JOB=False
 
 if [[ $JOB_TYPE =~ heat ]]
@@ -80,7 +79,18 @@ then
 fi
 if [ $JOB_TYPE == 'cdh' ]
 then
-   SSH_USERNAME=cloud-user
+   os_version=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
+   if [ "$os_version" == "centos" ]; then
+      SSH_USERNAME=cloud-user
+      CDH_IMAGE=centos_cdh_latest
+      HADOOP_VERSION=2c
+   else
+      SSH_USERNAME=ubuntu
+      # temporary using native ubuntu image
+      #CDH_IMAGE=ubuntu_cdh_latest
+      CDH_IMAGE=ubuntu-12.04
+      HADOOP_VERSION=2u
+   fi
    PLUGIN_TYPE=cdh
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "CDH detected"

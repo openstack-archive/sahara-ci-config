@@ -94,7 +94,7 @@ HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 SSH_USERNAME="ubuntu"
-CDH_IMAGE=$HOST-centos-cdh-${GERRIT_CHANGE_NUMBER}
+CDH_IMAGE=$HOST-${image_type}-cdh-${GERRIT_CHANGE_NUMBER}
 
 case $plugin in
     vanilla)
@@ -167,11 +167,15 @@ case $plugin in
 
     cdh)
        [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
-       image_type="centos"
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_centos_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i centos
+       if [ "${image_type}" == 'centos' ]; then
+           username='cloud-user'
+       else
+           username='ubuntu'
+       fi
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_${image_type}_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i $image_type
        check_error_code $? ${CDH_IMAGE}.qcow2
-       upload_image "cdh" "cloud-user" ${CDH_IMAGE}
-       SSH_USERNAME="cloud-user"
+       upload_image "cdh" ${username} ${CDH_IMAGE}
+       SSH_USERNAME=$username
        hadoop_version="2"
        PLUGIN_TYPE=$plugin
     ;;
