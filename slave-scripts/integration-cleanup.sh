@@ -37,7 +37,13 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     elif [ $PLUGIN == 'hdp2' ]; then
         python cleanup.py cleanup $HOST-cos-2-$PREV_BUILD-hdp-v2
     elif [ $PLUGIN == 'cdh' ]; then
-        python cleanup.py cleanup $HOST-uos-2-$PREV_BUILD-cdh
+        IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+        if [ "$IMAGE_TYPE" == "centos" ]; then
+            os="cos"
+        elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
+            os="uos"
+        fi
+        python cleanup.py cleanup $HOST-$os-2-$PREV_BUILD-cdh
     else
         python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
     fi
@@ -68,8 +74,13 @@ else
     fi
     if [ $JOB_TYPE == 'cdh' ]
     then
+        os_version=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
+        if [ "$os_version" == "centos" ]; then
+           HADOOP_VERSION=2c
+        else
+           HADOOP_VERSION=2u
+        fi
         JOB_TYPE=cdh
-        HADOOP_VERSION=2
     fi
     if [[ $JOB_TYPE =~ heat ]]
     then

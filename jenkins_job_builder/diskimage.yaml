@@ -22,14 +22,14 @@
     node: 'precise'
 
 - job-template:
-    name: 'diskimage-integration-vanilla-{image}-{hadoop-version}'
+    name: 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
     defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image} {hadoop-version}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image-vanilla} {hadoop-version}"
 
     properties:
       - zeromq-event
@@ -40,7 +40,30 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-vanilla-{image}-{hadoop-version}\
+               \nPREV_JOB=diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}\
+               \nHOST_NAME=$NODE_NAME"
+    node: 'precise'
+
+- job-template:
+    name: 'diskimage-integration-cdh-{image-cdh}'
+    defaults: global
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh cdh {image-cdh}"
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=diskimage-integration-cdh-{image-cdh}\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise'
 
@@ -51,16 +74,19 @@
      - hdp1
      - hdp2
      - spark
-     - cdh
-    image:
+    image-vanilla:
      - ubuntu
      - fedora
+     - centos
+    image-cdh:
+     - ubuntu
      - centos
     hadoop-version:
      - 1
      - 2.3
      - 2.4
     jobs:
-     - 'diskimage-integration-vanilla-{image}-{hadoop-version}'
+     - 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
      - 'diskimage-integration-{plugin}'
+     - 'diskimage-integration-cdh-{image-cdh}
 

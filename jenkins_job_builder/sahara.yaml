@@ -62,7 +62,8 @@
      - heat_vanilla-1
      - transient
      - heat_transient
-     - cdh
+     - cdh-ubuntu
+     - cdh-centos
     jobs:
      - 'gate-sahara-integration-{plugin}'
      - 'gate-saharaclient-integration-{plugin}'
