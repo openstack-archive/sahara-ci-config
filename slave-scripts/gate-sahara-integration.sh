@@ -29,7 +29,6 @@ HEAT_JOB=False
 if [[ $JOB_TYPE =~ heat ]]
 then
     HEAT_JOB=True
-    SSH_USERNAME=ec2-user
     echo "Heat detected"
     JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
     SKIP_TRANSIENT_TEST=True
@@ -38,11 +37,9 @@ if [ $JOB_TYPE == 'hdp1' ]
 then
    echo "HDP1 detected"
    PLUGIN_TYPE=hdp1
-   SSH_USERNAME=root
 fi
 if [ $JOB_TYPE == 'hdp2' ]
 then
-   SSH_USERNAME=root
    hadoop_version=2
    PLUGIN_TYPE=hdp2
    echo "HDP2 detected"
@@ -81,11 +78,9 @@ if [ $JOB_TYPE == 'cdh' ]
 then
    os_version=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
    if [ "$os_version" == "centos" ]; then
-      SSH_USERNAME=cloud-user
       CDH_IMAGE=centos_cdh_latest
       hadoop_version=2c
    else
-      SSH_USERNAME=ubuntu
       # temporary using native ubuntu image
       #CDH_IMAGE=ubuntu_cdh_latest
       CDH_IMAGE=ubuntu-12.04
