@@ -47,7 +47,6 @@ HEAT_JOB=False
 if [[ $JOB_TYPE =~ heat ]]
 then
     HEAT_JOB=True
-    SSH_USERNAME=ec2-user
     echo "Heat detected"
     JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
     SKIP_TRANSIENT_TEST=True
@@ -62,7 +61,6 @@ fi
 if [ $JOB_TYPE == 'hdp2' ]
 then
    HDP2_JOB=True
-   SSH_USERNAME=root
    HADOOP_VERSION=2
    echo "HDP2 detected"
 fi
@@ -100,7 +98,6 @@ fi
 if [ $JOB_TYPE == 'cdh' ]
 then
    CDH_JOB=True
-   SSH_USERNAME=cloud-user
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "CDH detected"
 fi
@@ -221,7 +218,6 @@ $COMMON_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 echo "[VANILLA]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_IMAGE'
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
 SKIP_CLUSTER_CONFIG_TEST = $SKIP_CLUSTER_CONFIG_TEST
@@ -235,7 +231,6 @@ $VANILLA_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 echo "[VANILLA_TWO]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_TWO_IMAGE'
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
 SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
@@ -252,7 +247,6 @@ SKIP_EDP_JOB_TYPES = Pig
 fi
 
 echo "[HDP]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$HDP1_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
@@ -264,13 +258,11 @@ $HDP1_PARAMS
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 echo "[HDP2]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$HDP2_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 echo "[CDH]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$CDH_IMAGE'
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 

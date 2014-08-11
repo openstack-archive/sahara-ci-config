@@ -102,7 +102,6 @@ VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-had
 HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
-SSH_USERNAME="ubuntu"
 CDH_IMAGE=$HOST-centos-cdh-${GERRIT_CHANGE_NUMBER}
 
 case $plugin in
@@ -116,7 +115,6 @@ case $plugin in
        else
            username=${image_type}
        fi
-       SSH_USERNAME=${username}
 
        case $hadoop_version in
            1)
@@ -155,7 +153,6 @@ case $plugin in
        image_type="centos"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${HDP_IMAGE}.qcow2
-       SSH_USERNAME="root"
        upload_image "hdp1" "root" ${HDP_IMAGE}
     ;;
 
@@ -163,7 +160,6 @@ case $plugin in
        image_type="centos"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
-       SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
     ;;
@@ -174,7 +170,6 @@ case $plugin in
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_centos_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i centos
        check_error_code $? ${CDH_IMAGE}.qcow2
        upload_image "cdh" "cloud-user" ${CDH_IMAGE}
-       SSH_USERNAME="cloud-user"
        hadoop_version="2"
     ;;
 esac
@@ -306,7 +301,6 @@ $COMMON_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
 echo "[VANILLA]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_IMAGE'
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
 SKIP_CLUSTER_CONFIG_TEST = $SKIP_CLUSTER_CONFIG_TEST
@@ -319,7 +313,6 @@ $VANILLA_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
 echo "[VANILLA_TWO]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$VANILLA_TWO_IMAGE'
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
 SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
@@ -336,7 +329,6 @@ HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-
 fi
 
 echo "[HDP]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$HDP_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
@@ -348,14 +340,12 @@ $HDP_PARAMS
 " >> sahara/tests/integration/configs/itest.conf
 
 echo "[HDP2]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$HDP_TWO_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = False
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 " >> sahara/tests/integration/configs/itest.conf
 
 echo "[CDH]
-SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$CDH_IMAGE'
 " >> $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
