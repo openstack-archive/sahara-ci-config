@@ -30,7 +30,6 @@ HEAT_JOB=False
 if [[ $JOB_TYPE =~ heat ]]
 then
     HEAT_JOB=True
-    SSH_USERNAME=ec2-user
     echo "Heat detected"
     JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
     SKIP_TRANSIENT_TEST=True
@@ -39,11 +38,9 @@ if [ $JOB_TYPE == 'hdp1' ]
 then
    echo "HDP1 detected"
    PLUGIN_TYPE=hdp1
-   SSH_USERNAME=root
 fi
 if [ $JOB_TYPE == 'hdp2' ]
 then
-   SSH_USERNAME=root
    hadoop_version=2
    PLUGIN_TYPE=hdp2
    echo "HDP2 detected"
@@ -80,7 +77,6 @@ then
 fi
 if [ $JOB_TYPE == 'cdh' ]
 then
-   SSH_USERNAME=cloud-user
    PLUGIN_TYPE=cdh
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "CDH detected"
