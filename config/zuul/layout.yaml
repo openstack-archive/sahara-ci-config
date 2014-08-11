@@ -9,7 +9,7 @@ pipelines:
         - event: patchset-created
         - event: change-restored
         - event: comment-added
-          comment_filter: (?i)^(Patch Set [0-9]+:\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug)|( savanna-ci)|( sahara-ci))\s*$
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck
         - event: comment-added
           require-approval:
             - username: savanna-ci
