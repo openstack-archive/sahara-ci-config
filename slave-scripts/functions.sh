@@ -47,7 +47,7 @@ write_sahara_main_conf() {
   conf_path=$1
   echo "[DEFAULT]
 " >> $conf_path
-  if [ $HEAT_JOB ]
+  if [ "$HEAT_JOB" == "True" ]
   then
     echo "infrastructure_engine=heat
 " >> $conf_path
