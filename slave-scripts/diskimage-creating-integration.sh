@@ -2,6 +2,8 @@
 
 . $FUNCTION_PATH
 
+check_openstack_host
+
 check_error_code() {
    if [ "$1" != "0" -o ! -f "$2" ]; then
        echo "$2 image doesn't build"
@@ -78,7 +80,7 @@ rename_image() {
 
 plugin="$1"
 image_type=${2:-ubuntu}
-HADOOP_VERSION=${3:-1}
+hadoop_version=${3:-1}
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 SKIP_CINDER_TEST=True
 SKIP_CLUSTER_CONFIG_TEST=True
@@ -109,7 +111,7 @@ case $plugin in
        fi
        SSH_USERNAME=${username}
 
-       case $HADOOP_VERSION in
+       case $hadoop_version in
            1)
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${VANILLA_IMAGE}.qcow2
@@ -120,7 +122,7 @@ case $plugin in
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
-              HADOOP_VERSION=2-3
+              hadoop_version=2-3
               PLUGIN_TYPE=vanilla2
               ;;
            2.4)
@@ -128,7 +130,7 @@ case $plugin in
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
-              HADOOP_VERSION=2-4
+              hadoop_version=2-4
               PLUGIN_TYPE=vanilla2
               ;;
        esac
@@ -161,7 +163,7 @@ case $plugin in
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        SSH_USERNAME="root"
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
-       HADOOP_VERSION="2"
+       hadoop_version="2"
        PLUGIN_TYPE=$plugin
     ;;
 
@@ -203,7 +205,7 @@ start_sahara etc/sahara/sahara.conf
 
 cd /tmp/sahara
 
-CLUSTER_NAME="$HOST-$image_os-$HADOOP_VERSION-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
+CLUSTER_NAME="$HOST-$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
 write_tests_conf sahara/tests/integration/configs/itest.conf
 
 run_tests
@@ -217,7 +219,7 @@ fi
 if [[ "$STATUS" != 0 ]]
 then
     if [ "${plugin}" == "vanilla" ]; then
-        if [ "${HADOOP_VERSION}" == "1" ]; then
+        if [ "${hadoop_version}" == "1" ]; then
             delete_image $VANILLA_IMAGE
         else
             delete_image $VANILLA_TWO_IMAGE
@@ -238,7 +240,7 @@ fi
 if [ "$ZUUL_PIPELINE" == "check" ]
 then
     if [ "${plugin}" == "vanilla" ]; then
-        if [ "${HADOOP_VERSION}" == "1" ]; then
+        if [ "${hadoop_version}" == "1" ]; then
             delete_image $VANILLA_IMAGE
         else
             delete_image $VANILLA_TWO_IMAGE
@@ -255,12 +257,12 @@ then
     fi
 else
     if [ "${plugin}" == "vanilla" ]; then
-        if [ "${HADOOP_VERSION}" == "1" ]; then
+        if [ "${hadoop_version}" == "1" ]; then
             delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
             rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
         else
-            delete_image ${image_type}_sahara_vanilla_hadoop_${HADOOP_VERSION}_latest
-            rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_${HADOOP_VERSION}_latest
+            delete_image ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
+            rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
         fi
     fi
     if [ "${plugin}" == "hdp1" ]; then

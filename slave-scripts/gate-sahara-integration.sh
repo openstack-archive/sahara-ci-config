@@ -12,7 +12,7 @@ sudo pip install .
 WORKSPACE=${1:-$WORKSPACE}
 JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 
-HADOOP_VERSION=1
+hadoop_version=1
 SKIP_CINDER_TEST=False
 SKIP_CLUSTER_CONFIG_TEST=False
 SKIP_EDP_TEST=False
@@ -44,24 +44,24 @@ fi
 if [ $JOB_TYPE == 'hdp2' ]
 then
    SSH_USERNAME=root
-   HADOOP_VERSION=2
+   hadoop_version=2
    PLUGIN_TYPE=hdp2
    echo "HDP2 detected"
 fi
 if [ $JOB_TYPE == 'vanilla' ]
 then
-   HADOOP_VERSION=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
-   if [ "$HADOOP_VERSION" == "1" ]; then
+   hadoop_version=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
+   if [ "$hadoop_version" == "1" ]; then
        PLUGIN_TYPE=vanilla1
        echo "Vanilla detected"
    else
        PLUGIN_TYPE=vanilla2
-       if [ "$HADOOP_VERSION" == "2.3" ]; then
+       if [ "$hadoop_version" == "2.3" ]; then
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
-          HADOOP_VERSION=2-3
+          hadoop_version=2-3
        else
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
-          HADOOP_VERSION=2-4
+          hadoop_version=2-4
           [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
        fi
        echo "Vanilla2 detected"
@@ -98,7 +98,7 @@ start_sahara etc/sahara/sahara.conf
 
 cd $WORKSPACE
 
-CLUSTER_NAME="$HOST-$HADOOP_VERSION-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
+CLUSTER_NAME="$HOST-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
 write_tests_conf $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 run_tests
