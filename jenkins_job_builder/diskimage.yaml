@@ -88,5 +88,5 @@
     jobs:
      - 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
      - 'diskimage-integration-{plugin}'
-     - 'diskimage-integration-cdh-{image-cdh}
+     - 'diskimage-integration-cdh-{image-cdh}'
 
