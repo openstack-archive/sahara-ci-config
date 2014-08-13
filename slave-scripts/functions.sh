@@ -150,7 +150,7 @@ SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 " >> $test_conf_path
 
 if [ $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" ]; then
-     echo "hadoop_version = '2.4.1'
+     echo "HADOOP_VERSION = '2.4.1'
 SKIP_EDP_JOB_TYPES = Pig
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
 " >> $test_conf_path
