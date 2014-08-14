@@ -40,6 +40,7 @@ projects:
       - gate-sahara-integration-heat_vanilla-1
       - gate-sahara-integration-hdp1
       - gate-sahara-integration-hdp2
+      - gate-sahara-integration-spark
       - gate-sahara-integration-cdh-centos
       - gate-sahara-integration-cdh-ubuntu
       - gate-sahara-integration-transient
@@ -54,6 +55,7 @@ projects:
       - gate-saharaclient-integration-heat_vanilla-1
       - gate-saharaclient-integration-hdp1
       - gate-saharaclient-integration-hdp2
+      - gate-saharaclient-integration-spark
       - gate-saharaclient-integration-cdh-centos
       - gate-saharaclient-integration-cdh-ubuntu
       - gate-saharaclient-integration-transient

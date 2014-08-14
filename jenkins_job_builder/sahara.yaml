@@ -57,6 +57,7 @@
      - vanilla-1
      - vanilla-2.3
      - vanilla-2.4
+     - spark
      - hdp1
      - hdp2
      - heat_vanilla-1
