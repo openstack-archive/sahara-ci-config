@@ -178,6 +178,13 @@ SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 SSH_USERNAME = '$SSH_USERNAME'
 IMAGE_NAME = '$CDH_IMAGE'
 " >>  $test_conf_path
+
+  echo "[SPARK]
+IMAGE_NAME = '$SPARK_IMAGE'
+SKIP_ALL_TESTS_FOR_PLUGIN = False
+SKIP_EDP_TEST = $SKIP_EDP_TEST
+SKIP_SCALING_TEST = $SKIP_SCALING_TEST
+" >> $test_conf_path
 }
 
 run_tests() {
@@ -215,6 +222,9 @@ run_tests() {
           tox -e integration -- cdh --concurrency=1
           STATUS=`echo $?`
           ;;
+        spark)
+          tox -e integration -- spark --concurrency=1
+          STATUS=`echo $?`
      esac
   fi
 }

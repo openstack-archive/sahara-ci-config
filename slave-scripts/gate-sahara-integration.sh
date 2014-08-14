@@ -24,6 +24,7 @@ SKIP_ONLY_TRANSIENT_TEST=False
 HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
+SPARK_IMAGE=sahara_spark_latest
 HEAT_JOB=False
 
 if [[ $JOB_TYPE =~ heat ]]
@@ -95,6 +96,14 @@ then
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
    echo "CDH detected"
 fi
+if [ $JOB_TYPE == 'spark' ]
+then
+   PLUGIN_TYPE=spark
+   SKIP_EDP_TEST=False
+   SKIP_SCALING_TEST=False
+   hadoop_version=1
+   echo "Spark detected"
+fi 
 
 cd $WORKSPACE
 
