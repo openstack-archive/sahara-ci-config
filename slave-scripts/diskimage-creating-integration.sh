@@ -43,6 +43,11 @@ register_cdh_image() {
    glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $2 --file $2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="${1}"
 }
 
+register_spark_image() {
+   # 1 - username, 2 - image name
+   glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $2 --file $2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="${1}"
+}
+
 delete_image() {
    glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $1
 }
@@ -69,6 +74,9 @@ upload_image() {
            ;;
            cdh)
              register_cdh_image "$2" "$3"
+           ;;
+           spark)
+             register_spark_image "$2" "$3"
            ;;
    esac
 }
@@ -144,8 +152,8 @@ case $plugin in
        image_type="ubuntu"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? ${SPARK_IMAGE}.qcow2
+       upload_image "spark" "ubuntu" ${SPARK_IMAGE}
        PLUGIN_TYPE=$plugin
-       exit 0
     ;;
 
     hdp1)
@@ -238,6 +246,9 @@ then
     if [ "${plugin}" == "cdh" ]; then
         delete_image $CDH_IMAGE
     fi
+    if [ "${plugin}" == "spark" ]; then
+        delete_image $SPARK_IMAGE
+    fi
     exit 1
 fi
 
@@ -258,6 +269,9 @@ then
     fi
     if [ "${plugin}" == "cdh" ]; then
         delete_image $CDH_IMAGE
+    fi
+    if [ "${plugin}" == "spark" ]; then
+        delete_image $SPARK_IMAGE
     fi
 else
     if [ "${plugin}" == "vanilla" ]; then
@@ -280,5 +294,9 @@ else
     if [ "${plugin}" == "cdh" ]; then
         delete_image centos_cdh_latest
         rename_image $CDH_IMAGE centos_cdh_latest
+    fi
+    if [ "${plugin}" == "spark" ]; then
+        delete_image $SPARK_IMAGE
+        rename_image $SPARK_IMAGE sahara_spark_latest
     fi
 fi
