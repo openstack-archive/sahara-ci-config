@@ -57,7 +57,11 @@ write_sahara_main_conf() {
   fi
   if [ "$PLUGIN_TYPE" == "cdh" ]
   then
-    echo "plugins=vanilla,hdp,cdh
+    echo "plugins=cdh
+" >> $conf_path
+  elif [ "$PLUGIN_TYPE" == "spark" ]
+  then
+    echo "plugins=spark
 " >> $conf_path
   fi
   echo "os_auth_host=$OPENSTACK_HOST
