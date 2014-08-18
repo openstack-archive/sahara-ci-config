@@ -70,3 +70,5 @@ CINDER_SECURE_DELETE=False
 
 RECLONE=yes
 API_RATE_LIMIT=False
+
+IMAGE_URLS=http://cloud-images.ubuntu.com/releases/precise/release/ubuntu-12.04-server-cloudimg-amd64-disk1.img
