@@ -122,3 +122,13 @@ jobs:
     voting: false
   - name: gate-sahara-integration-spark
     voting: false
+  - name: diskimage-integration-vanilla-ubuntu-2.4
+    voting: false
+  - name: diskimage-integration-vanilla-fedora-2.4
+    voting: false
+  - name: diskimage-integration-vanilla-centos-2.4
+    voting: false
+  - name: gate-saharaclient-integration-vanilla-2.4
+    voting: false
+  - name: gate-sahara-integration-vanilla-2.4
+    voting: false
