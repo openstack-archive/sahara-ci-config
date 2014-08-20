@@ -84,11 +84,7 @@ else
     fi
     if [[ $JOB_TYPE =~ heat ]]
     then
-       JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
-        if [ $JOB_TYPE == 'vanilla' ]
-        then
-            JOB_TYPE=vanilla-v1
-        fi
+        JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
         if [ $JOB_TYPE == 'transient' ]
         then
             JOB_TYPE=transient-vanilla
