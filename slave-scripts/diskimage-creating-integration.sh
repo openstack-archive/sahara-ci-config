@@ -93,7 +93,7 @@ GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 SKIP_CINDER_TEST=True
 SKIP_CLUSTER_CONFIG_TEST=True
 SKIP_EDP_TEST=False
-SKIP_MAP_REDUCE_TEST=False
+SKIP_MAP_REDUCE_TEST=True
 SKIP_SWIFT_TEST=True
 SKIP_SCALING_TEST=True
 SKIP_TRANSIENT_TEST=True
@@ -138,6 +138,7 @@ case $plugin in
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
               PLUGIN_TYPE=vanilla2
+              HEAT_JOB=True
               ;;
        esac
     ;;

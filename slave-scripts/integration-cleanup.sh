@@ -30,7 +30,7 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         elif [ "$HADOOP_VERSION" == '2.3' ]; then
             python cleanup.py cleanup $HOST-$os-2-3-$PREV_BUILD-vanilla-v2
         else
-            python cleanup.py cleanup $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
+            python cleanup.py cleanup-heat $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
         fi
     elif [ $PLUGIN == 'hdp1' ]; then
         python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
@@ -61,6 +61,7 @@ else
                 HADOOP_VERSION=2-3
             else
                 HADOOP_VERSION=2-4
+                JOB_TYPE=heat_vanilla
             fi
         fi
     fi
@@ -84,10 +85,10 @@ else
     fi
     if [[ $JOB_TYPE =~ heat ]]
     then
-       JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
-        if [ $JOB_TYPE == 'vanilla' ]
+        JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
+        if [ $JOB_TYPE == 'vanilla' ]	
         then
-            JOB_TYPE=vanilla-v1
+            JOB_TYPE=vanilla-v2
         fi
         if [ $JOB_TYPE == 'transient' ]
         then
