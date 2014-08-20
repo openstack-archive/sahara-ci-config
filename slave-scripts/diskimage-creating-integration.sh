@@ -125,6 +125,7 @@ case $plugin in
               PLUGIN_TYPE=vanilla1
               ;;
            2.3)
+              [ "$ZUUL_BRANCH" != "stable/icehouse" ] && echo "Vanilla 2.3 plugin is deprecated" && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
@@ -132,7 +133,7 @@ case $plugin in
               PLUGIN_TYPE=vanilla2
               ;;
            2.4)
-              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
+              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
@@ -173,7 +174,7 @@ case $plugin in
     ;;
 
     cdh)
-       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
+       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
        else
@@ -204,6 +205,7 @@ create_database
 sudo rm -rf sahara
 git clone https://review.openstack.org/openstack/sahara
 cd sahara
+[ "$ZUUL_BRANCH" == "stable/icehouse" ] && git checkout stable/icehouse && sudo pip install -U -r requirements.txt
 sudo pip install .
 
 #enable_pypi
