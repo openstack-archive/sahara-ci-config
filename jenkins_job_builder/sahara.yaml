@@ -60,7 +60,6 @@
      - spark
      - hdp1
      - hdp2
-     - heat_vanilla-1
      - transient
      - heat_transient
      - cdh-ubuntu

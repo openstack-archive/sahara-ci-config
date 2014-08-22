@@ -292,7 +292,7 @@ else
         rename_image $CDH_IMAGE centos_cdh_latest
     fi
     if [ "${plugin}" == "spark" ]; then
-        delete_image $SPARK_IMAGE
+        delete_image sahara_spark_latest
         rename_image $SPARK_IMAGE sahara_spark_latest
     fi
 fi
