@@ -16,8 +16,8 @@ hadoop_version=1
 SKIP_CINDER_TEST=False
 SKIP_CLUSTER_CONFIG_TEST=False
 SKIP_EDP_TEST=False
-SKIP_MAP_REDUCE_TEST=False
-SKIP_SWIFT_TEST=False
+SKIP_MAP_REDUCE_TEST=True
+SKIP_SWIFT_TEST=True
 SKIP_SCALING_TEST=False
 SKIP_TRANSIENT_TEST=True
 SKIP_ONLY_TRANSIENT_TEST=False
@@ -57,6 +57,7 @@ then
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
           hadoop_version=2-3
        else
+          HEAT_JOB=True
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
           hadoop_version=2-4
           [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
