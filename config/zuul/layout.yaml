@@ -114,9 +114,3 @@ jobs:
     voting: false
   - name: gate-sahara-integration-cdh-ubuntu
     voting: false
-  - name: diskimage-integration-spark
-    voting: false
-  - name: gate-saharaclient-integration-spark
-    voting: false
-  - name: gate-sahara-integration-spark
-    voting: false
