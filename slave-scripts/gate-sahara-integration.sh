@@ -24,6 +24,7 @@ SKIP_ONLY_TRANSIENT_TEST=False
 HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
+VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
 SPARK_IMAGE=sahara_spark_latest
 HEAT_JOB=False
 
@@ -58,7 +59,6 @@ then
           hadoop_version=2-3
        else
           HEAT_JOB=True
-          VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
           hadoop_version=2-4
           [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
        fi

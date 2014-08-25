@@ -151,6 +151,11 @@ SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 " >> $test_conf_path
 
+if [ $PLUGIN_TYPE == "transient" ]; then
+     echo "HADOOP_VERSION = '2.4.1'
+" >> $test_conf_path
+fi
+
 if [ $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" ]; then
      echo "HADOOP_VERSION = '2.4.1'
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
