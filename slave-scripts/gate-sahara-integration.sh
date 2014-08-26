@@ -57,10 +57,11 @@ then
        if [ "$hadoop_version" == "2.3" ]; then
           VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
           hadoop_version=2-3
+          [ "$ZUUL_BRANCH" != "stable/icehouse" ] && echo "Vanilla 2.3 plugin is deprecated" && exit 0
        else
           HEAT_JOB=True
           hadoop_version=2-4
-          [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
+          [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
        fi
        echo "Vanilla2 detected"
    fi
@@ -73,7 +74,7 @@ then
    SKIP_ONLY_TRANSIENT_TEST=True
    SKIP_TRANSIENT_JOB=True
    TRANSIENT_JOB=True
-   [ $HEAT_JOB ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
+   [ $HEAT_JOB ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Heat_Transient plugin is not supported in stable/icehouse" && exit 0
    echo "Transient detected"
 fi
 if [ $JOB_TYPE == 'cdh' ]
@@ -89,7 +90,7 @@ then
       hadoop_version=2u
    fi
    PLUGIN_TYPE=cdh
-   [ "$ZUUL_BRANCH" == "stable/icehouse" ] && exit 0
+   [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
    echo "CDH detected"
 fi
 if [ $JOB_TYPE == 'spark' ]
@@ -98,10 +99,12 @@ then
    SKIP_EDP_TEST=False
    SKIP_SCALING_TEST=False
    hadoop_version=1
+   [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Spark plugin is not supported in stable/icehouse" && exit 0
    echo "Spark detected"
 fi
 
 cd $WORKSPACE
+[ "$ZUUL_BRANCH" == "stable/icehouse" ] && git checkout stable/icehouse && sudo pip install -U -r requirements.txt
 
 TOX_LOG=$WORKSPACE/.tox/venv/log/venv-1.log
 
