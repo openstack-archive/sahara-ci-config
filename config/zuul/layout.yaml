@@ -60,9 +60,9 @@ projects:
       - gate-saharaclient-integration-heat_transient
       - gate-sahara-pep8-trunk
 
-  - name: openstack/sahara-dashboard
-    check:
-      - gate-ui-tests
+#  - name: openstack/sahara-dashboard
+#    check:
+#      - gate-ui-tests
 
   - name: openstack/sahara-image-elements
     check:
