@@ -114,15 +114,3 @@ jobs:
     voting: false
   - name: gate-sahara-integration-cdh-ubuntu
     voting: false
-  - name: gate-sahara-integration-hdp1
-    voting: false
-  - name: gate-sahara-integration-hdp2
-    voting: false
-  - name: gate-saharaclient-integration-hdp1
-    voting: false
-  - name: gate-saharaclient-integration-hdp2
-    voting: false
-  - name: diskimage-integration-hdp2
-    voting: false
-  - name: diskimage-integration-hdp1
-    voting: false
