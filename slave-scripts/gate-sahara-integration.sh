@@ -74,7 +74,7 @@ then
    SKIP_ONLY_TRANSIENT_TEST=True
    SKIP_TRANSIENT_JOB=True
    TRANSIENT_JOB=True
-   [ $HEAT_JOB ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Heat_Transient plugin is not supported in stable/icehouse" && exit 0
+   [ "$HEAT_JOB" == "True" ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Heat_Transient plugin is not supported in stable/icehouse" && exit 0
    echo "Transient detected"
 fi
 if [ $JOB_TYPE == 'cdh' ]
