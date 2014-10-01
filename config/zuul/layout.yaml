@@ -117,7 +117,3 @@ jobs:
       - '^[^\/]*$'
   - name: ^gate-sahara-integration-cdh-.*$
     voting: false
-    files:
-      - '^sahara/.*$'
-      - '^tools/.*$'
-      - '^[^\/]*$'
