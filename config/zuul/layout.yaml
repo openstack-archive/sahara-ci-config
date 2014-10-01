@@ -110,7 +110,7 @@ jobs:
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
     voting: false
-  - name: ^gate-sahara-integration.*$
+  - name: ^gate-sahara-integration-(vanilla|hdp|spark|transient|heat_transient).*$
     files:
       - '^sahara/.*$'
       - '^tools/.*$'
