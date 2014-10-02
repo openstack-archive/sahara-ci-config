@@ -112,12 +112,12 @@ jobs:
     voting: false
   - name: gate-saharaclient-integration-vanilla-2.4
     voting: false
-  - name: gate-sahara-integration-vanilla-2.4
-    voting: false
   - name: ^gate-sahara-integration.*$
     files:
       - '^sahara/.*$'
       - '^tools/.*$'
       - '^[^\/]*$'
   - name: ^gate-sahara-integration-cdh-.*$
+    voting: false
+  - name: ^gate-sahara-integration-vanilla-2.4$
     voting: false
