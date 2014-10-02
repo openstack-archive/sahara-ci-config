@@ -110,6 +110,19 @@ jobs:
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
     voting: false
+<<<<<<< HEAD
+=======
+  - name: gate-saharaclient-integration-vanilla-2.4
+    voting: false
+  - name: gate-sahara-integration-vanilla-2.4
+    voting: false
+  - name: ^gate-sahara-integration-cdh-.*$
+    voting: false
+    files:
+      - '^sahara/.*$'
+      - '^tools/.*$'
+      - '^[^\/]*$'
+>>>>>>> a56b310... Set job with Vanilla 2.4 as non-voting
   - name: ^gate-sahara-integration.*$
     files:
       - '^sahara/.*$'
