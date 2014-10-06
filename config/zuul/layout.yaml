@@ -99,7 +99,7 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
-    branch: ^(master|milestone-proposed|stable/icehouse)$
+    branch: ^(master|proposed/juno|stable/icehouse)$
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: diskimage-integration-cdh-centos
