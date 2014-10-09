@@ -1,5 +1,5 @@
-- job:
-    name: gate-ui-tests
+- job-template:
+    name: 'gate-{type}-tests'
     project-type: freestyle
     defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
@@ -31,3 +31,12 @@
             - unstable: true
             - failure: true
             - aborted: true
+
+- project:
+    name: sahara-dashboard
+    github-org: openstack
+    type:
+     - ui
+     - uitests
+    jobs:
+     - 'gate-{type}-tests'

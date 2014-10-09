@@ -5,7 +5,13 @@
 check_openstack_host
 
 sudo iptables -F
-sudo pip install $WORKSPACE
+if [ ! -d saharadashboard ]
+then
+   DASHBOARD_PATH=$(pwd)/sahara-dashboard
+   git clone https://github.com/openstack/sahara-dashboard
+else
+   DASHBOARD_PATH=$(pwd)
+fi
 
 create_database
 
@@ -44,11 +50,11 @@ image_name_for_register = 'ubuntu-12.04'
 image_name_for_edit = "sahara-itests-ci-vanilla-image"
 [vanilla]
 skip_plugin_tests = False
-skip_edp_test = False
+skip_edp_test = True
 base_image = "sahara-itests-ci-vanilla-image"
 [hdp]
 skip_plugin_tests = False
 hadoop_version = '1.3.2'
-" >> $WORKSPACE/saharadashboard/tests/configs/config.conf
+" >> $DASHBOARD_PATH/saharadashboard/tests/configs/config.conf
 
-cd $WORKSPACE && tox -e uitests
+cd $DASHBOARD_PATH && tox -e uitests
