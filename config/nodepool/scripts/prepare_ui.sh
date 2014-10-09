@@ -39,8 +39,6 @@ sudo su -c "echo '
     </Directory>
 </VirtualHost>' > /etc/apache2/conf.d/horizon"
 
-sudo sed -i "s/'openstack_dashboard'/'saharadashboard',\n    'openstack_dashboard'/g" /opt/horizon/openstack_dashboard/settings.py
-sudo su -c "echo \"HORIZON_CONFIG['dashboards'] += ('sahara',)\" >> /opt/horizon/openstack_dashboard/settings.py"
 sudo sed -i "s/#from horizon.utils import secret_key/from horizon.utils import secret_key/g" /opt/horizon/openstack_dashboard/local/local_settings.py
 sudo sed -i "s/#SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(LOCAL_PATH, '.secret_key_store'))/SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(LOCAL_PATH, '.secret_key_store'))/g" /opt/horizon/openstack_dashboard/local/local_settings.py
 sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${OPENSTACK_HOST}\"/g" /opt/horizon/openstack_dashboard/local/local_settings.py
