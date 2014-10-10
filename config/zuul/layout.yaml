@@ -100,6 +100,8 @@ jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
     branch: ^(master|proposed/juno|stable/icehouse)$
+  - name: ^.*2\.3$
+    branch: ^(stable/icehouse|stable/juno|proposed/juno)$
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: diskimage-integration-cdh-centos
