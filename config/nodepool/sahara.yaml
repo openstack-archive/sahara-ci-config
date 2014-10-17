@@ -17,11 +17,11 @@ labels:
     providers:
       - name: cilab-1
       - name: cilab-2
-#  - name:  ui
-#    image: ui
-#    min-ready: 1
-#    providers:
-#      - name: cilab-1
+  - name:  ui
+    image: ui
+    min-ready: 1
+    providers:
+      - name: cilab-1
 
 providers:
   - name: cilab-1
@@ -40,11 +40,11 @@ providers:
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node_bare.sh
-#      - name: ui
-#        base-image: 'ubuntu-12.04'
-#        min-ram: 4096
-#        private-key: '/etc/nodepool/id_dsa'
-#        setup: prepare_node_ui.sh
+      - name: ui
+        base-image: 'ubuntu-12.04'
+        min-ram: 4096
+        private-key: '/etc/nodepool/id_dsa'
+        setup: prepare_node_ui.sh
   - name: cilab-2
     username: 'ci-user'
     password: 'nova'
