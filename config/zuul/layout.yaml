@@ -110,6 +110,10 @@ jobs:
     voting: false
   - name: diskimage-integration-cdh-ubuntu
     voting: false
+  - name: diskimage-integration-vanilla-fedora-2.4
+    voting: false
+  - name: diskimage-integration-vanilla-centos-2.4
+    voting: false
   - name: gate-saharaclient-integration-cdh-centos
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
