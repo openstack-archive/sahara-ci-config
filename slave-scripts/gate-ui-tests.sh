@@ -33,7 +33,10 @@ if [ "$FAILURE" != 0 ]; then
 fi
 
 sudo service apache2 restart
-sleep 20
+sleep 5
+
+TEST_IMAGE=uitests-$RANDOM
+glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $TEST_IMAGE --disk-format qcow2 --container-format bare < 1
 
 echo "
 [common]
@@ -46,8 +49,9 @@ neutron_management_network = 'private'
 floating_ip_pool = 'public'
 keystone_url = 'http://$OPENSTACK_HOST:5000/v2.0'
 await_element = 120
-image_name_for_register = 'ubuntu-12.04'
+image_name_for_register = '$TEST_IMAGE'
 image_name_for_edit = "sahara-itests-ci-vanilla-image"
+security_groups = default
 [vanilla]
 skip_plugin_tests = False
 skip_edp_test = True
@@ -58,3 +62,7 @@ hadoop_version = '1.3.2'
 " >> $DASHBOARD_PATH/saharadashboard/tests/configs/config.conf
 
 cd $DASHBOARD_PATH && tox -e uitests
+STATUS=`echo $?`
+
+glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $TEST_IMAGE
+exit $STATUS
