@@ -22,9 +22,9 @@ THIN=$3
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
 sudo hostname $HOSTNAME
-wget https://git.openstack.org/cgit/openstack-infra/config/plain/install_puppet.sh
+wget https://git.openstack.org/cgit/openstack-infra/system-config/plain/install_puppet.sh
 sudo bash -xe install_puppet.sh
-sudo git clone https://review.openstack.org/p/openstack-infra/config.git \
+sudo git clone https://review.openstack.org/p/openstack-infra/system-config.git \
     /root/config
 sudo /bin/bash /root/config/install_modules.sh
 #if [ -z "$NODEPOOL_SSH_KEY" ] ; then
