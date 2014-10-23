@@ -47,6 +47,9 @@ mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON sahara.* TO 'sahara-citest'@'local
 mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 
+#install RabbitMQ for distributed Sahara mode
+sudo apt-get install rabbitmq-server
+
 #workaround problem 'xslt-config: not found'
 sudo apt-get install libxslt1-dev -y
 
