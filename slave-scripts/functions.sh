@@ -101,7 +101,13 @@ start_sahara() {
      echo "Command 'sahara-db-manage' failed"
      exit 1
   fi
-  screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-file $conf_path -d --log-file log.txt"
+  if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
+    screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file $conf_path -d --log-file log-api.txt"
+    sleep 2
+    screen -dmS sahara-engine /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-file $conf_path -d --log-file log-engine.txt"
+  else
+    screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-file $conf_path -d --log-file log.txt"
+  fi
 
   api_responding_timeout=30
   FAILURE=0
@@ -251,6 +257,15 @@ cat_logs() {
   echo "-----------Python sahara env-----------"
   cd $log_path && pip freeze
 
-  echo "-----------Sahara Log------------"
-  cat $log_path/log.txt
+  if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
+     echo "-----------Sahara API Log------------"
+     cat $log_path/log-api.txt
+     echo "-------------------------------------"
+     echo "-----------Sahara Engine Log---------"
+     cat $log_path/log-engine.txt
+     echo "-------------------------------------"
+  else
+     echo "-----------Sahara Log------------"
+     cat $log_path/log.txt
+  fi
 }
