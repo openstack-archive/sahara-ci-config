@@ -113,7 +113,7 @@
     - gerrit-git-prep
     - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh"
+              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh"
     properties:
       - zeromq-event
     publishers:
