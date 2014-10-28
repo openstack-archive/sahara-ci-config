@@ -1,8 +1,8 @@
 #!/bin/bash -xe
 
-source /usr/local/jenkins/slave_scripts/select-mirror.sh openstack sahara
-
+. $FUNCTION_PATH
 set -o pipefail
+enable_pypi
 
 # replace hacking with master tarball
 sed -i '/^hacking/d' test-requirements.txt
