@@ -10,6 +10,5 @@ echo -e "-f http://tarballs.openstack.org/hacking/hacking-master.tar.gz#egg=hack
 
 sed -i '/^ignore/d' tox.ini
 sed -ie 's/\(^exclude.*\)/\1,*sahara-ci-config*/' tox.ini
-sed -ie 's/flake8==2.2.4/flake8==2.2.5/g' requirements.txt
 
 tox -v -epep8 -- --statistics | tee pep8.txt
