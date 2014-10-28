@@ -32,7 +32,7 @@ enable_pypi() {
 [global]
 timeout = 60
 index-url = https://sahara.mirantis.com/pypi/
-extra-index-url = http://pypi.openstack.org/openstack/
+extra-index-url = http://pypi.python.org/pypi/
 download-cache = /home/jenkins/.pip/cache/
 [install]
 use-mirrors = true
