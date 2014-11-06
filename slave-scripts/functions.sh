@@ -13,10 +13,12 @@ check_openstack_host() {
       export OPENSTACK_HOST="172.18.168.42"
       export HOST="c1"
       export TENANT_ID="$CI_LAB_TENANT_ID"
+      export USE_NEUTRON=true
   else
       export OPENSTACK_HOST="172.18.168.43"
       export HOST="c2"
       export TENANT_ID="$STACK_SAHARA_TENANT_ID"
+      export USE_NEUTRON=false
   fi
 }
 
@@ -70,7 +72,7 @@ os_admin_username=ci-user
 os_admin_password=nova
 os_admin_tenant_name=ci
 use_identity_api_v3=true
-use_neutron=true
+use_neutron=$USE_NEUTRON
 min_transient_cluster_active_time=30
 node_domain = nl
 [database]

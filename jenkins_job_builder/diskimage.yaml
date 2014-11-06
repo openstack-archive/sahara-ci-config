@@ -19,7 +19,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=diskimage-integration-{plugin}\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise'
+    node: 'precise-nova_network'
 
 - job-template:
     name: 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
@@ -42,7 +42,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise'
+    node: 'precise-neutron'
 
 - job-template:
     name: 'diskimage-integration-cdh-{image-cdh}'
@@ -65,7 +65,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=diskimage-integration-cdh-{image-cdh}\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise'
+    node: 'precise-nova_network'
 
 - project:
     name: sahara-image-elements
