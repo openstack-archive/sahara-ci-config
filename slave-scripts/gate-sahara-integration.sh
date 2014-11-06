@@ -44,6 +44,7 @@ if [ $JOB_TYPE == 'hdp2' ]
 then
    hadoop_version=2
    PLUGIN_TYPE=hdp2
+   HEAT_JOB=True
    echo "HDP2 detected"
 fi
 if [ $JOB_TYPE == 'vanilla' ]
