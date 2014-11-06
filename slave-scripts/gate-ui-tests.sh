@@ -18,7 +18,7 @@ create_database
 #screen -dmS display sudo Xvfb -fp /usr/share/fonts/X11/misc/ :22 -screen 0 1024x768x16
 screen -dmS display sudo X
 export DISPLAY=:0
-#enable_pypi
+enable_pypi
 
 cd $HOME
 write_sahara_main_conf sahara.conf

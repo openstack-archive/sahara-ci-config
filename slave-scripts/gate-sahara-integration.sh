@@ -109,7 +109,7 @@ cd $WORKSPACE
 TOX_LOG=$WORKSPACE/.tox/venv/log/venv-1.log
 
 create_database
-#enable_pypi
+enable_pypi
 
 write_sahara_main_conf etc/sahara/sahara.conf
 start_sahara etc/sahara/sahara.conf
