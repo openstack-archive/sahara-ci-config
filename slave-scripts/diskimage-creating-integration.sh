@@ -209,7 +209,7 @@ cd sahara
 [ "$ZUUL_BRANCH" == "stable/icehouse" ] && git checkout stable/icehouse && sudo pip install -U -r requirements.txt
 sudo pip install .
 
-#enable_pypi
+enable_pypi
 
 write_sahara_main_conf etc/sahara/sahara.conf
 start_sahara etc/sahara/sahara.conf
