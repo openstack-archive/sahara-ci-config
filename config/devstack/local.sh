@@ -9,6 +9,12 @@ else
     exit 1
 fi
 
+if [[ `nova endpoints | grep neutron` != "" ]]; then
+    USE_NEUTRON=true
+else
+    USE_NEUTRON=false
+fi
+
 VANILLA23_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-2.3.0-ubuntu-13.10.qcow2
 VANILLA24_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-2.4.1-ubuntu-13.10.qcow2
 VANILLA_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-1.2.1-ubuntu-13.10.qcow2
@@ -40,8 +46,12 @@ nova-manage project quota $CI_TENANT_ID --key instances --value 64
 nova-manage project quota $CI_TENANT_ID --key cores --value 150
 cinder quota-update --volumes 100 $CI_TENANT_ID
 cinder quota-update --gigabytes 2000 $CI_TENANT_ID
-neutron quota-update --tenant_id $CI_TENANT_ID --port 64
-neutron quota-update --tenant_id $CI_TENANT_ID --floatingip 64
+if $USE_NEUTRON; then
+  neutron quota-update --tenant_id $CI_TENANT_ID --port 64
+  neutron quota-update --tenant_id $CI_TENANT_ID --floatingip 64
+else
+  nova quota-update --floating-ips 64 $CI_TENANT_ID
+fi
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
@@ -60,15 +70,21 @@ glance image-create --name centos_cdh_latest --file $CENTOS_CDH_IMAGE_PATH --dis
 glance image-update --name ubuntu-12.04 --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu" ubuntu-12.04-server-cloudimg-amd64-disk1
 glance image-create --name sahara_spark_latest --file $SPARK_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
 
-# make Neutron networks shared
-PRIVATE_NET_ID=$(neutron net-list | grep private | awk '{print $2}')
-PUBLIC_NET_ID=$(neutron net-list | grep public | awk '{print $2}')
-FORMAT=" --request-format xml"
+# switch to ci-user credentials
+source $ADMIN_RCFILE ci-user ci
 
-neutron net-update $FORMAT $PRIVATE_NET_ID --shared True
-neutron net-update $FORMAT $PUBLIC_NET_ID --shared True
-
-neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+if $USE_NEUTRON; then
+  # create neutron private network for ci tenant
+  PRIVATE_CIDR=10.0.0.0/24
+  PRIVATE_NET_ID=$(neutron net-create ci-private | grep id | awk '{print $4}' | head -1)
+  SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep id | awk '{print $4}' | sed -n 2p)
+  ROUTER_ID=$(neutron router-create ci-router | grep id | awk '{print $4}' | head -1)
+  PUBLIC_NET_ID=$(neutron net-list | grep public | awk '{print $2}')
+  FORMAT=" --request-format xml"
+  neutron router-interface-add $ROUTER_ID $SUBNET_ID
+  neutron router-gateway-set $ROUTER_ID $PUBLIC_NET_ID
+  neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+fi
 
 nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add public-jenkins > /dev/null
 
@@ -81,23 +97,21 @@ nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add pu
 sudo sed -i '/^\[token\]/a expiration=86400' /etc/keystone/keystone.conf
 sudo service apache2 restart
 
-# switch to ci-user credentials
-source $ADMIN_RCFILE ci-user ci
-
 # setup security groups
-#nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
-#nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
-
-#setup the default security group for Neutron
-#this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
-#CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
-CI_DEFAULT_SECURITY_GROUP_ID=$(nova secgroup-list | grep ' default ' | get_field 1)
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+if $USE_NEUTRON; then
+  #this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
+  #CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
+  CI_DEFAULT_SECURITY_GROUP_ID=$(nova secgroup-list | grep ' default ' | get_field 1)
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+else
+  nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+  nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+fi
 
 #create Sahara endpoint for UI tests
 keystone service-create --name sahara --type data_processing --description "Data Processing Service"
