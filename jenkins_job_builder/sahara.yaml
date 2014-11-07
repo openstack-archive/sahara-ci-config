@@ -162,7 +162,7 @@
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
     concurrent: true
-    node: 'precise-neutron' || 'precise-nova-network'
+    node: precise-neutron || precise-nova-network
 
     builders:
     - gerrit-git-prep

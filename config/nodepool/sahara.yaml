@@ -13,12 +13,12 @@ gearman-servers:
 labels:
   - name:  precise-neutron
     image: precise-neutron
-    min-ready: 6
+    min-ready: 4
     providers:
       - name: cilab-1
   - name:  precise-nova-network
     image: precise-nova-network
-    min-ready: 6
+    min-ready: 4
     providers:
       - name: cilab-2
   - name:  ui
