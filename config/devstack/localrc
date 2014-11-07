@@ -36,13 +36,14 @@ KEYSTONE_TOKEN_FORMAT=UUID
 # In NAT mode it is subnet VMWare Fusion provides, in bridged mode it is your local network.
 # But only use the top end of the network by using a /27 and starting at the 224 octet.
 
-# Stack-ci lab
-FIXED_RANGE=10.0.0.0/24
+# Stack-ci lab with neutron network provider
+FIXED_RANGE=10.20.0.0/24
+NETWORK_GATEWAY=10.20.0.1
 FIXED_NETWORK_SIZE=256
 FLOATING_RANGE=172.18.169.0/26
 PUBLIC_NETWORK_GATEWAY=172.18.169.1
 
-# Stack-sahara lab
+# Stack-sahara lab with nova network provider
 #FIXED_RANGE=10.1.0.0/24
 #NETWORK_GATEWAY=10.1.0.1
 #FIXED_NETWORK_SIZE=256
