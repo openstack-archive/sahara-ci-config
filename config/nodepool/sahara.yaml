@@ -12,12 +12,12 @@ gearman-servers:
 
 labels:
   - name:  precise-neutron
-    image: precise
+    image: precise-neutron
     min-ready: 6
     providers:
       - name: cilab-1
-  - name:  precise-nova_network
-    image: precise
+  - name:  precise-nova-network
+    image: precise-nova-network
     min-ready: 6
     providers:
       - name: cilab-2
@@ -60,7 +60,7 @@ providers:
     networks:
       - net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'
     images:
-      - name: precise-nova_network
+      - name: precise-nova-network
         base-image: 'ubuntu-12.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'

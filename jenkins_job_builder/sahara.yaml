@@ -48,7 +48,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise-nova_network'
+    node: 'precise-nova-network'
 
 - job-template:
     name: 'gate-sahara-integration-{plugin-neutron}'
@@ -100,7 +100,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=$JOB_NAME
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise-nova_network'
+    node: 'precise-nova-network'
 
 - project:
     name: sahara
@@ -162,7 +162,7 @@
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
     concurrent: true
-    node: 'precise'
+    node: 'precise-neutron' || 'precise-nova-network'
 
     builders:
     - gerrit-git-prep
