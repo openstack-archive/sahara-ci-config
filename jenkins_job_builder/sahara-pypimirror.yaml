@@ -9,7 +9,7 @@
                   \n<a href=\"http://sahara.mirantis.net/pypi/\">http://sahara.mirantis.net/pypi</a><br/>\
                   \n<b>Maintainer</b>: Sergey Kolekonov<br/>"
     defaults: global
-    disabled: false
+    disabled: true
     concurrent: false
 
     triggers:
