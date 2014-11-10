@@ -7,6 +7,7 @@ fi
 
 CACHE_IP=${1}
 CACHE_DIR=${2}
+REPOLIST_DIR=$CACHE_DIR/repolist
 
 echo "Install apt-cacher-ng"
 sudo apt-get install -y apt-cacher-ng
@@ -19,18 +20,17 @@ sudo sed -i "s/CacheDir:.*/CacheDir: ${CACHE_DIR//\//\\\/}/g" /etc/apt-cacher-ng
 sudo service apt-cacher-ng restart
 
 echo "Create repo files for CDH plugin"
-mkdir -p apt-cacher/repolist
-pushd apt-cacher
-pushd repolist
+mkdir -p $REPOLIST_DIR
+pushd $REPOLIST_DIR
 
 wget http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/cloudera.list -O cdh.list
 wget http://archive.cloudera.com/cm5/ubuntu/precise/amd64/cm/cloudera.list -O cm.list
 
-sed -i "s/http:\/\//http:\/\/${CACHE_IP}\//g" cdh.list cm.list
+sed -i "s/http:\/\//http:\/\/${CACHE_IP}\:3142\//g" cdh.list cm.list
 
 sudo apt-get install apache2 -y
-sudo echo -e "Alias /cdh-repo ${CACHE_DIR}
-<Directory ${CACHE_DIR}>
+sudo echo -e "Alias /cdh-repo ${REPOLIST_DIR}
+<Directory ${REPOLIST_DIR}>
 Order allow,deny
 Allow from all
   Options +Indexes
