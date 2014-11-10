@@ -5,13 +5,15 @@ sleep 20
 
 source $JENKINS_HOME/credentials
 JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $1 }')
-HOST="c"$(echo $HOST_NAME | awk -F '-' '{ print $3 }')
-if [ "$HOST" == "c1" ]; then
+HOST=$(echo $HOST_NAME | awk -F '-' '{ print $2 }')
+if [ "$HOST" == "neutron" ]; then
     export os_auth_url="http://$OPENSTACK_HOST_CI_LAB:5000/v2.0"
     export os_image_endpoint="http://$OPENSTACK_HOST_CI_LAB:8004/v1/$CI_LAB_TENANT_ID"
+    HOST="c1"
 else
     export os_auth_url="http://$OPENSTACK_HOST_SAHARA_STACK:5000/v2.0"
     export os_image_endpoint="http://$OPENSTACK_HOST_SAHARA_STACK:8004/v1/$STACK_SAHARA_TENANT_ID"
+    HOST="c2"
 fi
 if [ $JOB_TYPE == 'diskimage' ]; then
     PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
@@ -75,7 +77,7 @@ else
     fi
     if [ $JOB_TYPE == 'cdh' ]
     then
-        os_version=$(echo $JOB_NAME | awk -F '-' '{ print $5}')
+        os_version=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
         if [ "$os_version" == "centos" ]; then
            HADOOP_VERSION=2c
         else
