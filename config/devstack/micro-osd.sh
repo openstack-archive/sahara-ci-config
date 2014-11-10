@@ -18,13 +18,14 @@ if [ -z "$1" ]; then
    echo "You must specify full path for Ceph installing"
    exit 1
 fi
-
+old=false
 if [ -d "$1" ]; then
-   read -p "Directory '$1' already exists, do you really want to replace it?" yn
-   case $yn in
-        [Yy]* ) rm -rf $1;;
-        [Nn]* ) echo "Specify another directory" ; exit 1;;
-        * ) echo "Please answer yes or no.";;
+   read -p "Directory '$1' already exists, do you really want to recreate it? (Y/N) Or replace old? (R)" ynr
+   case $ynr in
+        [Yy]* ) echo "Recreating directory" ;;
+        [Nn]* ) echo "Specify another directory" ; exit 0;;
+        [Rr]* ) echo "Using old directory"; old=true;;
+        * ) echo "Please answer yes, no or replace";;
    esac
 fi
 
@@ -43,7 +44,11 @@ sudo apt-get --yes install ceph ceph-common
 # get rid of process and directories leftovers
 pkill ceph-mon || true
 pkill ceph-osd || true
-rm -fr $DIR
+if $old; then
+   rm -rf $DIR/*
+else
+   rm -rf $DIR
+fi
 
 # cluster wide parameters
 mkdir -p ${DIR}/log
