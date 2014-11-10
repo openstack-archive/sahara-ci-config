@@ -35,7 +35,7 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     elif [ $PLUGIN == 'hdp1' ]; then
         python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
     elif [ $PLUGIN == 'hdp2' ]; then
-        python cleanup.py cleanup $HOST-cos-2-$PREV_BUILD-hdp-v2
+        python cleanup.py cleanup-heat $HOST-cos-2-$PREV_BUILD-hdp-v2
     elif [ $PLUGIN == 'cdh' ]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
@@ -70,8 +70,8 @@ else
         JOB_TYPE=hdp
     elif [ $JOB_TYPE == 'hdp2' ]
     then
-        JOB_TYPE=hdp-v2
         HADOOP_VERSION=2
+        JOB_TYPE=heat_hdp
     fi
     if [ $JOB_TYPE == 'cdh' ]
     then
@@ -89,6 +89,10 @@ else
         if [ $JOB_TYPE == 'vanilla' ]
         then
             JOB_TYPE=vanilla-v2
+        fi
+        if [ $JOB_TYPE == 'hdp' ]
+        then
+            JOB_TYPE=hdp-v2
         fi
         if [ $JOB_TYPE == 'transient' ]
         then

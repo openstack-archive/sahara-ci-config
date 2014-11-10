@@ -172,6 +172,7 @@ case $plugin in
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
        PLUGIN_TYPE=$plugin
+       HEAT_JOB=True
     ;;
 
     cdh)
