@@ -90,6 +90,7 @@ then
       CDH_IMAGE=ubuntu-12.04
       hadoop_version=2u
    fi
+   SKIP_SCALING_TEST=True
    PLUGIN_TYPE=cdh
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
    echo "CDH detected"
