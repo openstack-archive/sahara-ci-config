@@ -26,7 +26,7 @@ rm -rf sahara
 git clone https://github.com/openstack/sahara
 cd sahara
 sudo pip install .
-start_sahara $HOME/sahara.conf
+start_sahara $HOME/sahara/sahara.conf
 
 if [ "$FAILURE" != 0 ]; then
     exit 1
