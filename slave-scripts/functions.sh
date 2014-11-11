@@ -46,6 +46,7 @@ index_url = http://172.18.168.44/simple/
 
 write_sahara_main_conf() {
   conf_path=$1
+  conf_dir=$(dirname $1)
   echo "[DEFAULT]
 " >> $conf_path
   if [ "$HEAT_JOB" == "True" ]
@@ -82,6 +83,9 @@ identity_uri=http://$OPENSTACK_HOST:35357/
 admin_user=ci-user
 admin_password=nova
 admin_tenant_name=ci" >> $conf_path
+
+cp etc/sahara/policy.json $conf_dir
+
   echo "----------- sahara.conf -----------"
   cat $conf_path
   echo "----------- end of sahara.conf -----------"
@@ -89,6 +93,7 @@ admin_tenant_name=ci" >> $conf_path
 
 start_sahara() {
   conf_path=$1
+  conf_dir=$(dirname $1)
   if [ "$ZUUL_BRANCH" == "stable/icehouse" ]
   then
      sahara_bin=sahara-api
@@ -103,12 +108,12 @@ start_sahara() {
      exit 1
   fi
   if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
-    screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-file $conf_path -d --log-file log-api.txt"
+    screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file log-api.txt"
     sleep 2
-    screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-file $conf_path -d --log-file log-engine-1.txt"
-    screen -dmS sahara-engine_2 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-file $conf_path -d --log-file log-engine-2.txt"
+    screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-1.txt"
+    screen -dmS sahara-engine_2 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-2.txt"
   else
-    screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-file $conf_path -d --log-file log.txt"
+    screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-dir $conf_path -d --log-file log.txt"
   fi
 
   api_responding_timeout=30
