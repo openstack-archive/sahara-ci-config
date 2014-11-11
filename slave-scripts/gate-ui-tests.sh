@@ -20,13 +20,13 @@ screen -dmS display sudo X
 export DISPLAY=:0
 enable_pypi
 
-cd $HOME
-write_sahara_main_conf sahara.conf
-rm -rf sahara
-git clone https://github.com/openstack/sahara
-cd sahara
+SAHARA_DIR=$HOME/sahara
+rm -rf $SAHARA_DIR
+git clone https://github.com/openstack/sahara $SAHARA_DIR
+cd $SAHARA_DIR
+write_sahara_main_conf $SAHARA_DIR/etc/sahara/sahara.conf
 sudo pip install .
-start_sahara $HOME/sahara.conf
+start_sahara $SAHARA_DIR/etc/sahara/sahara.conf
 
 if [ "$FAILURE" != 0 ]; then
     exit 1
