@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 cd /opt/ci/jenkins-jobs/sahara-ci-config/slave-scripts
 sleep 20
@@ -49,6 +49,8 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     else
         python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
     fi
+elif [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
+    python cleanup.py cleanup $PREV_BUILD-selenium
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
     HADOOP_VERSION=1
