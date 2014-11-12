@@ -54,7 +54,7 @@ image_name_for_edit = "sahara-itests-ci-vanilla-image"
 security_groups = default
 [vanilla]
 skip_plugin_tests = False
-skip_edp_test = True
+skip_edp_test = False
 base_image = "sahara-itests-ci-vanilla-image"
 [hdp]
 skip_plugin_tests = False
