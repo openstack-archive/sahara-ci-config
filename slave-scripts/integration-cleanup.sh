@@ -49,6 +49,8 @@ if [ $JOB_TYPE == 'diskimage' ]; then
     else
         python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
     fi
+elif [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
+    python cleanup.py cleanup selenium-cl-selenium
 else
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
     HADOOP_VERSION=1
