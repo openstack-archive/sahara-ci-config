@@ -292,8 +292,8 @@ else
         rename_image $HDP_TWO_IMAGE centos_sahara_hdp_hadoop_2_latest
     fi
     if [ "${plugin}" == "cdh" ]; then
-        delete_image centos_cdh_latest
-        rename_image $CDH_IMAGE centos_cdh_latest
+        delete_image ${image_type}_cdh_latest
+        rename_image $CDH_IMAGE ${image_type}_cdh_latest
     fi
     if [ "${plugin}" == "spark" ]; then
         delete_image sahara_spark_latest
