@@ -7,7 +7,7 @@
                   \n<p><b>Title</b>: Tests for Sahara dashboard<br/>\
                   \n<b>Description</b>: This job installs Sahara-dashboard and run selenium tests.<br/>\
                   \n<b>Maintainer</b>: Vadim Rovachev<br/>"
-    node: ui
+    node: ui-neutron
     disabled: false
     concurrent: false
 
