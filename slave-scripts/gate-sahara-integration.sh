@@ -21,6 +21,7 @@ SKIP_SWIFT_TEST=True
 SKIP_SCALING_TEST=False
 SKIP_TRANSIENT_TEST=True
 SKIP_ONLY_TRANSIENT_TEST=False
+SKIP_ALL_TESTS_FOR_PLUGIN=False
 HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
 HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
