@@ -9,4 +9,9 @@ tox -e integration --notest
 # change sahara-client
 .tox/integration/bin/pip install $WORKSPACE
 
-bash -x /tmp/sahara-ci-config/slave-scripts/gate-sahara-integration.sh /tmp/sahara
+JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
+if [ "$JOB_TYPE" = "integration" ]; then
+   bash -x /tmp/sahara-ci-config/slave-scripts/gate-sahara-integration.sh /tmp/sahara
+else
+   bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-tempest.sh /tmp/sahara
+fi
