@@ -73,6 +73,7 @@ sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%
    -P /home/jenkins http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.tar.gz
 
 pushd /home/jenkins
+sudo git clone https://git.openstack.org/openstack/tempest
 RELEASE_DIB="0.1.17"
 sudo git clone https://git.openstack.org/openstack/diskimage-builder
 sudo git --git-dir=/home/jenkins/diskimage-builder/.git --work-tree=/home/jenkins/diskimage-builder/ checkout $RELEASE_DIB
