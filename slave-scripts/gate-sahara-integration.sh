@@ -22,11 +22,17 @@ SKIP_SCALING_TEST=False
 SKIP_TRANSIENT_TEST=True
 SKIP_ONLY_TRANSIENT_TEST=False
 HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
+SKIP_ALL_TESTS_FOR_HDP=False
 HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
+SKIP_ALL_TESTS_FOR_HDP_TWO=False
 VANILLA_IMAGE=sahara-itests-ci-vanilla-image
+SKIP_ALL_TESTS_FOR_VANILLA=False
 VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
+SKIP_ALL_TESTS_FOR_VANILLA_TWO=False
 SPARK_IMAGE=sahara_spark_latest
+SKIP_ALL_TESTS_FOR_SPARK=False
 HEAT_JOB=False
+SKIP_ALL_TESTS_FOR_CDH=True
 
 if [[ $JOB_TYPE =~ heat ]]
 then
@@ -91,6 +97,7 @@ then
       hadoop_version=2u
    fi
    SKIP_SCALING_TEST=True
+   SKIP_ALL_TESTS_FOR_CDH=False
    PLUGIN_TYPE=cdh
    [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
    echo "CDH detected"
