@@ -36,7 +36,7 @@ sudo service apache2 restart
 sleep 5
 
 TEST_IMAGE=uitests-$RANDOM
-glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-create --name $TEST_IMAGE --disk-format qcow2 --container-format bare < /proc/uptime
+glance nova image-create --name $TEST_IMAGE --disk-format qcow2 --container-format bare < /proc/uptime
 
 echo "
 [common]
@@ -65,5 +65,5 @@ hadoop_version = '1.3.2'
 cd $DASHBOARD_PATH && tox -e uitests
 STATUS=`echo $?`
 
-glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-delete $TEST_IMAGE
+glance nova image-delete $TEST_IMAGE
 exit $STATUS

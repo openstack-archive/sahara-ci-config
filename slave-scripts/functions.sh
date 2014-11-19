@@ -9,6 +9,9 @@ export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
 # This function determines Openstack host by checking internal address (second octet)
 check_openstack_host() {
   NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+  export OS_USERNAME=ci-user
+  export OS_TENANT_NAME=ci
+  export OS_PASSWORD=nova
   if [ "$NETWORK" == "0" ]; then
       export OPENSTACK_HOST="172.18.168.42"
       export HOST="c1"
@@ -20,6 +23,7 @@ check_openstack_host() {
       export TENANT_ID="$STACK_SAHARA_TENANT_ID"
       export USE_NEUTRON=false
   fi
+  export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
 }
 
 create_database() {
