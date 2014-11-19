@@ -53,6 +53,8 @@ if $USE_NEUTRON; then
 else
   nova quota-update --floating-ips 64 $CI_TENANT_ID
 fi
+nova quota-update --tenant_id $CI_TENANT_ID --security-groups 100
+nova quota-update --tenant_id $CI_TENANT_ID --security-group-rules 100
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
@@ -83,7 +85,9 @@ if $USE_NEUTRON; then
   FORMAT=" --request-format xml"
   neutron router-interface-add $ROUTER_ID $SUBNET_ID
   neutron router-gateway-set $ROUTER_ID $PUBLIC_NET_ID
-  neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+  neutron subnet-update ci-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+else
+  PRIVATE_NET_ID=$(nova net-list | grep private | awk '{print $2}')
 fi
 
 nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add public-jenkins > /dev/null
