@@ -9,7 +9,7 @@ check_openstack_host
 
 SAHARA_PATH=$1
 TEMPEST=True
-IMAGE_ID=$(glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-list | grep ubuntu-test-image | awk '{print $2}')
+IMAGE_ID=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 if $USE_NEUTRON; then
   private_subnet="ci-private"
 else
