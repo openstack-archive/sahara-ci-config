@@ -9,13 +9,13 @@ check_openstack_host
 
 SAHARA_PATH=$1
 TEMPEST=True
-IMAGE_ID=$(glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-list | grep ci-vanilla-image | awk '{print $2}')
+IMAGE_ID=$(glance image-list | grep ci-vanilla-image | awk '{print $2}')
 if $USE_NEUTRON; then
   private_subnet="ci-private"
 else
   private_subnet="private"
 fi
-PRIVATE_ID=$(nova --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova net-list | grep $private_subnet | awk '{print $2}')
+PRIVATE_ID=$(nova net-list | grep $private_subnet | awk '{print $2}')
 
 cd /home/jenkins
 
