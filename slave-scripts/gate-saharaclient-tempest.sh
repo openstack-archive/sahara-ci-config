@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 #this is to fix bug with testtools==0.9.35
 #sed 's/testtools>=0.9.32/testtools==0.9.34/' -i test-requirements.txt
@@ -7,16 +7,19 @@
 
 check_openstack_host
 
-sudo pip install .
-
 SAHARA_PATH=$1
-TEMPEST=true
+TEMPEST=True
 IMAGE_ID=$(glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-list | grep ci-vanilla-image | awk '{print $2}')
-PRIVATE_ID=$(neutron --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password neutron net-list | grep ci-private | awk '{print $2}')
+if $USE_NEUTRON; then
+  private_subnet="ci-private"
+else
+  private_subnet="private"
+fi
+PRIVATE_ID=$(nova --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova net-list | grep $private_subnet | awk '{print $2}')
 
 cd /home/jenkins
 
-cp -r $WORSKPACE/saharaclient/tests/tempest tempest/
+cp -r $WORKSPACE/saharaclient/tests/tempest tempest/
 
 cd tempest
 
@@ -45,11 +48,12 @@ ssh_username=ubuntu
 floating_ip_pool=public
 private_network_id=$PRIVATE_ID
 fake_image_id=$IMAGE_ID
-" > scenario/data_processing/etc/sahara_tests.conf
+" > tempest/scenario/data_processing/etc/sahara_tests.conf
 
 create_database
 enable_pypi
 
+sudo pip install $SAHARA_PATH/.
 write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
 start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
 
