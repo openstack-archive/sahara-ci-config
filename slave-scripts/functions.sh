@@ -64,6 +64,9 @@ write_sahara_main_conf() {
   then
     echo "plugins=spark
 " >> $conf_path
+  elif $TEMPEST; then
+    echo "plugins=fake
+" >> $conf_path
   fi
   echo "os_auth_host=$OPENSTACK_HOST
 os_auth_port=5000
