@@ -10,7 +10,7 @@ check_openstack_host
 sudo pip install .
 
 SAHARA_PATH=$1
-TEMPEST=true
+TEMPEST=True
 IMAGE_ID=$(glance --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password nova image-list | grep ci-vanilla-image | awk '{print $2}')
 PRIVATE_ID=$(neutron --os-username ci-user --os-auth-url http://$OPENSTACK_HOST:5000/v2.0/ --os-tenant-name ci --os-password neutron net-list | grep ci-private | awk '{print $2}')
 
