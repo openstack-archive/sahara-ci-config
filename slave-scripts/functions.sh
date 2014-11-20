@@ -64,7 +64,7 @@ write_sahara_main_conf() {
   then
     echo "plugins=spark
 " >> $conf_path
-  elif $TEMPEST; then
+  elif [ "$TEMPEST" == "True" ]; then
     echo "plugins=fake
 " >> $conf_path
   fi
