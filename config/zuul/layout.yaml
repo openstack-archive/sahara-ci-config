@@ -64,6 +64,10 @@ projects:
     check:
       - gate-uitests-tests
 
+  - name: openstack/horizon
+    check:
+      - gate-ui-tests
+
   - name: openstack/sahara-image-elements
     check:
       - diskimage-integration-vanilla-ubuntu-1
@@ -109,6 +113,8 @@ jobs:
   - name: gate-saharaclient-integration-cdh-centos
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
+    voting: false
+  - name: gate-ui-tests
     voting: false
   - name: ^gate-sahara-integration.*$
     files:
