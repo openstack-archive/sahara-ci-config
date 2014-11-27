@@ -100,6 +100,10 @@ projects:
       - diskimage-integration-hdp1
       - diskimage-integration-hdp2
 
+  - name: stackforge/sahara-ci-config
+    check:
+      - sahara-ci-syntax-check
+
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
@@ -114,8 +118,6 @@ jobs:
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
     voting: false
-  - name: gate-ui-tests
-    voting: false
   - name: ^gate-sahara-integration.*$
     files:
       - '^sahara/.*$'
@@ -124,6 +126,7 @@ jobs:
   - name: ^gate-sahara-integration-cdh-.*$
     voting: false
   - name: gate-ui-tests
+    voting: false
     files:
       - '^openstack_dashboard/dashboards/project/data_processing.*$'
       - 'openstack_dashboard/api/sahara.py'
