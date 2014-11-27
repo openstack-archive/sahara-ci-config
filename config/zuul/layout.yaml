@@ -100,6 +100,10 @@ projects:
       - diskimage-integration-hdp1
       - diskimage-integration-hdp2
 
+  - name: stackforge/sahara-ci-config
+    check:
+      - sahara-ci-syntax-check
+
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
