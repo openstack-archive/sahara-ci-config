@@ -267,7 +267,7 @@ cat_logs() {
   echo "-----------Python sahara env-----------"
   cd $log_path && pip freeze
 
-  if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" \) ]; then
      echo "-----------Sahara API Log------------"
      cat $log_path/log-api.txt
      echo "-------------------------------------"
