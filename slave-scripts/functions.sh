@@ -107,7 +107,7 @@ start_sahara() {
      echo "Command 'sahara-db-manage' failed"
      exit 1
   fi
-  if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" \) ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file log-api.txt"
     sleep 2
     screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-1.txt"
@@ -167,12 +167,12 @@ SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 " >> $test_conf_path
 
-if [ $PLUGIN_TYPE == "transient" ]; then
+if [ "$PLUGIN_TYPE" == "transient" ]; then
      echo "HADOOP_VERSION = '2.4.1'
 " >> $test_conf_path
 fi
 
-if [ $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" ]; then
+if [ "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" ]; then
      echo "HADOOP_VERSION = '2.4.1'
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
 " >> $test_conf_path
@@ -267,7 +267,7 @@ cat_logs() {
   echo "-----------Python sahara env-----------"
   cd $log_path && pip freeze
 
-  if [ "$ZUUL_BRANCH" == "master" -a \( $PLUGIN_TYPE == "vanilla2" -a "$hadoop_version" == "2-4" -o $PLUGIN_TYPE == "hdp2" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" \) ]; then
      echo "-----------Sahara API Log------------"
      cat $log_path/log-api.txt
      echo "-------------------------------------"
