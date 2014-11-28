@@ -7,8 +7,11 @@
                  \n<p>This job check syntax in *.yaml, *.sh, *.py files"
     disabled: false
     concurrent: false
-    node: 'master'
+    node: master
 
     builders:
       - gerrit-git-prep
       - shell: "bash -x /opt/ci/jenkins-jobs/sahara-ci-syntax-check.sh"
+
+    publishers:
+      - console-log
