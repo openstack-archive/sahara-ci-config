@@ -24,6 +24,7 @@ HDP2_IMAGE_PATH=/home/ubuntu/images/centos-6_4-64-hdp-2-0.qcow2
 CENTOS_CDH_IMAGE_PATH=/home/ubuntu/images/centos_sahara_cloudera_latest.qcow2
 UBUNTU_CDH_IMAGE_PATH=/home/ubuntu/images/ubuntu_sahara_cloudera_latest.qcow2
 SPARK_IMAGE_PATH=/home/ubuntu/images/sahara_spark_latest.qcow2
+NATIVE_UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
 # setup ci tenant and ci users
 CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep id | awk '{print $4}')
@@ -72,6 +73,7 @@ glance image-create --name centos_cdh_latest --file $CENTOS_CDH_IMAGE_PATH --dis
 #glance image-create --name ubuntu_cdh_latest --file $UBUNTU_CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
 glance image-update --name ubuntu-12.04 --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu" ubuntu-12.04-server-cloudimg-amd64-disk1
 glance image-create --name sahara_spark_latest --file $SPARK_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
+glance image-create --name ubuntu-test-image --file $NATIVE_UBUNTU_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true
 
 # switch to ci-user credentials
 source $ADMIN_RCFILE ci-user ci

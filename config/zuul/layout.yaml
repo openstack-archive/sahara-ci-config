@@ -54,6 +54,7 @@ projects:
       - gate-saharaclient-integration-hdp1
       - gate-saharaclient-integration-hdp2
       - gate-saharaclient-integration-spark
+      - gate-saharaclient-tempest-tests
       - gate-saharaclient-integration-cdh-centos
       - gate-saharaclient-integration-cdh-ubuntu
       - gate-saharaclient-integration-transient
@@ -115,6 +116,8 @@ jobs:
   - name: diskimage-integration-cdh-ubuntu
     voting: false
   - name: gate-saharaclient-integration-cdh-centos
+    voting: false
+  - name: gate-saharaclient-tempest-tests
     voting: false
   - name: gate-saharaclient-integration-cdh-ubuntu
     voting: false
