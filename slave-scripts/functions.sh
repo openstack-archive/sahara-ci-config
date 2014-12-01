@@ -34,6 +34,7 @@ enable_pypi() {
 [global]
 timeout = 60
 index-url = http://172.18.168.44/simple/
+extra-index-url = https://pypi.python.org/simple/
 download-cache = /home/jenkins/.pip/cache/
 [install]
 use-mirrors = true
