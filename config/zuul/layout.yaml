@@ -65,9 +65,9 @@ projects:
     check:
       - gate-uitests-tests
 
-  - name: openstack/horizon
-    check:
-      - gate-ui-tests
+#  - name: openstack/horizon
+#    check:
+#      - gate-ui-tests
 
   - name: openstack/sahara-image-elements
     check:
@@ -128,8 +128,8 @@ jobs:
       - '^[^\/]*$'
   - name: ^gate-sahara-integration-cdh-.*$
     voting: false
-  - name: gate-ui-tests
-    voting: false
-    files:
-      - '^openstack_dashboard/dashboards/project/data_processing.*$'
-      - 'openstack_dashboard/api/sahara.py'
+#  - name: gate-ui-tests
+#    voting: false
+#    files:
+#      - '^openstack_dashboard/dashboards/project/data_processing.*$'
+#      - 'openstack_dashboard/api/sahara.py'
