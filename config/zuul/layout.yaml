@@ -14,9 +14,6 @@ pipelines:
           require-approval:
             - username: savanna-ci
               older-than: 48h
-    start:
-      gerrit:
-        verified: 0
     success:
       gerrit:
         verified: 1
