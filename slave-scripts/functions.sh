@@ -249,7 +249,7 @@ run_tests() {
            STATUS=`echo $?`
            ;;
         transient)
-           tox -e integration -- transient --concurrency=1
+           tox -e integration -- transient --concurrency=3
            STATUS=`echo $?`
            ;;
         cdh)
