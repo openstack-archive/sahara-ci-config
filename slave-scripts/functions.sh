@@ -112,7 +112,7 @@ start_sahara() {
      echo "Command 'sahara-db-manage' failed"
      exit 1
   fi
-  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file log-api.txt"
     sleep 2
     screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-1.txt"
