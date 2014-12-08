@@ -16,10 +16,10 @@ else
     export os_image_endpoint="http://$OPENSTACK_HOST_SAHARA_STACK:8004/v1/$STACK_SAHARA_TENANT_ID"
     HOST="c2"
 fi
-if [ $JOB_TYPE == 'diskimage' ]; then
-    PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
-    if [ $PLUGIN == 'vanilla' ]; then
-        IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+if [ $JOB_TYPE == 'dib' ]; then
+    PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    if [[ $PLUGIN =~ 'vanilla' ]]; then
+        IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
             os="cos"
         elif [ "$IMAGE_TYPE" == "fedora" ]; then
@@ -27,7 +27,7 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
             os="uos"
         fi
-        HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+        HADOOP_VERSION=$(echo $PLUGIN | awk -F '_' '{ print $2}')
         if [ "$HADOOP_VERSION" == '1' ]; then
             python cleanup.py cleanup $HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
         elif [ "$HADOOP_VERSION" == '2.3' ]; then
@@ -35,12 +35,12 @@ if [ $JOB_TYPE == 'diskimage' ]; then
         else
             python cleanup.py cleanup-heat $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
         fi
-    elif [ $PLUGIN == 'hdp1' ]; then
+    elif [ $PLUGIN == 'hdp_1' ]; then
         python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
-    elif [ $PLUGIN == 'hdp2' ]; then
+    elif [ $PLUGIN == 'hdp_2' ]; then
         python cleanup.py cleanup-heat $HOST-cos-2-$PREV_BUILD-hdp-v2
-    elif [ $PLUGIN == 'cdh' ]; then
-        IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    elif [[ $PLUGIN =~ 'cdh' ]]; then
+        IMAGE_TYPE=$(echo $PREV_JOB | awk -F '_' '{ print $2 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
             os="cos"
         elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
@@ -53,11 +53,12 @@ if [ $JOB_TYPE == 'diskimage' ]; then
 elif [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
     python cleanup.py cleanup $PREV_BUILD-selenium
 else
-    JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    ENGINE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
     HADOOP_VERSION=1
-    if [ $JOB_TYPE == 'vanilla' ]
+    if [[ $JOB_TYPE =~ 'vanilla' ]]
     then
-        HADOOP_VERSION=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+        HADOOP_VERSION=$(echo JOB_TYPE | awk -F '_' '{ print $2 }')
         if [ "$HADOOP_VERSION" == '1' ]; then
             JOB_TYPE=vanilla-v1
         else
@@ -66,21 +67,20 @@ else
                 HADOOP_VERSION=2-3
             else
                 HADOOP_VERSION=2-4
-                JOB_TYPE=heat_vanilla
             fi
         fi
     fi
-    if [ $JOB_TYPE == 'hdp1' ]
+    if [ $JOB_TYPE == 'hdp_1' ]
     then
         JOB_TYPE=hdp
-    elif [ $JOB_TYPE == 'hdp2' ]
+    elif [ $JOB_TYPE == 'hdp_2' ]
     then
         HADOOP_VERSION=2
-        JOB_TYPE=heat_hdp
+        JOB_TYPE=hdp-v2
     fi
-    if [ $JOB_TYPE == 'cdh' ]
+    if [[ $JOB_TYPE =~ 'cdh' ]]
     then
-        os_version=$(echo $PREV_JOB | awk -F '-' '{ print $5}')
+        os_version=$(echo $JOB_TYPE | awk -F '_' '{ print $2}')
         if [ "$os_version" == "centos" ]; then
            HADOOP_VERSION=2c
         else
@@ -88,21 +88,12 @@ else
         fi
         JOB_TYPE=cdh
     fi
-    if [[ $JOB_TYPE =~ heat ]]
-    then
-        JOB_TYPE=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
-        if [ $JOB_TYPE == 'vanilla' ]
-        then
-            JOB_TYPE=vanilla-v2
-        fi
-        if [ $JOB_TYPE == 'hdp' ]
-        then
-            JOB_TYPE=hdp-v2
-        fi
-        if [ $JOB_TYPE == 'transient' ]
+    if [ $JOB_TYPE == 'transient' ]
         then
             JOB_TYPE=transient-vanilla
         fi
+    if [ $ENGINE == 'heat' ]
+    then
         python cleanup.py cleanup-heat $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
     else
         python cleanup.py cleanup $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
