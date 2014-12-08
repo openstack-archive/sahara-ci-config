@@ -1,12 +1,12 @@
-- job-template:
-    name: 'diskimage-integration-{plugin}'
+- job:
+    name: 'dib-nova-heat-hdp_2'
     defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh {plugin}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh hdp_2"
 
     properties:
       - zeromq-event
@@ -17,19 +17,19 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-{plugin}\
+               \nPREV_JOB=dib-nova-heat-hdp_2\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-nova-network'
 
 - job-template:
-    name: 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
+    name: 'dib-{network}-direct-{plugin}-{os}-aio'
     defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh vanilla {image-vanilla} {hadoop-version}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
       - zeromq-event
@@ -40,53 +40,80 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}\
+               \nPREV_JOB=dib-{network}-direct-{plugin}-{os}\
+               \nHOST_NAME=$NODE_NAME"
+    node: 'precise-{network}'
+
+- job-template:
+    name: 'dib-nova-direct-{plugin}-aio'
+    defaults: global
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin}"
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=dib-nova-direct-{plugin}-aio\
+               \nHOST_NAME=$NODE_NAME"
+    node: 'precise-nova-network'
+
+- job-template:
+    name: 'dib-neutron-heat-vanilla_2.4-{os}'
+    defaults: global
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}"
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=dib-dib-neutron-heat-vanilla_2.4-{os}\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-neutron'
-
-- job-template:
-    name: 'diskimage-integration-cdh-{image-cdh}'
-    defaults: global
-    concurrent: false
-    builders:
-      - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/diskimage-creating-integration.sh cdh {image-cdh}"
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=diskimage-integration-cdh-{image-cdh}\
-               \nHOST_NAME=$NODE_NAME"
-    node: 'precise-nova-network'
 
 - project:
     name: sahara-image-elements
     github-org: openstack
     plugin:
-     - hdp1
-     - hdp2
-     - spark
-    image-vanilla:
+     - vanilla_1
+     - vanilla_2.3
+    os:
      - ubuntu
      - fedora
      - centos
-    image-cdh:
-     - ubuntu
-     - centos
-    hadoop-version:
-     - 1
-     - 2.3
-     - 2.4
+    network:
+     - neutron
     jobs:
-     - 'diskimage-integration-vanilla-{image-vanilla}-{hadoop-version}'
-     - 'diskimage-integration-{plugin}'
-     - 'diskimage-integration-cdh-{image-cdh}'
+     - 'dib-nova-heat-hdp_2'
+     - 'dib-{network}-direct-{plugin}-{os}-aio'
+     - 'dib-{network}-direct-{plugin}-{os}-aio':
+          network: nova
+          plugin: cdh
+          os:
+            - ubuntu
+            - centos
+     - 'dib-nova-direct-{plugin}-aio':
+          plugin:
+            - spark
+            - hdp_1
+     - 'dib-neutron-heat-vanilla_2.4-{os}'
 
