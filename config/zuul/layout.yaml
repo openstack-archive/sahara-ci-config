@@ -31,31 +31,30 @@ pipelines:
 projects:
   - name: openstack/sahara
     check:
-      - gate-sahara-integration-vanilla-1
-      - gate-sahara-integration-vanilla-2.3
-      - gate-sahara-integration-vanilla-2.4
-      - gate-sahara-integration-hdp1
-      - gate-sahara-integration-hdp2
-      - gate-sahara-integration-spark
-      - gate-sahara-integration-cdh-centos
-      - gate-sahara-integration-cdh-ubuntu
-      - gate-sahara-integration-transient
-      - gate-sahara-integration-heat_transient
+      - gate-sahara-neutron-direct-vanilla_1-aio
+      - gate-sahara-neutron-direct-vanilla_2.3-aio
+      - gate-sahara-neutron-heat-vanilla_2.4
+      - gate-sahara-neutron-direct-spark-aio
+      - gate-sahara-neutron-direct-transient
+      - gate-sahara-neutron-heat-transient
+      - gate-sahara-nova-direct-cdh_ubuntu-aio
+      - gate-sahara-nova-direct-cdh_centos-aio
+      - gate-sahara-nova-direct-hdp_1-aio
+      - gate-sahara-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
 
   - name: openstack/python-saharaclient
     check:
-      - gate-saharaclient-integration-vanilla-1
-      - gate-saharaclient-integration-vanilla-2.3
-      - gate-saharaclient-integration-vanilla-2.4
-      - gate-saharaclient-integration-hdp1
-      - gate-saharaclient-integration-hdp2
-      - gate-saharaclient-integration-spark
-      - gate-saharaclient-tempest-tests
-      - gate-saharaclient-integration-cdh-centos
-      - gate-saharaclient-integration-cdh-ubuntu
-      - gate-saharaclient-integration-transient
-      - gate-saharaclient-integration-heat_transient
+      - gate-saharaclient-neutron-direct-vanilla_1-aio
+      - gate-saharaclient-neutron-direct-vanilla_2.3-aio
+      - gate-saharaclient-neutron-heat-vanilla_2.4
+      - gate-saharaclient-neutron-direct-spark-aio
+      - gate-saharaclient-neutron-direct-transient
+      - gate-saharaclient-neutron-heat-transient
+      - gate-saharaclient-nova-direct-cdh_ubuntu-aio
+      - gate-saharaclient-nova-direct-cdh_centos-aio
+      - gate-saharaclient-nova-direct-hdp_1-aio
+      - gate-saharaclient-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
 
   - name: openstack/sahara-dashboard
@@ -68,35 +67,35 @@ projects:
 
   - name: openstack/sahara-image-elements
     check:
-      - diskimage-integration-vanilla-ubuntu-1
-      - diskimage-integration-vanilla-fedora-1
-      - diskimage-integration-vanilla-centos-1
-      - diskimage-integration-vanilla-ubuntu-2.3
-      - diskimage-integration-vanilla-fedora-2.3
-      - diskimage-integration-vanilla-centos-2.3
-      - diskimage-integration-vanilla-ubuntu-2.4
-      - diskimage-integration-vanilla-fedora-2.4
-      - diskimage-integration-vanilla-centos-2.4
-      - diskimage-integration-spark
-      - diskimage-integration-cdh-centos
-      - diskimage-integration-cdh-ubuntu
-      - diskimage-integration-hdp1
-      - diskimage-integration-hdp2
+      - dib-neutron-direct-vanilla_1-ubuntu-aio
+      - dib-neutron-direct-vanilla_1-fedora-aio
+      - dib-neutron-direct-vanilla_1-centos-aio
+      - dib-neutron-direct-vanilla_2.3-ubuntu-aio
+      - dib-neutron-direct-vanilla_2.3-fedora-aio
+      - dib-neutron-direct-vanilla_2.3-centos-aio
+      - dib-neutron-heat-vanilla_2.4-ubuntu
+      - dib-neutron-heat-vanilla_2.4-fedora
+      - dib-neutron-heat-vanilla_2.4-centos
+      - dib-nova-direct-spark-aio
+      - dib-nova-direct-hdp_1-aio
+      - dib-nova-heat-hdp_2
+      - dib-nova-direct-cdh-ubuntu-aio
+      - dib-nova-direct-cdh-centos-aio
     post:
-      - diskimage-integration-vanilla-ubuntu-1
-      - diskimage-integration-vanilla-fedora-1
-      - diskimage-integration-vanilla-centos-1
-      - diskimage-integration-vanilla-ubuntu-2.3
-      - diskimage-integration-vanilla-fedora-2.3
-      - diskimage-integration-vanilla-centos-2.3
-      - diskimage-integration-vanilla-ubuntu-2.4
-      - diskimage-integration-vanilla-fedora-2.4
-      - diskimage-integration-vanilla-centos-2.4
-      - diskimage-integration-spark
-      - diskimage-integration-cdh-centos
-      - diskimage-integration-cdh-ubuntu
-      - diskimage-integration-hdp1
-      - diskimage-integration-hdp2
+      - dib-neutron-direct-vanilla_1-ubuntu-aio
+      - dib-neutron-direct-vanilla_1-fedora-aio
+      - dib-neutron-direct-vanilla_1-centos-aio
+      - dib-neutron-direct-vanilla_2.3-ubuntu-aio
+      - dib-neutron-direct-vanilla_2.3-fedora-aio
+      - dib-neutron-direct-vanilla_2.3-centos-aio
+      - dib-neutron-heat-vanilla_2.4-ubuntu
+      - dib-neutron-heat-vanilla_2.4-fedora
+      - dib-neutron-heat-vanilla_2.4-centos
+      - dib-nova-direct-spark-aio
+      - dib-nova-direct-hdp_1-aio
+      - dib-nova-heat-hdp_2
+      - dib-nova-direct-cdh-ubuntu-aio
+      - dib-nova-direct-cdh-centos-aio
 
   - name: stackforge/sahara-ci-config
     check:
@@ -108,23 +107,13 @@ jobs:
     branch: ^(master|proposed/juno|stable/icehouse)$
   - name: gate-sahara-pep8-trunk
     voting: false
-  - name: diskimage-integration-cdh-centos
-    voting: false
-  - name: diskimage-integration-cdh-ubuntu
-    voting: false
-  - name: gate-saharaclient-integration-cdh-centos
-    voting: false
   - name: gate-saharaclient-tempest-tests
     voting: false
-  - name: gate-saharaclient-integration-cdh-ubuntu
-    voting: false
-  - name: ^gate-sahara-integration.*$
+  - name: ^gate-sahara-.*$
     files:
       - '^sahara/.*$'
       - '^tools/.*$'
       - '^[^\/]*$'
-  - name: ^gate-sahara-integration-cdh-.*$
-    voting: false
 #  - name: gate-ui-tests
 #    voting: false
 #    files:

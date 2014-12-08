@@ -6,7 +6,7 @@
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-integration.sh"
+              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -25,14 +25,14 @@
     node: precise-neutron || precise-nova-network
 
 - job-template:
-    name: 'gate-saharaclient-integration-{plugin-neutron}'
+    name: 'gate-saharaclient-neutron-{plugin-neutron}'
     defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-integration.sh"
+              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -51,14 +51,14 @@
     node: 'precise-neutron'
 
 - job-template:
-    name: 'gate-saharaclient-integration-{plugin-nova_network}'
+    name: 'gate-saharaclient-nova-{plugin-nova_network}'
     defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient-integration.sh"
+              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -77,14 +77,14 @@
     node: 'precise-nova-network'
 
 - job-template:
-    name: 'gate-sahara-integration-{plugin-neutron}'
+    name: 'gate-sahara-neutron-{plugin-neutron}'
     defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-integration.sh"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -103,14 +103,14 @@
     node: 'precise-neutron'
 
 - job-template:
-    name: 'gate-sahara-integration-{plugin-nova_network}'
+    name: 'gate-sahara-nova-{plugin-nova_network}'
     defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-integration.sh"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -132,22 +132,22 @@
     name: sahara
     github-org: openstack
     plugin-neutron:
-     - vanilla-1
-     - vanilla-2.3
-     - vanilla-2.4
-     - spark
-     - transient
-     - heat_transient
+     - direct-vanilla_1-aio
+     - direct-vanilla_2.3-aio
+     - heat-vanilla_2.4
+     - direct-spark-aio
+     - direct-transient
+     - heat-transient
     plugin-nova_network:
-     - cdh-ubuntu
-     - cdh-centos
-     - hdp1
-     - hdp2
+     - direct-cdh_ubuntu-aio
+     - direct-cdh_centos-aio
+     - direct-hdp_1-aio
+     - heat-hdp_2
     jobs:
-     - 'gate-sahara-integration-{plugin-neutron}'
-     - 'gate-sahara-integration-{plugin-nova_network}'
-     - 'gate-saharaclient-integration-{plugin-neutron}'
-     - 'gate-saharaclient-integration-{plugin-nova_network}'
+     - 'gate-sahara-neutron-{plugin-neutron}'
+     - 'gate-sahara-nova-{plugin-nova_network}'
+     - 'gate-saharaclient-neutron-{plugin-neutron}'
+     - 'gate-saharaclient-nova-{plugin-nova_network}'
 
 - job:
     name: integration-cleanup
