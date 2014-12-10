@@ -51,6 +51,7 @@ index_url = http://172.18.168.44/simple/
 
 write_sahara_main_conf() {
   conf_path=$1
+  HEAT_JOB=False
   echo "[DEFAULT]
 " >> $conf_path
   if [ "$HEAT_JOB" == "True" ]
