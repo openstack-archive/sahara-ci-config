@@ -183,6 +183,12 @@ HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-
 " >> $test_conf_path
 fi
 
+if [ "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-6" ]; then
+     echo "HADOOP_VERSION = '2.6.0'
+HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar'
+" >> $test_conf_path
+fi
+
   echo "[HDP]
 IMAGE_NAME = '$HDP_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN

@@ -68,14 +68,14 @@
     node: 'precise-nova-network'
 
 - job-template:
-    name: 'dib-neutron-heat-vanilla_2.4-{os}'
+    name: 'dib-neutron-heat-{plugin}-{os}'
     defaults: global
     concurrent: false
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
               \ngit clone https://github.com/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}"
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
       - zeromq-event
@@ -115,5 +115,8 @@
           plugin:
             - spark
             - hdp_1
-     - 'dib-neutron-heat-vanilla_2.4-{os}'
+     - 'dib-neutron-heat-{plugin}-{os}':
+          plugin:
+            - vanilla_2.4
+            - vanilla_2.6
 
