@@ -23,6 +23,9 @@ register_vanilla_image() {
            2.4)
              glance image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
+           2.6)
+             glance image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
+             ;;
    esac
 }
 
@@ -66,6 +69,9 @@ upload_image() {
            vanilla-2.4)
              register_vanilla_image "2.4" "$2" "$3"
            ;;
+           vanilla-2.6)
+             register_vanilla_image "2.6" "$2" "$3"
+           ;;
            hdp1)
              register_hdp_image "1" "$2" "$3"
            ;;
@@ -90,7 +96,7 @@ ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 
 plugin="$1"
 image_type=${2:-ubuntu}
-hadoop_version=${3:-1}
+hadoop_version=1
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 SKIP_CINDER_TEST=True
 SKIP_CLUSTER_CONFIG_TEST=True
@@ -143,11 +149,21 @@ case $plugin in
               PLUGIN_TYPE=vanilla2
               ;;
            2.4)
+              VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.4
               [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
+              PLUGIN_TYPE=vanilla2
+              ;;
+           2.6)
+              VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.6
+              [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_6_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
+              upload_image "vanilla-2.6" "${username}" ${VANILLA_TWO_IMAGE}
+              hadoop_version=2-6
               PLUGIN_TYPE=vanilla2
               ;;
        esac
@@ -238,7 +254,7 @@ fi
 
 if [[ "$STATUS" != 0 ]]
 then
-    if [ "${plugin}" == "vanilla" ]; then
+    if [[ "${plugin}" =~ vanilla ]]; then
         if [ "${hadoop_version}" == "1" ]; then
             delete_image $VANILLA_IMAGE
         else
@@ -262,7 +278,7 @@ fi
 
 if [ "$ZUUL_PIPELINE" == "check" ]
 then
-    if [ "${plugin}" == "vanilla" ]; then
+    if [[ "${plugin}" =~ vanilla ]]; then
         if [ "${hadoop_version}" == "1" ]; then
             delete_image $VANILLA_IMAGE
         else
@@ -282,7 +298,7 @@ then
         delete_image $SPARK_IMAGE
     fi
 else
-    if [ "${plugin}" == "vanilla" ]; then
+    if [[ "${plugin}" =~ vanilla ]]; then
         if [ "${hadoop_version}" == "1" ]; then
             delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
             rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
