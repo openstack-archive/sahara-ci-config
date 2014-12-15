@@ -177,9 +177,14 @@ if [ "$PLUGIN_TYPE" == "transient" ]; then
 " >> $test_conf_path
 fi
 
-if [ "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" ]; then
-     echo "HADOOP_VERSION = '2.4.1'
-HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar'
+if [ "$PLUGIN_TYPE" == "vanilla2" -a \( "$hadoop_version" == "2-4" -o "$hadoop_version" == "2-6" \) ]; then
+   if [ "$hadoop_version" == "2-4" ]; then
+      version="2.4.1"
+   else
+      version="2.6.0"
+   fi
+   echo "HADOOP_VERSION = '${version}'
+HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-${version}.jar'
 " >> $test_conf_path
 fi
 
