@@ -86,6 +86,8 @@ rename_image() {
    glance image-update $1 --name $2
 }
 
+ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
+
 plugin="$1"
 image_type=${2:-ubuntu}
 hadoop_version=${3:-1}
@@ -106,8 +108,14 @@ HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 CDH_IMAGE=$HOST-${image_type}-cdh-${GERRIT_CHANGE_NUMBER}
 
+if [[ "$ENGINE_TYPE" == 'heat' ]]
+then
+    HEAT_JOB=True
+    echo "Heat detected"
+fi
+
 case $plugin in
-    vanilla)
+    vanilla*)
        pushd /home/jenkins
        python -m SimpleHTTPServer 8000 > /dev/null &
        popd
@@ -118,6 +126,7 @@ case $plugin in
            username=${image_type}
        fi
 
+       hadoop_version=$(echo $plugin | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
@@ -140,7 +149,6 @@ case $plugin in
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
               PLUGIN_TYPE=vanilla2
-              HEAT_JOB=True
               ;;
        esac
     ;;
@@ -158,22 +166,21 @@ case $plugin in
        PLUGIN_TYPE=$plugin
     ;;
 
-    hdp1)
+    hdp_1)
        image_type="centos"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${HDP_IMAGE}.qcow2
        upload_image "hdp1" "root" ${HDP_IMAGE}
-       PLUGIN_TYPE=$plugin
+       PLUGIN_TYPE="hdp1"
     ;;
 
-    hdp2)
+    hdp_2)
        image_type="centos"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
-       PLUGIN_TYPE=$plugin
-       HEAT_JOB=True
+       PLUGIN_TYPE="hdp2"
     ;;
 
     cdh)
