@@ -20,10 +20,10 @@ SKIP_SCALING_TEST=False
 SKIP_TRANSIENT_TEST=True
 SKIP_ONLY_TRANSIENT_TEST=False
 SKIP_ALL_TESTS_FOR_PLUGIN=False
-HDP_IMAGE=sahara-itests-ci-hdp-image-jdk-iptables-off
-HDP_TWO_IMAGE=centos-6_4-64-hdp-2-0-hw
-VANILLA_IMAGE=sahara-itests-ci-vanilla-image
-VANILLA_TWO_IMAGE=ubuntu-vanilla-2.4-latest
+HDP_IMAGE=sahara_hdp_1_latest
+HDP_TWO_IMAGE=sahara_hdp_2_latest
+VANILLA_IMAGE=ubuntu_vanilla_1_latest
+VANILLA_TWO_IMAGE=ubuntu_vanilla_2.4_latest
 SPARK_IMAGE=sahara_spark_latest
 HEAT_JOB=False
 
@@ -55,7 +55,7 @@ case $JOB_TYPE in
              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
           else
              hadoop_version=2-6
-             VANILLA_TWO_IMAGE=ubuntu-vanilla-2.6-latest
+             VANILLA_TWO_IMAGE=ubuntu_vanilla_2.6_latest
              [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
           fi
           echo "Vanilla2 detected"
