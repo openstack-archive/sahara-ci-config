@@ -32,8 +32,10 @@ if [ $JOB_TYPE == 'dib' ]; then
             python cleanup.py cleanup $HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
         elif [ "$HADOOP_VERSION" == '2.3' ]; then
             python cleanup.py cleanup $HOST-$os-2-3-$PREV_BUILD-vanilla-v2
-        else
+        elif [ "$HADOOP_VERSION" == '2.4' ]; then
             python cleanup.py cleanup-heat $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
+        else
+            python cleanup.py cleanup-heat $HOST-$os-2-6-$PREV_BUILD-vanilla-v2
         fi
     elif [ $PLUGIN == 'hdp_1' ]; then
         python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
@@ -65,8 +67,10 @@ else
             JOB_TYPE=vanilla-v2
             if [ "$HADOOP_VERSION" == '2.3' ]; then
                 HADOOP_VERSION=2-3
-            else
+            elif [ "$HADOOP_VERSION" == '2.4' ]; then
                 HADOOP_VERSION=2-4
+            else
+                HADOOP_VERSION=2-6
             fi
         fi
     fi
