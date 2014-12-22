@@ -16,8 +16,8 @@ labels:
     min-ready: 4
     providers:
       - name: cilab-1
-  - name:  precise-nova-network
-    image: precise-nova-network
+  - name:  precise-nova
+    image: precise-nova
     min-ready: 4
     providers:
       - name: cilab-2
@@ -60,7 +60,7 @@ providers:
     networks:
       - net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'
     images:
-      - name: precise-nova-network
+      - name: precise-nova
         base-image: 'ubuntu-12.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
