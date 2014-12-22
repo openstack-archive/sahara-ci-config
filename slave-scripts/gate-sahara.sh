@@ -76,7 +76,7 @@ case $JOB_TYPE in
        echo "Transient detected"
        ;;
     cdh*)
-       os_version=$(echo $JOB_NAME | awk -F '_' '{ print $2}')
+       os_version=$(echo $JOB_TYPE | awk -F '_' '{ print $2}')
        if [ "$os_version" == "centos" ]; then
           CDH_IMAGE=centos_cdh_latest
           hadoop_version=2c

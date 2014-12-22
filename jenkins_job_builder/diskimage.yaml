@@ -19,7 +19,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=dib-nova-heat-hdp_2\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise-nova-network'
+    node: 'precise-nova'
 
 - job-template:
     name: 'dib-{network}-direct-{plugin}-{os}-aio'
@@ -65,7 +65,7 @@
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
                \nPREV_JOB=dib-nova-direct-{plugin}-aio\
                \nHOST_NAME=$NODE_NAME"
-    node: 'precise-nova-network'
+    node: 'precise-nova'
 
 - job-template:
     name: 'dib-neutron-heat-{plugin}-{os}'
