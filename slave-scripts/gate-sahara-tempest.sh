@@ -15,7 +15,13 @@ fi
 
 cd /home/jenkins
 
-cp -r $WORKSPACE/saharaclient/tests/tempest tempest/
+git clone http://github.com/openstack/python-saharaclient
+cd python-saharaclient
+sudo pip install -U -r requirements.txt
+sudo pip install .
+cd ..
+
+cp -r $WORKSPACE/sahara/tests/tempest tempest/
 
 cd tempest
 

@@ -1,12 +1,12 @@
 - job:
-    name: 'gate-saharaclient-tempest-tests'
+    name: 'gate-sahara-tempest-tests'
     defaults: global
     concurrent: true
     builders:
       - gerrit-git-prep
       - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-tempest.sh"
     properties:
       - zeromq-event
     wrappers:
