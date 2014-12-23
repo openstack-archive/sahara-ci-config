@@ -24,6 +24,32 @@
                \nHOST_NAME=$NODE_NAME"
     node: precise-neutron || precise-nova
 
+- job:
+    name: 'gate-sahara-tempest-tests'
+    defaults: global
+    concurrent: true
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://github.com/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara-tempest.sh"
+    properties:
+      - zeromq-event
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - timestamps
+    publishers:
+      - console-log
+      - trigger-parameterized-builds:
+          - project: "integration-cleanup"
+            predefined-parameters:
+               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               \nPREV_JOB=$JOB_NAME\
+               \nHOST_NAME=$NODE_NAME"
+    node: precise-neutron || precise-nova
+
 - job-template:
     name: 'gate-saharaclient-neutron-{plugin-neutron}'
     defaults: global
