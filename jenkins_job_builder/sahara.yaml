@@ -133,7 +133,6 @@
     github-org: openstack
     plugin-neutron:
      - direct-vanilla_1-aio
-     - direct-vanilla_2.3-aio
      - heat-vanilla_2.4
      - heat-vanilla_2.6
      - direct-spark-aio

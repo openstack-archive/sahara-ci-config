@@ -16,7 +16,6 @@ else
     USE_NEUTRON=false
 fi
 
-VANILLA23_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-2.3.0-ubuntu-13.10.qcow2
 VANILLA24_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-2.4.1-ubuntu-13.10.qcow2
 VANILLA26_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-2.6.0-ubuntu-14.04.qcow2
 VANILLA_IMAGE_PATH=/home/ubuntu/images/sahara-icehouse-vanilla-1.2.1-ubuntu-13.10.qcow2
@@ -64,7 +63,6 @@ nova flavor-delete m1.small
 nova flavor-create --is-public true m1.small 2 1024 20 1
 
 # add images for tests
-glance image-create --name ubuntu-vanilla-2.3-latest --file $VANILLA23_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name ubuntu-vanilla-2.4-latest --file $VANILLA24_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name ubuntu-vanilla-2.6-latest --file $VANILLA26_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name sahara-itests-ci-vanilla-image --file $VANILLA_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'

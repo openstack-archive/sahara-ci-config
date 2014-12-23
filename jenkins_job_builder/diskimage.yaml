@@ -95,7 +95,6 @@
     github-org: openstack
     plugin:
      - vanilla_1
-     - vanilla_2.3
     os:
      - ubuntu
      - fedora

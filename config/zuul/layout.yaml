@@ -32,7 +32,6 @@ projects:
   - name: openstack/sahara
     check:
       - gate-sahara-neutron-direct-vanilla_1-aio
-      - gate-sahara-neutron-direct-vanilla_2.3-aio
       - gate-sahara-neutron-heat-vanilla_2.4
       - gate-sahara-neutron-heat-vanilla_2.6
       - gate-sahara-neutron-direct-spark-aio
@@ -47,7 +46,6 @@ projects:
   - name: openstack/python-saharaclient
     check:
       - gate-saharaclient-neutron-direct-vanilla_1-aio
-      - gate-saharaclient-neutron-direct-vanilla_2.3-aio
       - gate-saharaclient-neutron-heat-vanilla_2.4
       - gate-saharaclient-neutron-heat-vanilla_2.6
       - gate-saharaclient-neutron-direct-spark-aio
@@ -72,9 +70,6 @@ projects:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
       - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
-      - dib-neutron-direct-vanilla_2.3-ubuntu-aio
-      - dib-neutron-direct-vanilla_2.3-fedora-aio
-      - dib-neutron-direct-vanilla_2.3-centos-aio
       - dib-neutron-heat-vanilla_2.4-ubuntu
       - dib-neutron-heat-vanilla_2.4-fedora
       - dib-neutron-heat-vanilla_2.4-centos
@@ -90,9 +85,6 @@ projects:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
       - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
-      - dib-neutron-direct-vanilla_2.3-ubuntu-aio
-      - dib-neutron-direct-vanilla_2.3-fedora-aio
-      - dib-neutron-direct-vanilla_2.3-centos-aio
       - dib-neutron-heat-vanilla_2.4-ubuntu
       - dib-neutron-heat-vanilla_2.4-fedora
       - dib-neutron-heat-vanilla_2.4-centos

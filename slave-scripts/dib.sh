@@ -17,9 +17,6 @@ register_vanilla_image() {
            1)
              glance image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
-           2.3)
-             glance image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
-             ;;
            2.4)
              glance image-create --name $3 --file $3.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'="${2}"
              ;;
@@ -62,9 +59,6 @@ upload_image() {
    case "$1" in
            vanilla-1)
              register_vanilla_image "1" "$2" "$3"
-           ;;
-           vanilla-2.3)
-             register_vanilla_image "2.3" "$2" "$3"
            ;;
            vanilla-2.4)
              register_vanilla_image "2.4" "$2" "$3"
@@ -139,14 +133,6 @@ case $plugin in
               check_error_code $? ${VANILLA_IMAGE}.qcow2
               upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
               PLUGIN_TYPE=vanilla1
-              ;;
-           2.3)
-              [ "$ZUUL_BRANCH" != "stable/icehouse" ] && echo "Vanilla 2.3 plugin is deprecated" && exit 0
-              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_3_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.3
-              check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
-              upload_image "vanilla-2.3" "${username}" ${VANILLA_TWO_IMAGE}
-              hadoop_version=2-3
-              PLUGIN_TYPE=vanilla2
               ;;
            2.4)
               VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.4

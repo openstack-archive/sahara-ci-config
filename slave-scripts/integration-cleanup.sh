@@ -30,8 +30,6 @@ if [ $JOB_TYPE == 'dib' ]; then
         HADOOP_VERSION=$(echo $PLUGIN | awk -F '_' '{ print $2}')
         if [ "$HADOOP_VERSION" == '1' ]; then
             python cleanup.py cleanup $HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla-v1
-        elif [ "$HADOOP_VERSION" == '2.3' ]; then
-            python cleanup.py cleanup $HOST-$os-2-3-$PREV_BUILD-vanilla-v2
         elif [ "$HADOOP_VERSION" == '2.4' ]; then
             python cleanup.py cleanup-heat $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
         else
@@ -65,9 +63,7 @@ else
             JOB_TYPE=vanilla-v1
         else
             JOB_TYPE=vanilla-v2
-            if [ "$HADOOP_VERSION" == '2.3' ]; then
-                HADOOP_VERSION=2-3
-            elif [ "$HADOOP_VERSION" == '2.4' ]; then
+            if [ "$HADOOP_VERSION" == '2.4' ]; then
                 HADOOP_VERSION=2-4
             else
                 HADOOP_VERSION=2-6

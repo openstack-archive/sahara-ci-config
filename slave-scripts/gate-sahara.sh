@@ -50,11 +50,7 @@ case $JOB_TYPE in
           echo "Vanilla detected"
        else
           PLUGIN_TYPE=vanilla2
-          if [ "$hadoop_version" == "2.3" ]; then
-             VANILLA_TWO_IMAGE=ubuntu-vanilla-2.3-latest
-             hadoop_version=2-3
-             [ "$ZUUL_BRANCH" != "stable/icehouse" ] && echo "Vanilla 2.3 plugin is deprecated" && exit 0
-          elif [ "$hadoop_version" == "2.4" ]; then
+          if [ "$hadoop_version" == "2.4" ]; then
              hadoop_version=2-4
              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
           else
