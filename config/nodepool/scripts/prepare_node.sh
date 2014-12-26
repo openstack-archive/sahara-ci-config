@@ -59,7 +59,7 @@ sudo apt-get install qemu kpartx -y
 
 #install Sahara requirements
 sudo pip install mysql-python
-cd /tmp && git clone https://github.com/openstack/sahara
+cd /tmp && git clone https://git.openstack.org/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
 
 # install requirements for Cloudera plugin
