@@ -13,7 +13,7 @@
 
     scm:
      - git:
-        url: https://github.com/stackforge/sahara-ci-config.git
+        url: https://git.openstack.org/stackforge/sahara-ci-config
         branches:
           - "master"
 
