@@ -3,7 +3,7 @@
     node: master
     project-type: freestyle
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/sahara-ci-config\">https://github.com/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Update job for Zuul and Nodepool <br/>\
                   \n<b>Description</b>: This job updates Zuul and Nodepool configs from sahara-ci-config repo. <br/>\
                   \n<b>Maintainer</b>: Sergey Kolekonov<br/>"
@@ -13,7 +13,7 @@
 
     scm:
      - git:
-        url: https://github.com/stackforge/sahara-ci-config.git
+        url: https://git.openstack.org/stackforge/sahara-ci-config
         branches:
           - "master"
 

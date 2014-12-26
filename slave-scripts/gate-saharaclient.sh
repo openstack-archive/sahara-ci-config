@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo rm -rf /tmp/sahara
-git clone https://github.com/openstack/sahara /tmp/sahara
+git clone https://git.openstack.org/openstack/sahara /tmp/sahara
 cd /tmp/sahara
 # prepare test dependencies
 tox -e integration --notest

@@ -3,7 +3,7 @@
     project-type: freestyle
     defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/sahara-ci-config\">https://github.com/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Tests for Sahara dashboard<br/>\
                   \n<b>Description</b>: This job installs Sahara-dashboard and run selenium tests.<br/>\
                   \n<b>Maintainer</b>: Vadim Rovachev<br/>"
@@ -17,7 +17,7 @@
     builders:
     - gerrit-git-prep
     - shell:  "rm -rf sahara-ci-config\
-             \ngit clone https://github.com/stackforge/sahara-ci-config\
+             \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-ui-tests.sh"
 
     publishers:

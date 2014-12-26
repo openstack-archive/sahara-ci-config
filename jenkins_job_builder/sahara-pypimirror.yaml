@@ -3,7 +3,7 @@
     node: master
     project-type: freestyle
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://github.com/stackforge/sahara-ci-config\">https://github.com/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Pypi mirror updater<br/>\
                   \n<b>Description</b>: This job creates/updates Pypi mirror used for testing with all Sahara requirements from all Sahara branches (based on openstack-infra jeepyb scripts). Mirror url:\
                   \n<a href=\"http://sahara.mirantis.net/pypi/\">http://sahara.mirantis.net/pypi</a><br/>\

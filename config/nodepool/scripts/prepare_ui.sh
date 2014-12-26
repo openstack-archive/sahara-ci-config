@@ -19,7 +19,7 @@ else
 fi
 
 sudo apt-get install libstdc++5 nodejs xserver-xorg libffi-dev apache2 libapache2-mod-wsgi  -y
-git clone https://github.com/openstack/horizon
+git clone https://git.openstack.org/openstack/horizon
 cd horizon && sudo pip install -U -r requirements.txt
 cp openstack_dashboard/local/local_settings.py.example openstack_dashboard/local/local_settings.py
 sudo sed -i "s/OPENSTACK_HOST = \"127.0.0.1\"/OPENSTACK_HOST = \"${OPENSTACK_HOST}\"/g" openstack_dashboard/local/local_settings.py
