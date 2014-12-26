@@ -8,7 +8,7 @@ sudo iptables -F
 if [ ! -d saharadashboard ]
 then
    DASHBOARD_PATH=$(pwd)/sahara-dashboard
-   git clone https://github.com/openstack/sahara-dashboard
+   git clone https://git.openstack.com/openstack/sahara-dashboard
 else
    DASHBOARD_PATH=$(pwd)
 fi
@@ -22,7 +22,7 @@ enable_pypi
 
 SAHARA_DIR=$HOME/sahara
 rm -rf $SAHARA_DIR
-git clone https://github.com/openstack/sahara $SAHARA_DIR
+git clone https://git.openstack.com/openstack/sahara $SAHARA_DIR
 cd $SAHARA_DIR
 write_sahara_main_conf $SAHARA_DIR/etc/sahara/sahara.conf
 sudo pip install .
