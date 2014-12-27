@@ -59,6 +59,7 @@ nova quota-update --tenant_id $CI_TENANT_ID --security-group-rules 100
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
+nova flavor-create --is-public true qa-flavor 21 4096 40 1
 nova flavor-delete m1.small
 nova flavor-create --is-public true m1.small 2 1024 20 1
 
