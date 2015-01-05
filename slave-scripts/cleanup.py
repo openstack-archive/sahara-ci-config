@@ -51,7 +51,10 @@ def cleanup_heat():
 
 def cleanup():
     client = get_nova_client()
+    cinder_client = get_cinder_client()
     servers = client.servers.list()
+    volumes = cinder_client.volumes.list()
+    secgroups = client.security_groups.list()
     current_name = sys.argv[2]
 
     for server in servers:
@@ -63,12 +66,15 @@ def cleanup():
             client.servers.delete(server.id)
 
     time.sleep(20)
-    cinder_client = get_cinder_client()
-    volumes = cinder_client.volumes.list()
     for volume in volumes:
         if current_name in volume.display_name :
            print volume.display_name
            volume.delete()
+
+    for group in secgroups:
+        if current_name in group.name :
+           print group.name
+           group.delete()
 
 def main(argv):
     load_conf()
