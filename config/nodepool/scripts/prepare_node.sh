@@ -50,8 +50,8 @@ sudo service mysql stop
 #install RabbitMQ for distributed Sahara mode
 sudo apt-get install rabbitmq-server -y
 
-#workaround problem 'xslt-config: not found'
-sudo apt-get install libxslt1-dev -y
+#install required libraries
+sudo apt-get install libxslt1-dev libffi-dev -y
 
 #glance-client is required for diskimage-integration jobs
 sudo pip install python-glanceclient
