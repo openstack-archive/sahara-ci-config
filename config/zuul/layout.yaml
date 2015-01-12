@@ -109,21 +109,21 @@ jobs:
     voting: false
   - name: gate-saharaclient-tempest-tests
     voting: false
-  - name: gate-sahara-neutron-heat-vanilla_2.6
-    voting: false
-  - name: gate-saharaclient-neutron-heat-vanilla_2.6
-    voting: false
-  - name: dib-neutron-heat-vanilla_2.6-ubuntu
-    voting: false
-  - name: dib-neutron-heat-vanilla_2.6-fedora
-    voting: false
-  - name: dib-neutron-heat-vanilla_2.6-centos
-    voting: false
   - name: ^gate-sahara-.*$
     files:
       - '^sahara/.*$'
       - '^tools/.*$'
       - '^[^\/]*$'
+  - name: gate-sahara-neutron-heat-vanilla_2.4
+    voting: false
+  - name: gate-saharaclient-neutron-heat-vanilla_2.4
+    voting: false
+  - name: dib-neutron-heat-vanilla_2.4-ubuntu
+    voting: false
+  - name: dib-neutron-heat-vanilla_2.4-fedora
+    voting: false
+  - name: dib-neutron-heat-vanilla_2.4-centos
+    voting: false
 #  - name: gate-ui-tests
 #    voting: false
 #    files:
