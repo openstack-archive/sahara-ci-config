@@ -1,10 +1,23 @@
 #!/bin/bash
 
+PROJECT=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
+
+if [ "$PROJECT" == "sahara" ]; then
+   SAHARA_PATH="$WORKSPACE"
+   git clone http://github.com/openstack/python-saharaclient /tmp/saharaclient
+   cd /tmp/saharaclient
+   sudo pip install -U -r requirements.txt
+   sudo pip install .
+else
+   SAHARA_PATH=/tmp/sahara
+   git clone http://github.com/openstack/sahara $SAHARA_PATH
+   sudo pip install .
+fi
+
 . $FUNCTION_PATH
 
 check_openstack_host
 
-SAHARA_PATH=$1
 TEMPEST=True
 IMAGE_ID=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 if $USE_NEUTRON; then
@@ -15,7 +28,7 @@ fi
 
 cd /home/jenkins
 
-cp -r $WORKSPACE/saharaclient/tests/tempest tempest/
+cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
 
 cd tempest
 
