@@ -2,6 +2,10 @@
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ADMIN_RCFILE=$TOP_DIR/openrc
 PRIVATE_CIDR=10.0.0.0/24
+CINDER_CONF=/etc/cinder/cinder.conf
+NOVA_CONF=/etc/nova/nova.conf
+
+source $TOP_DIR/functions-common
 
 if [ -e "$ADMIN_RCFILE" ]; then
     source $ADMIN_RCFILE admin admin
@@ -27,15 +31,15 @@ SPARK_IMAGE_PATH=/home/ubuntu/images/sahara_spark_latest.qcow2
 NATIVE_UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
 # setup ci tenant and ci users
-CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep id | awk '{print $4}')
-CI_USER_ID=$(keystone user-create --name ci-user --tenant_id $CI_TENANT_ID --pass nova |  grep id | awk '{print $4}')
+CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep -w id | awk '{print $4}')
+CI_USER_ID=$(keystone user-create --name ci-user --tenant_id $CI_TENANT_ID --pass nova |  grep -w id | awk '{print $4}')
 ADMIN_USER_ID=$(keystone user-list | grep admin | awk '{print $2}' | head -n 1)
 MEMBER_ROLE_ID=$(keystone role-list | grep Member | awk '{print $2}')
 HEAT_OWNER_ROLE_ID=$(keystone role-list | grep heat_stack_owner | awk '{print $2}')
 keystone user-role-add --user $CI_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
 keystone user-role-add --user $ADMIN_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
-keystone user-role-add --user $CI_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
-keystone user-role-add --user $ADMIN_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
+#keystone user-role-add --user $CI_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
+#keystone user-role-add --user $ADMIN_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
 _MEMBER_ROLE_ID=$(keystone role-list | grep _member_ | awk '{print $2}')
 keystone user-role-add --user $ADMIN_USER_ID --role $_MEMBER_ROLE_ID --tenant $CI_TENANT_ID
 ADMIN_ROLE_ID=$(keystone role-list | grep admin | awk '{print $2}')
@@ -54,8 +58,8 @@ if $USE_NEUTRON; then
 else
   nova quota-update --floating-ips 64 $CI_TENANT_ID
 fi
-nova quota-update --tenant_id $CI_TENANT_ID --security-groups 100
-nova quota-update --tenant_id $CI_TENANT_ID --security-group-rules 100
+nova quota-update --security-groups 1000 $CI_TENANT_ID
+nova quota-update --security-group-rules 10000 $CI_TENANT_ID
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
@@ -122,6 +126,27 @@ fi
 #create Sahara endpoint for UI tests
 keystone service-create --name sahara --type data_processing --description "Data Processing Service"
 keystone endpoint-create --service sahara --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+
+# Setup Ceph
+echo "R" | bash $TOP_DIR/micro-osd.sh /srv/ceph
+
+# Setup Ceph backend for Cinder
+inidelete $CINDER_CONF DEFAULT default_volume_type
+inidelete $CINDER_CONF DEFAULT enabled_backends
+inidelete $CINDER_CONF lvmdriver-1 volume_clear
+inidelete $CINDER_CONF lvmdriver-1 volume_group
+inidelete $CINDER_CONF lvmdriver-1 volume_driver
+inidelete $CINDER_CONF lvmdriver-1 volume_backend_name
+iniset    $CINDER_CONF DEFAULT volume_driver cinder.volume.drivers.rbd.RBDDriver
+iniset    $CINDER_CONF DEFAULT rbd_pool data
+
+# Setup path for Nova instances
+iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
+
+# Restart OpenStack services
+screen -X -S stack quit
+screen -dm -c $TOP_DIR/stack-screenrc
+sleep 10
 
 echo "|---------------------------------------------------|"
 echo "| ci-tenant-id | $CI_TENANT_ID"
