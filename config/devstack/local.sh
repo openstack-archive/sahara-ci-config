@@ -2,6 +2,10 @@
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ADMIN_RCFILE=$TOP_DIR/openrc
 PRIVATE_CIDR=10.0.0.0/24
+CINDER_CONF=/etc/cinder/cinder.conf
+NOVA_CONF=/etc/nova/nova.conf
+
+source $TOP_DIR/functions-common
 
 if [ -e "$ADMIN_RCFILE" ]; then
     source $ADMIN_RCFILE admin admin
@@ -122,6 +126,25 @@ fi
 #create Sahara endpoint for UI tests
 keystone service-create --name sahara --type data_processing --description "Data Processing Service"
 keystone endpoint-create --service sahara --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+
+# Setup Ceph
+echo "R" | $TOP_DIR/micro-osd.sh /srv/ceph
+
+# Setup Ceph backend for Cinder
+inidelete $CINDER_CONF DEFAULT default_volume_type
+inidelete $CINDER_CONF DEFAULT enabled_backends
+inidelete $CINDER_CONF lvmdriver-1 volume_clear
+inidelete $CINDER_CONF lvmdriver-1 volume_group
+inidelete $CINDER_CONF lvmdriver-1 volume_driver
+inidelete $CINDER_CONF lvmdriver-1 volume_backend_name
+
+# Setup path for Nova instances
+iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
+
+# Restart OpenStack services
+screen -X -S stack quit
+screen -dm -c $TOP_DIR/stack-screenrc
+sleep 10
 
 echo "|---------------------------------------------------|"
 echo "| ci-tenant-id | $CI_TENANT_ID"
