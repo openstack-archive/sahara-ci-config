@@ -13,17 +13,17 @@ gearman-servers:
 labels:
   - name:  precise-neutron
     image: precise-neutron
-    min-ready: 4
+    min-ready: 3
     providers:
       - name: cilab-1
   - name:  precise-nova
     image: precise-nova
-    min-ready: 4
+    min-ready: 3
     providers:
       - name: cilab-2
   - name:  ui-neutron
     image: ui-neutron
-    min-ready: 1
+    min-ready: 0
     providers:
       - name: cilab-1
 
@@ -33,7 +33,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.42:5000/v2.0'
     project-id: 'ci'
-    max-servers: 6
+    max-servers: 4
     boot-timeout: 120
     pool: public
     networks:
@@ -54,7 +54,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.43:5000/v2.0'
     project-id: 'ci'
-    max-servers: 6
+    max-servers: 4
     boot-timeout: 120
     pool: public
     networks:
