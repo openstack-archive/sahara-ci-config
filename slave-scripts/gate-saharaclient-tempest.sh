@@ -15,7 +15,7 @@ fi
 
 cd /home/jenkins
 
-cp -r $WORKSPACE/saharaclient/tests/tempest tempest/
+cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
 
 cd tempest
 
