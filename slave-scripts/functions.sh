@@ -174,7 +174,7 @@ SKIP_EDP_TEST = $SKIP_EDP_TEST
 " >> $test_conf_path
 
 if [ "$PLUGIN_TYPE" == "transient" ]; then
-     echo "HADOOP_VERSION = '2.4.1'
+     echo "HADOOP_VERSION = '2.6.0'
 " >> $test_conf_path
 fi
 
