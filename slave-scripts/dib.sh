@@ -247,10 +247,10 @@ then
             delete_image $VANILLA_TWO_IMAGE
         fi
     fi
-    if [ "${plugin}" == "hdp1" ]; then
+    if [ "${plugin}" == "hdp_1" ]; then
         delete_image $HDP_IMAGE
     fi
-    if [ "${plugin}" == "hdp2" ]; then
+    if [ "${plugin}" == "hdp_2" ]; then
         delete_image $HDP_TWO_IMAGE
     fi
     if [ "${plugin}" == "cdh" ]; then
@@ -271,10 +271,10 @@ then
             delete_image $VANILLA_TWO_IMAGE
         fi
     fi
-    if [ "${plugin}" == "hdp1" ]; then
+    if [ "${plugin}" == "hdp_1" ]; then
         delete_image $HDP_IMAGE
     fi
-    if [ "${plugin}" == "hdp2" ]; then
+    if [ "${plugin}" == "hdp_2" ]; then
         delete_image $HDP_TWO_IMAGE
     fi
     if [ "${plugin}" == "cdh" ]; then
@@ -294,11 +294,11 @@ else
             rename_image $VANILLA_TWO_IMAGE ${image_type}_vanilla_${hadoop_version}_latest
         fi
     fi
-    if [ "${plugin}" == "hdp1" ]; then
+    if [ "${plugin}" == "hdp_1" ]; then
         delete_image sahara_hdp_1_latest
         rename_image $HDP_IMAGE sahara_hdp_1_latest
     fi
-    if [ "${plugin}" == "hdp2" ]; then
+    if [ "${plugin}" == "hdp_2" ]; then
         delete_image sahara_hdp_2_latest
         rename_image $HDP_TWO_IMAGE sahara_hdp_2_latest
     fi
