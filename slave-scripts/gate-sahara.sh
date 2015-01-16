@@ -77,9 +77,7 @@ case $JOB_TYPE in
           CDH_IMAGE=centos_cdh_latest
           hadoop_version=2c
        else
-          # temporary using native ubuntu image
-          #CDH_IMAGE=ubuntu_cdh_latest
-          CDH_IMAGE=ubuntu-12.04
+          CDH_IMAGE=ubuntu_cdh_latest
           hadoop_version=2u
        fi
        SKIP_SCALING_TEST=True
