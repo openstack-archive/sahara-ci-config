@@ -262,7 +262,7 @@ then
     exit 1
 fi
 
-if [ "$ZUUL_PIPELINE" == "check" ]
+if [ "$ZUUL_PIPELINE" == "check" -o "$ZUUL_BRANCH" != "master" ]
 then
     if [[ "${plugin}" =~ vanilla ]]; then
         if [ "${hadoop_version}" == "1" ]; then
@@ -285,21 +285,22 @@ then
     fi
 else
     if [[ "${plugin}" =~ vanilla ]]; then
+        hadoop_version=$(echo $plugin | awk -F '_' '{print $2}')
         if [ "${hadoop_version}" == "1" ]; then
-            delete_image ${image_type}_sahara_vanilla_hadoop_1_latest
-            rename_image $VANILLA_IMAGE ${image_type}_sahara_vanilla_hadoop_1_latest
+            delete_image ${image_type}_vanilla_1_latest
+            rename_image $VANILLA_IMAGE ${image_type}_vanilla_1_latest
         else
-            delete_image ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
-            rename_image $VANILLA_TWO_IMAGE ${image_type}_sahara_vanilla_hadoop_${hadoop_version}_latest
+            delete_image ${image_type}_vanilla_${hadoop_version}_latest
+            rename_image $VANILLA_TWO_IMAGE ${image_type}_vanilla_${hadoop_version}_latest
         fi
     fi
     if [ "${plugin}" == "hdp1" ]; then
-        delete_image centos_sahara_hdp_hadoop_1_latest
-        rename_image $HDP_IMAGE centos_sahara_hdp_hadoop_1_latest
+        delete_image sahara_hdp_1_latest
+        rename_image $HDP_IMAGE sahara_hdp_1_latest
     fi
     if [ "${plugin}" == "hdp2" ]; then
-        delete_image centos_sahara_hdp_hadoop_2_latest
-        rename_image $HDP_TWO_IMAGE centos_sahara_hdp_hadoop_2_latest
+        delete_image sahara_hdp_2_latest
+        rename_image $HDP_TWO_IMAGE sahara_hdp_2_latest
     fi
     if [ "${plugin}" == "cdh" ]; then
         delete_image ${image_type}_cdh_latest
