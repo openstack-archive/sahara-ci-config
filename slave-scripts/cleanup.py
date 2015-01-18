@@ -8,6 +8,7 @@ import requests
 from random import randint
 from keystoneclient.v2_0 import client as kc
 from heatclient import client as hc
+from heatclient import exc as hc_exc
 from cinderclient import client as cc
 
 CONF = dict()
@@ -47,7 +48,10 @@ def get_cinder_client():
 def cleanup_heat():
     current_name = sys.argv[2]
     client = get_heat_client()
-    client.stacks.delete(current_name)
+    try:
+       client.stacks.delete(current_name)
+    except hc_exc.HTTPNotFound:
+       print "The stack is not found"
 
 def cleanup():
     client = get_nova_client()
