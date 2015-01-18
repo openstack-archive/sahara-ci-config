@@ -9,6 +9,7 @@ from random import randint
 from keystoneclient.v2_0 import client as kc
 from heatclient import client as hc
 from cinderclient import client as cc
+import re
 
 CONF = dict()
 CONF_FILE = '/etc/jenkins_jobs/credentials.conf'
@@ -56,9 +57,10 @@ def cleanup():
     volumes = cinder_client.volumes.list()
     secgroups = client.security_groups.list()
     current_name = sys.argv[2]
+    name_regex = re.compile(current_name)
 
     for server in servers:
-        if current_name in server.name :
+        if name_regex.match(server.name) :
             print server.name
             fl_ips = client.floating_ips.findall(instance_id=server.id)
             for fl_ip in fl_ips:
@@ -67,12 +69,12 @@ def cleanup():
 
     time.sleep(20)
     for volume in volumes:
-        if current_name in volume.display_name :
+        if name_regex.match(volume.display_name) :
            print volume.display_name
            volume.delete()
 
     for group in secgroups:
-        if current_name in group.name :
+        if name_regex.match(group.name) :
            print group.name
            group.delete()
 

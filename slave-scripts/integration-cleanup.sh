@@ -90,7 +90,7 @@ else
     fi
     if [ $JOB_TYPE == 'transient' ]
         then
-            JOB_TYPE=transient
+            JOB_TYPE='[1-9]-transient'
         fi
 #    if [ $ENGINE == 'heat' ]
 #    then
