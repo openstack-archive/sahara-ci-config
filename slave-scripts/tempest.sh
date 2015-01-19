@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. $FUNCTION_PATH
+
 PROJECT=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
 
 if [ "$PROJECT" == "sahara" ]; then
@@ -13,8 +15,6 @@ else
    git clone http://github.com/openstack/sahara $SAHARA_PATH
    sudo pip install .
 fi
-
-. $FUNCTION_PATH
 
 check_openstack_host
 
