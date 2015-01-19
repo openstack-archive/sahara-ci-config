@@ -42,6 +42,7 @@ projects:
       - gate-sahara-nova-direct-hdp_1-aio
       - gate-sahara-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
+      - tempest-sahara-tests
 
   - name: openstack/python-saharaclient
     check:
@@ -56,6 +57,7 @@ projects:
       - gate-saharaclient-nova-direct-hdp_1-aio
       - gate-saharaclient-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
+      - tempest-saharaclient-tests
 
   - name: openstack/sahara-dashboard
     check:
@@ -106,8 +108,6 @@ jobs:
     parameter-function: set_ci_tenant
     branch: ^(master|proposed/juno|stable/icehouse)$
   - name: gate-sahara-pep8-trunk
-    voting: false
-  - name: gate-saharaclient-tempest-tests
     voting: false
   - name: ^gate-sahara-.*$
     files:

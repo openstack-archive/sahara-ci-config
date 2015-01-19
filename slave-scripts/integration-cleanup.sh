@@ -52,6 +52,8 @@ if [ $JOB_TYPE == 'dib' ]; then
     fi
 elif [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
     python cleanup.py cleanup $PREV_BUILD-selenium
+elif [ $JOB_TYPE == "tempest" ]; then
+    python cleanup.py cleanup sahara-cluster
 else
     ENGINE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
