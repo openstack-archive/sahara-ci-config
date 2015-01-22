@@ -29,16 +29,16 @@ if [ $JOB_TYPE == 'dib' ]; then
         fi
         HADOOP_VERSION=$(echo $PLUGIN | awk -F '_' '{ print $2}')
         if [ "$HADOOP_VERSION" == '1' ]; then
-            python cleanup.py cleanup $HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla
+            python cleanup.py cleanup .*$HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla.*
         elif [ "$HADOOP_VERSION" == '2.4' ]; then
-            python cleanup.py cleanup $HOST-$os-2-4-$PREV_BUILD-vanilla-v2
+            python cleanup.py cleanup .*$HOST-$os-2-4-$PREV_BUILD-vanilla-v2.*
         else
-            python cleanup.py cleanup $HOST-$os-2-6-$PREV_BUILD-vanilla-v2
+            python cleanup.py cleanup .*$HOST-$os-2-6-$PREV_BUILD-vanilla-v2.*
         fi
     elif [ $PLUGIN == 'hdp_1' ]; then
-        python cleanup.py cleanup $HOST-cos-1-$PREV_BUILD-hdp
+        python cleanup.py cleanup .*$HOST-cos-1-$PREV_BUILD-hdp.*
     elif [ $PLUGIN == 'hdp_2' ]; then
-        python cleanup.py cleanup $HOST-cos-2-$PREV_BUILD-hdp-v2
+        python cleanup.py cleanup .*$HOST-cos-2-$PREV_BUILD-hdp-v2.*
     elif [[ $PLUGIN =~ 'cdh' ]]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
@@ -46,14 +46,14 @@ if [ $JOB_TYPE == 'dib' ]; then
         elif [ "$IMAGE_TYPE" == "ubuntu" ]; then
             os="uos"
         fi
-        python cleanup.py cleanup $HOST-$os-2-$PREV_BUILD-cdh
+        python cleanup.py cleanup .*$HOST-$os-2-$PREV_BUILD-cdh.*
     else
-        python cleanup.py cleanup $HOST-uos-1-$PREV_BUILD-$PLUGIN
+        python cleanup.py cleanup .*$HOST-uos-1-$PREV_BUILD-$PLUGIN.*
     fi
 elif [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
-    python cleanup.py cleanup $PREV_BUILD-selenium
+    python cleanup.py cleanup .*$PREV_BUILD-selenium.*
 elif [ $JOB_TYPE == "tempest" ]; then
-    python cleanup.py cleanup sahara-cluster
+    python cleanup.py cleanup .*sahara-cluster.*
 else
     ENGINE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
@@ -96,9 +96,9 @@ else
         fi
 #    if [ $ENGINE == 'heat' ]
 #    then
-#        python cleanup.py cleanup-heat $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
+#        python cleanup.py cleanup-heat .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
 #    else
-        python cleanup.py cleanup $HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE
+        python cleanup.py cleanup .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
 #    fi
 fi
 set +x
