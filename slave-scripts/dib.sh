@@ -192,7 +192,7 @@ case $plugin in
        else
            username='ubuntu'
        fi
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_${image_type}_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i $image_type
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_5_3_${image_type}_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
        check_error_code $? ${CDH_IMAGE}.qcow2
        upload_image "cdh" ${username} ${CDH_IMAGE}
        hadoop_version="2"
