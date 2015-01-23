@@ -31,14 +31,14 @@ if [ $JOB_TYPE == 'dib' ]; then
         if [ "$HADOOP_VERSION" == '1' ]; then
             python cleanup.py cleanup .*$HOST-$os-$HADOOP_VERSION-$PREV_BUILD-vanilla.*
         elif [ "$HADOOP_VERSION" == '2.4' ]; then
-            python cleanup.py cleanup-heat .*$HOST-$os-2-4-$PREV_BUILD-vanilla-v2.*
+            python cleanup.py cleanup .*$HOST-$os-2-4-$PREV_BUILD-vanilla-v2.*
         else
-            python cleanup.py cleanup-heat .*$HOST-$os-2-6-$PREV_BUILD-vanilla-v2.*
+            python cleanup.py cleanup .*$HOST-$os-2-6-$PREV_BUILD-vanilla-v2.*
         fi
     elif [ $PLUGIN == 'hdp_1' ]; then
         python cleanup.py cleanup .*$HOST-cos-1-$PREV_BUILD-hdp.*
     elif [ $PLUGIN == 'hdp_2' ]; then
-        python cleanup.py cleanup-heat .*$HOST-cos-2-$PREV_BUILD-hdp-v2.*
+        python cleanup.py cleanup .*$HOST-cos-2-$PREV_BUILD-hdp-v2.*
     elif [[ $PLUGIN =~ 'cdh' ]]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
@@ -94,11 +94,11 @@ else
         then
             JOB_TYPE='[1-9]-transient'
         fi
-    if [ $ENGINE == 'heat' ]
-    then
-        python cleanup.py cleanup-heat .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
-    else
+#    if [ $ENGINE == 'heat' ]
+#    then
+#        python cleanup.py cleanup-heat .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
+#    else
        python cleanup.py cleanup .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
-    fi
+#    fi
 fi
 set +x
