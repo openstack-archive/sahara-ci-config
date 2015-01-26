@@ -101,4 +101,3 @@ else
        python cleanup.py cleanup .*$HOST-$HADOOP_VERSION-$PREV_BUILD-$JOB_TYPE.*
     fi
 fi
-set +x
