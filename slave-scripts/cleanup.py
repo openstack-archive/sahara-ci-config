@@ -49,10 +49,29 @@ def get_cinder_client():
 def cleanup_heat():
     current_name = sys.argv[2]
     client = get_heat_client()
-    try:
-       client.stacks.delete(current_name)
-    except hc_exc.HTTPNotFound:
-       print "The stack is not found"
+    stacks = client.stacks.list()
+    name_regex = re.compile(current_name)
+    deleted_stacks = []
+
+    for stack in stacks:
+       if name_regex.match(stack.stack_name) :
+         deleted_stacks.append(stack.stack_name)
+         print stack.stack_name
+         client.stacks.delete(stack.stack_name)
+    if not deleted_stacks :
+      return
+    else:
+       # Let Heat delete stacks
+       time.sleep(30)
+
+    stacks = client.stacks.list()
+    for stack in stacks:
+       if stack.stack_name in deleted_stacks :
+         #Resource cleanup is required
+         print "At least one stack wasn't deleted!"
+         print "Performing resources cleanup..."
+         cleanup()
+         return
 
 def cleanup():
     client = get_nova_client()
