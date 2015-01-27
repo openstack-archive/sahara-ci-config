@@ -17,7 +17,7 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=dib-nova-heat-hdp_2\
+               \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-nova'
 
@@ -40,7 +40,7 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=dib-{network}-direct-{plugin}-{os}\
+               \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-{network}'
 
@@ -63,7 +63,7 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=dib-nova-direct-{plugin}-aio\
+               \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-nova'
 
@@ -86,7 +86,7 @@
           - project: "integration-cleanup"
             predefined-parameters:
                "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=dib-dib-neutron-heat-vanilla_2.4-{os}\
+               \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
     node: 'precise-neutron'
 
