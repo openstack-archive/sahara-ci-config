@@ -173,8 +173,13 @@ SKIP_EDP_TEST = $SKIP_EDP_TEST
 " >> $test_conf_path
 
 if [ "$PLUGIN_TYPE" == "transient" ]; then
+   if [ "$ZUUL_BRANCH" == "master" ]; then
      echo "HADOOP_VERSION = '2.6.0'
 " >> $test_conf_path
+   elif [[ "$ZUUL_BRANCH" =~ juno ]]; then
+     echo "HADOOP_VERSION = '2.4.1'
+" >> $test_conf_path
+   fi
 fi
 
 if [ "$PLUGIN_TYPE" == "vanilla2" -a \( "$hadoop_version" == "2-4" -o "$hadoop_version" == "2-6" \) ]; then
