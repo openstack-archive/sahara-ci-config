@@ -81,8 +81,10 @@ glance image-create --name ubuntu-test-image --file $NATIVE_UBUNTU_IMAGE_PATH --
 source $ADMIN_RCFILE ci-user ci
 
 if $USE_NEUTRON; then
+  # rename admin private network
+  neutron net-update private --name admin-private
   # create neutron private network for ci tenant
-  PRIVATE_NET_ID=$(neutron net-create ci-private | grep id | awk '{print $4}' | head -1)
+  PRIVATE_NET_ID=$(neutron net-create private | grep id | awk '{print $4}' | head -1)
   SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep id | awk '{print $4}' | sed -n 2p)
   ROUTER_ID=$(neutron router-create ci-router | grep id | awk '{print $4}' | head -1)
   PUBLIC_NET_ID=$(neutron net-list | grep public | awk '{print $2}')

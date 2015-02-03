@@ -20,11 +20,6 @@ check_openstack_host
 
 TEMPEST=True
 IMAGE_ID=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
-if $USE_NEUTRON; then
-  private_subnet="ci-private"
-else
-  private_subnet="private"
-fi
 
 cd /home/jenkins
 
@@ -55,7 +50,7 @@ flavor_id=2
 sahara_url=http://localhost:8386/v1.1/$TENANT_ID
 ssh_username=ubuntu
 floating_ip_pool=public
-private_network=$private_subnet
+private_network=private
 fake_image_id=$IMAGE_ID
 " > tempest/scenario/data_processing/etc/sahara_tests.conf
 

@@ -33,7 +33,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.42:5000/v2.0'
     project-id: 'ci'
-    max-servers: 4
+    max-servers: 5
     boot-timeout: 120
     pool: public
     networks:
@@ -54,7 +54,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.43:5000/v2.0'
     project-id: 'ci'
-    max-servers: 4
+    max-servers: 5
     boot-timeout: 120
     pool: public
     networks:
