@@ -75,7 +75,7 @@ sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%
 pushd /home/jenkins
 sudo git clone https://git.openstack.org/openstack/tempest
 pushd tempest && sudo pip install -U -r requirements.txt && popd
-RELEASE_DIB="0.1.17"
+RELEASE_DIB="0.1.29"
 sudo git clone https://git.openstack.org/openstack/diskimage-builder
 sudo git --git-dir=/home/jenkins/diskimage-builder/.git --work-tree=/home/jenkins/diskimage-builder/ checkout $RELEASE_DIB
 sudo chown -R jenkins:jenkins /home/jenkins
