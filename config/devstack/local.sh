@@ -14,7 +14,7 @@ else
     exit 1
 fi
 
-if [[ `nova endpoints | grep neutron` != "" ]]; then
+if [[ $(nova endpoints | grep neutron) != "" ]]; then
     USE_NEUTRON=true
 else
     USE_NEUTRON=false

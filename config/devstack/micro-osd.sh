@@ -112,7 +112,7 @@ echo ceph osd tree
 sleep 5
 sudo cp $DIR/ceph.conf /etc/ceph/
 
-CEPH_HEALTH=`ceph health`
+CEPH_HEALTH=$(ceph health)
 if [ "$CEPH_HEALTH" == "HEALTH_OK" ]; then
    echo "Ceph is installed successfully and working OK."
    echo

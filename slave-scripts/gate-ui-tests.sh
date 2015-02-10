@@ -63,7 +63,7 @@ hadoop_version = '1.3.2'
 " >> $DASHBOARD_PATH/saharadashboard/tests/configs/config.conf
 
 cd $DASHBOARD_PATH && tox -e uitests
-STATUS=`echo $?`
+STATUS=$?
 
 glance image-delete $TEST_IMAGE
 exit $STATUS
