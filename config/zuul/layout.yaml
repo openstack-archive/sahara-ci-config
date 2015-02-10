@@ -10,10 +10,6 @@ pipelines:
         - event: change-restored
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(sahara-ci-)?recheck
-        - event: comment-added
-          require-approval:
-            - username: savanna-ci
-              older-than: 48h
     success:
       gerrit:
         verified: 1
