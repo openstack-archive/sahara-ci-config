@@ -29,11 +29,11 @@ wget http://archive.cloudera.com/cm5/ubuntu/precise/amd64/cm/cloudera.list -O cm
 sed -i "s/http:\/\//http:\/\/${CACHE_IP}\:3142\//g" cdh.list cm.list
 
 sudo apt-get install apache2 -y
-sudo echo -e "Alias /cdh-repo ${REPOLIST_DIR}
+echo -e "Alias /cdh-repo ${REPOLIST_DIR}
 <Directory ${REPOLIST_DIR}>
 Order allow,deny
 Allow from all
   Options +Indexes
-</Directory>" > /etc/apache2/sites-available/repo.conf
+</Directory>" | sudo tee /etc/apache2/sites-available/repo.conf
 sudo a2ensite repo
 sudo service apache2 reload

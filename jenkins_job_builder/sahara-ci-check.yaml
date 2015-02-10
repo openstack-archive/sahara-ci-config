@@ -11,7 +11,7 @@
 
     builders:
       - gerrit-git-prep
-      - shell: "bash -x /opt/ci/jenkins-jobs/sahara-ci-syntax-check.sh"
+      - shell: "bash /opt/ci/jenkins-jobs/sahara-ci-syntax-check.sh"
 
     publishers:
       - console-log

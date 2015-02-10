@@ -18,7 +18,7 @@ else
 fi
 if [ $JOB_TYPE == 'dib' ]; then
     PLUGIN=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
-    if [[ $PLUGIN =~ 'vanilla' ]]; then
+    if [[ $PLUGIN =~ vanilla ]]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
             os="cos"
@@ -39,7 +39,7 @@ if [ $JOB_TYPE == 'dib' ]; then
         python cleanup.py cleanup .*$HOST-cos-1-$PREV_BUILD-hdp.*
     elif [ $PLUGIN == 'hdp_2' ]; then
         python cleanup.py cleanup-heat .*$HOST-cos-2-$PREV_BUILD-hdp-v2.*
-    elif [[ $PLUGIN =~ 'cdh' ]]; then
+    elif [[ $PLUGIN =~ cdh ]]; then
         IMAGE_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
         if [ "$IMAGE_TYPE" == "centos" ]; then
             os="cos"
@@ -58,7 +58,7 @@ else
     ENGINE=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
     JOB_TYPE=$(echo $PREV_JOB | awk -F '-' '{ print $5 }')
     HADOOP_VERSION=1
-    if [[ $JOB_TYPE =~ 'vanilla' ]]
+    if [[ $JOB_TYPE =~ vanilla ]]
     then
         HADOOP_VERSION=$(echo $JOB_TYPE | awk -F '_' '{ print $2 }')
         if [ "$HADOOP_VERSION" == '1' ]; then
@@ -80,7 +80,7 @@ else
         HADOOP_VERSION=2
         JOB_TYPE=hdp-v2
     fi
-    if [[ $JOB_TYPE =~ 'cdh' ]]
+    if [[ $JOB_TYPE =~ cdh ]]
     then
         os_version=$(echo $JOB_TYPE | awk -F '_' '{ print $2}')
         if [ "$os_version" == "centos" ]; then

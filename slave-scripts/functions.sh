@@ -4,11 +4,11 @@ TMP_LOG=/tmp/tox.log
 LOG_FILE=/tmp/tox_log.txt
 BUILD_ID=dontKill
 TIMEOUT=60
-export ADDR=`ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}'`
+export ADDR=$(ifconfig eth0| awk -F ' *|:' '/inet addr/{print $4}')
 
 # This function determines Openstack host by checking internal address (second octet)
 check_openstack_host() {
-  NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+  NETWORK=$(ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}')
   export OS_USERNAME=ci-user
   export OS_TENANT_NAME=ci
   export OS_PASSWORD=nova
@@ -106,7 +106,7 @@ start_sahara() {
      sahara_bin=sahara-all
   fi
   sahara-db-manage --config-file $conf_path  upgrade head
-  status=`echo $?`
+  status=$?
   if [[ "$status" != 0 ]]
   then
      echo "Command 'sahara-db-manage' failed"
@@ -147,9 +147,8 @@ NEUTRON_ENABLED = $USE_NEUTRON
 INTERNAL_NEUTRON_NETWORK = 'private'
 JOB_LAUNCH_TIMEOUT = 15
 HDFS_INITIALIZATION_TIMEOUT = 10
-" >> $test_conf_path
 
-  echo "[VANILLA]
+[VANILLA]
 IMAGE_NAME = '$VANILLA_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
@@ -160,9 +159,8 @@ SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 SKIP_TRANSIENT_CLUSTER_TEST = $SKIP_TRANSIENT_TEST
 ONLY_TRANSIENT_CLUSTER_TEST = $SKIP_ONLY_TRANSIENT_TEST
-" >> $test_conf_path
 
-  echo "[VANILLA_TWO]
+[VANILLA_TWO]
 IMAGE_NAME = '$VANILLA_TWO_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
@@ -201,17 +199,15 @@ SKIP_EDP_TEST = $SKIP_EDP_TEST
 SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
 SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-" >> $test_conf_path
 
-  echo "[HDP2]
+[HDP2]
 IMAGE_NAME = '$HDP_TWO_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-" >> $test_conf_path
 
-  echo "[CDH]
+[CDH]
 IMAGE_NAME = '$CDH_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
@@ -221,9 +217,8 @@ SKIP_CINDER_TEST = $SKIP_CINDER_TEST
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 CM_REPO_LIST_URL = 'http://$OPENSTACK_HOST/cdh-repo/cm.list'
 CDH_REPO_LIST_URL = 'http://$OPENSTACK_HOST/cdh-repo/cdh.list'
-" >>  $test_conf_path
 
-  echo "[SPARK]
+[SPARK]
 IMAGE_NAME = '$SPARK_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_EDP_TEST = $SKIP_EDP_TEST
@@ -240,35 +235,35 @@ run_tests() {
            if [ "$ZUUL_BRANCH" == "stable/icehouse" ]
            then
               tox -e integration -- hdp --concurrency=1
-              STATUS=`echo $?`
+              STATUS=$?
            else
               tox -e integration -- hdp1 --concurrency=1
-              STATUS=`echo $?`
+              STATUS=$?
            fi
            ;;
         hdp2)
            tox -e integration -- hdp2 --concurrency=1
-           STATUS=`echo $?`
+           STATUS=$?
            ;;
         vanilla1)
            tox -e integration -- vanilla1 --concurrency=1
-           STATUS=`echo $?`
+           STATUS=$?
            ;;
         vanilla2)
            tox -e integration -- vanilla2 --concurrency=1
-           STATUS=`echo $?`
+           STATUS=$?
            ;;
         transient)
            tox -e integration -- transient --concurrency=3
-           STATUS=`echo $?`
+           STATUS=$?
            ;;
         cdh)
           tox -e integration -- cdh --concurrency=1
-          STATUS=`echo $?`
+          STATUS=$?
           ;;
         spark)
           tox -e integration -- spark --concurrency=1
-          STATUS=`echo $?`
+          STATUS=$?
           ;;
      esac
   fi

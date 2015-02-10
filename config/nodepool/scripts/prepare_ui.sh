@@ -11,7 +11,7 @@
 
 #Repository for Openstack Dashboard
 #sudo add-apt-repository cloud-archive:havana -y
-NETWORK=`ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}'`
+NETWORK=$(ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}' | awk -F . '{print $2}')
 if [ "$NETWORK" == "0" ]; then
     OPENSTACK_HOST="172.18.168.42"
 else
