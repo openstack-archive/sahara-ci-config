@@ -201,12 +201,11 @@ case $plugin in
 esac
 
 # This parameter is used for cluster name, because cluster name's length exceeds limit 64 characters with $image_type.
-image_os="uOS"
+image_os="uos"
 if [ "$image_type" == "centos" ]; then
-    image_os="cOS"
-fi
-if [ "$image_type" == "fedora" ]; then
-    image_os="fOS"
+    image_os="cos"
+elif [ "$image_type" == "fedora" ]; then
+    image_os="fos"
 fi
 
 cd /tmp/
