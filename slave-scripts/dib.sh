@@ -38,9 +38,9 @@ register_hdp_image() {
    esac
 }
 
-register_cdh_image() {
+oegister_cdh_image() {
    # 1 - username, 2 - image name
-   glance image-create --name $2 --file $2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="${1}"
+   glance image-create --name $2 --file $2.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="${1}"
 }
 
 register_spark_image() {
