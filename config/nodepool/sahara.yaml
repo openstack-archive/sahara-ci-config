@@ -11,13 +11,13 @@ gearman-servers:
   - host: 127.0.0.1
 
 labels:
-  - name:  precise-neutron
-    image: precise-neutron
+  - name:  trusty-neutron
+    image: trusty-neutron
     min-ready: 3
     providers:
       - name: cilab-1
-  - name:  precise-nova
-    image: precise-nova
+  - name:  trusty-nova
+    image: trusty-nova
     min-ready: 3
     providers:
       - name: cilab-2
@@ -39,8 +39,8 @@ providers:
     networks:
       - net-id: 'CI_LAB_PRIVATE_NETWORK_ID'
     images:
-      - name: precise-neutron
-        base-image: 'ubuntu-12.04'
+      - name: trusty-neutron
+        base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node_bare.sh
@@ -60,8 +60,8 @@ providers:
     networks:
       - net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'
     images:
-      - name: precise-nova
-        base-image: 'ubuntu-12.04'
+      - name: trusty-nova
+        base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node_bare.sh
