@@ -27,6 +27,7 @@ VANILLA_TWO_IMAGE=ubuntu_vanilla_2.4_latest
 VANILLA_TWO_SIX_IMAGE=ubuntu_vanilla_2.6_latest
 SPARK_IMAGE=sahara_spark_latest
 HEAT_JOB=False
+TESTS_CONFIG_FILE='sahara/tests/integration/configs/itest.conf'
 
 if [[ "$ENGINE_TYPE" == 'heat' ]]
 then
@@ -58,6 +59,7 @@ case $JOB_TYPE in
              hadoop_version=2-6
              VANILLA_TWO_IMAGE=$VANILLA_TWO_SIX_IMAGE
              [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
+             TESTS_CONFIG_FILE="sahara-ci-config/config/sahara/sahara-test-config-vanilla-2.6.yaml"
           fi
           echo "Vanilla2 detected"
        fi
@@ -92,6 +94,7 @@ case $JOB_TYPE in
        SKIP_EDP_TEST=False
        SKIP_SCALING_TEST=False
        [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Spark plugin is not supported in stable/icehouse" && exit 0
+       [[ "$JOB_NAME" =~ scenario ]] && TESTS_CONFIG_FILE="sahara-ci-config/config/sahara/sahara-test-config-spark.yaml"
        echo "Spark detected"
        ;;
 esac
@@ -110,7 +113,7 @@ start_sahara etc/sahara/sahara.conf
 cd $WORKSPACE
 
 CLUSTER_NAME="$HOST-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
-write_tests_conf $WORKSPACE/sahara/tests/integration/configs/itest.conf
+write_tests_conf
 
 run_tests
 
