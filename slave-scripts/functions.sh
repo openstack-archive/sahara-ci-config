@@ -113,7 +113,7 @@ start_sahara() {
      echo "Command 'sahara-db-manage' failed"
      exit 1
   fi
-  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-6" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) -o "$hadoop_version" == "2-4" ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file logs/sahara-log-api.txt"
     sleep 2
     screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file logs/sahara-log-engine-1.txt"
@@ -130,10 +130,30 @@ start_sahara() {
   fi
 }
 
-write_tests_conf() {
-  test_conf_path=$1
+insert_scenario_value() {
+  value=$1
+  sed -i "s/%${value}%/${!value}/g" $TESTS_CONFIG_FILE
+}
 
-  echo "[COMMON]
+write_tests_conf() {
+  if [[ "$JOB_NAME" =~ scenario ]]; then
+    case $PLUGIN_TYPE in
+       vanilla2)
+          IMAGE_NAME="$VANILLA_TWO_IMAGE"
+       ;;
+       spark)
+          IMAGE_NAME="$SPARK_IMAGE"
+       ;;
+    esac
+    insert_scenario_value OS_USERNAME
+    insert_scenario_value OS_PASSWORD
+    insert_scenario_value OS_TENANT_NAME
+    insert_scenario_value OPENSTACK_HOST
+    insert_scenario_value CLUSTER_NAME
+    insert_scenario_value TENANT_ID
+    insert_scenario_value IMAGE_NAME
+  else
+    echo "[COMMON]
 OS_USERNAME = 'ci-user'
 OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
@@ -170,15 +190,15 @@ SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 SKIP_EDP_JOB_TYPES = $SKIP_EDP_JOB_TYPES
-" >> $test_conf_path
+" >> $TESTS_CONFIG_FILE
 
 if [ "$PLUGIN_TYPE" == "transient" ]; then
    if [ "$ZUUL_BRANCH" == "master" ]; then
      echo "HADOOP_VERSION = '2.6.0'
-" >> $test_conf_path
+" >> $TESTS_CONFIG_FILE
    elif [[ "$ZUUL_BRANCH" =~ juno ]]; then
      echo "HADOOP_VERSION = '2.4.1'
-" >> $test_conf_path
+" >> $TESTS_CONFIG_FILE
    fi
 fi
 
@@ -190,7 +210,7 @@ if [ "$PLUGIN_TYPE" == "vanilla2" -a \( "$hadoop_version" == "2-4" -o "$hadoop_v
    fi
    echo "HADOOP_VERSION = '${version}'
 HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-${version}.jar'
-" >> $test_conf_path
+" >> $TESTS_CONFIG_FILE
 fi
 
   echo "[HDP]
@@ -225,7 +245,8 @@ IMAGE_NAME = '$SPARK_IMAGE'
 SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-" >> $test_conf_path
+" >> $TESTS_CONFIG_FILE
+  fi
 }
 
 run_tests() {
@@ -252,8 +273,13 @@ run_tests() {
            STATUS=$?
            ;;
         vanilla2)
-           tox -e integration -- vanilla2 --concurrency=1
-           STATUS=$?
+           if [[ "$JOB_NAME" =~ scenario ]]; then
+              tox -e scenario $TESTS_CONFIG_FILE
+              STATUS=$?
+           else
+              tox -e integration -- vanilla2 --concurrency=1
+              STATUS=$?
+           fi
            ;;
         transient)
            tox -e integration -- transient --concurrency=3
@@ -264,8 +290,13 @@ run_tests() {
           STATUS=$?
           ;;
         spark)
-          tox -e integration -- spark --concurrency=1
-          STATUS=$?
+          if [[ "$JOB_NAME" =~ scenario ]]; then
+             tox -e scenario $TESTS_CONFIG_FILE
+             STATUS=$?
+          else
+             tox -e integration -- spark --concurrency=1
+             STATUS=$?
+          fi
           ;;
      esac
   fi
