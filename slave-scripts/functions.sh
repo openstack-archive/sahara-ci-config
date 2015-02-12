@@ -131,103 +131,16 @@ start_sahara() {
 
 write_tests_conf() {
   test_conf_path=$1
-
-  echo "[COMMON]
-OS_USERNAME = 'ci-user'
-OS_PASSWORD = 'nova'
-OS_TENANT_NAME = 'ci'
-OS_TENANT_ID = '$TENANT_ID'
-OS_AUTH_URL = 'http://$OPENSTACK_HOST:5000/v2.0'
-SAHARA_HOST = '$ADDR'
-FLAVOR_ID = '20'
-CLUSTER_CREATION_TIMEOUT = $TIMEOUT
-CLUSTER_NAME = '$CLUSTER_NAME'
-FLOATING_IP_POOL = 'public'
-NEUTRON_ENABLED = $USE_NEUTRON
-INTERNAL_NEUTRON_NETWORK = 'private'
-JOB_LAUNCH_TIMEOUT = 15
-HDFS_INITIALIZATION_TIMEOUT = 10
-
-[VANILLA]
-IMAGE_NAME = '$VANILLA_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
-SKIP_CLUSTER_CONFIG_TEST = $SKIP_CLUSTER_CONFIG_TEST
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
-SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-SKIP_TRANSIENT_CLUSTER_TEST = $SKIP_TRANSIENT_TEST
-ONLY_TRANSIENT_CLUSTER_TEST = $SKIP_ONLY_TRANSIENT_TEST
-
-[VANILLA_TWO]
-IMAGE_NAME = '$VANILLA_TWO_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
-SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
-SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-SKIP_EDP_JOB_TYPES = $SKIP_EDP_JOB_TYPES
-" >> $test_conf_path
-
-if [ "$PLUGIN_TYPE" == "transient" ]; then
-   if [ "$ZUUL_BRANCH" == "master" ]; then
-     echo "HADOOP_VERSION = '2.6.0'
-" >> $test_conf_path
-   elif [[ "$ZUUL_BRANCH" =~ juno ]]; then
-     echo "HADOOP_VERSION = '2.4.1'
-" >> $test_conf_path
-   fi
-fi
-
-if [ "$PLUGIN_TYPE" == "vanilla2" -a \( "$hadoop_version" == "2-4" -o "$hadoop_version" == "2-6" \) ]; then
-   if [ "$hadoop_version" == "2-4" ]; then
-      version="2.4.1"
-   else
-      version="2.6.0"
-   fi
-   echo "HADOOP_VERSION = '${version}'
-HADOOP_EXAMPLES_JAR_PATH = '/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-${version}.jar'
-" >> $test_conf_path
-fi
-
-  echo "[HDP]
-IMAGE_NAME = '$HDP_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_CINDER_TEST = '$SKIP_CINDER_TEST'
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
-SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-
-[HDP2]
-IMAGE_NAME = '$HDP_TWO_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-
-[CDH]
-IMAGE_NAME = '$CDH_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_MAP_REDUCE_TEST = $SKIP_MAP_REDUCE_TEST
-SKIP_SWIFT_TEST = $SKIP_SWIFT_TEST
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-SKIP_CINDER_TEST = $SKIP_CINDER_TEST
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-CM_REPO_LIST_URL = 'http://$OPENSTACK_HOST/cdh-repo/cm.list'
-CDH_REPO_LIST_URL = 'http://$OPENSTACK_HOST/cdh-repo/cdh.list'
-
-[SPARK]
-IMAGE_NAME = '$SPARK_IMAGE'
-SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
-SKIP_EDP_TEST = $SKIP_EDP_TEST
-SKIP_SCALING_TEST = $SKIP_SCALING_TEST
-" >> $test_conf_path
+  sed -i "s/%OS_USERNAME%/${OS_USERNAME}/g" $test_conf_path
+  sed -i "s/%OS_PASSWORD%/${OS_PASSWORD}/g" $test_conf_path
+  sed -i "s/%OS_TENANT_NAME%/${OS_TENANT_NAME}/g" $test_conf_path
+  sed -i "s/%OPENSTACK_HOST%/${OPENSTACK_HOST}/g" $test_conf_path
+  sed -i "s/%CLUSTER_NAME%/${CLUSTER_NAME}/g" $test_conf_path
+  sed -i "s/%TENANT_ID%/${TENANT_ID}/g" $test_conf_path
 }
 
 run_tests() {
+  conf_file=$1
   if [ "$FAILURE" = 0 ]; then
     echo "Integration tests are started"
     export PYTHONUNBUFFERED=1
@@ -251,7 +164,7 @@ run_tests() {
            STATUS=$?
            ;;
         vanilla2)
-           tox -e integration -- vanilla2 --concurrency=1
+           tox -e scenario $conf_file
            STATUS=$?
            ;;
         transient)

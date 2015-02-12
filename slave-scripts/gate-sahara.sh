@@ -110,9 +110,9 @@ start_sahara etc/sahara/sahara.conf
 cd $WORKSPACE
 
 CLUSTER_NAME="$HOST-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
-write_tests_conf $WORKSPACE/sahara/tests/integration/configs/itest.conf
+write_tests_conf $WORKSPACE/sahara-ci-config/config/sahara/sahara.yaml
 
-run_tests
+run_tests $WORKSPACE/sahara-ci-config/config/sahara/sahara.yaml
 
 cat_logs $WORKSPACE
 
