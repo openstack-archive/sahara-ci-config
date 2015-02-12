@@ -107,6 +107,7 @@ HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
 HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 CDH_IMAGE=$HOST-${image_type}-cdh-${GERRIT_CHANGE_NUMBER}
+TESTS_CONFIG_FILE='sahara/tests/integration/configs/itest.conf'
 
 if [[ "$ENGINE_TYPE" == 'heat' ]]
 then
@@ -155,6 +156,7 @@ case $plugin in
               if [ "$image_type" != "ubuntu" ] ; then
                   SKIP_EDP_JOB_TYPES=Hive
               fi
+              TESTS_CONFIG_FILE="$WORKSPACE/sahara-ci-config/config/sahara/sahara-test-config-vanilla-2.6.yaml"
               ;;
        esac
     ;;
@@ -170,6 +172,7 @@ case $plugin in
        [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Tests for Spark plugin is not implemented in stable/icehouse" && exit 0
        upload_image "spark" "ubuntu" ${SPARK_IMAGE}
        PLUGIN_TYPE=$plugin
+       [ "$ZUUL_BRANCH" == "master" ] && TESTS_CONFIG_FILE="$WORKSPACE/sahara-ci-config/config/sahara/sahara-test-config-spark.yaml"
     ;;
 
     hdp_1)
@@ -231,7 +234,7 @@ start_sahara etc/sahara/sahara.conf
 cd /tmp/sahara
 
 CLUSTER_NAME="$HOST-$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
-write_tests_conf sahara/tests/integration/configs/itest.conf
+write_tests_conf
 
 run_tests
 
