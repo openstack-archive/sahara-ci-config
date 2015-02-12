@@ -1,0 +1,21 @@
+- job:
+    name: 'gate-sahara-neutron-heat-vanilla_2.6-scenario'
+    defaults: global
+    concurrent: false
+    builders:
+      - gerrit-git-prep
+      - shell: "rm -rf sahara-ci-config\
+              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
+    properties:
+      - zeromq-event
+    wrappers:
+      - timeout:
+          timeout: 120
+          fail: true
+      - timestamps
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: 'trusty-neutron'

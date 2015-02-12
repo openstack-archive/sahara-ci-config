@@ -113,7 +113,7 @@ start_sahara() {
      echo "Command 'sahara-db-manage' failed"
      exit 1
   fi
-  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) ]; then
+  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-6" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file logs/sahara-log-api.txt"
     sleep 2
     screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file logs/sahara-log-engine-1.txt"
@@ -131,9 +131,16 @@ start_sahara() {
 }
 
 write_tests_conf() {
-  test_conf_path=$1
-
-  echo "[COMMON]
+  if [ $PLUGIN_TYPE == "vanilla2" -a $ZUUL_BRANCH == "master" ]; then
+    test_conf_path=$1
+    sed -i "s/%OS_USERNAME%/${OS_USERNAME}/g" $test_conf_path
+    sed -i "s/%OS_PASSWORD%/${OS_PASSWORD}/g" $test_conf_path
+    sed -i "s/%OS_TENANT_NAME%/${OS_TENANT_NAME}/g" $test_conf_path
+    sed -i "s/%OPENSTACK_HOST%/${OPENSTACK_HOST}/g" $test_conf_path
+    sed -i "s/%CLUSTER_NAME%/${CLUSTER_NAME}/g" $test_conf_path
+    sed -i "s/%TENANT_ID%/${TENANT_ID}/g" $test_conf_path
+  else
+    echo "[COMMON]
 OS_USERNAME = 'ci-user'
 OS_PASSWORD = 'nova'
 OS_TENANT_NAME = 'ci'
@@ -226,9 +233,11 @@ SKIP_ALL_TESTS_FOR_PLUGIN = $SKIP_ALL_TESTS_FOR_PLUGIN
 SKIP_EDP_TEST = $SKIP_EDP_TEST
 SKIP_SCALING_TEST = $SKIP_SCALING_TEST
 " >> $test_conf_path
+  fi
 }
 
 run_tests() {
+  conf_file=$1
   if [ "$FAILURE" = 0 ]; then
     echo "Integration tests are started"
     export PYTHONUNBUFFERED=1
@@ -252,8 +261,13 @@ run_tests() {
            STATUS=$?
            ;;
         vanilla2)
-           tox -e integration -- vanilla2 --concurrency=1
-           STATUS=$?
+           if [ $ZUUL_BRANCH == "master" ]; then
+              tox -e scenario $conf_file
+              STATUS=$?
+           else
+              tox -e integration -- vanilla2 --concurrency=1
+              STATUS=$?
+           fi
            ;;
         transient)
            tox -e integration -- transient --concurrency=3
