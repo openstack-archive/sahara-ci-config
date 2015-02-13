@@ -29,7 +29,7 @@ sudo git clone https://review.openstack.org/p/openstack-infra/system-config.git 
 sudo /bin/bash /root/config/install_modules.sh
 #if [ -z "$NODEPOOL_SSH_KEY" ] ; then
 sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, }"
+    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, enable_unbound => false, }"
 #else
 #    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
 #   -e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, thin => $THIN, ssh_key => '$NODEPOOL_SSH_KEY', }"
@@ -58,7 +58,7 @@ sudo pip install python-glanceclient
 sudo apt-get install qemu kpartx -y
 
 #install Sahara requirements
-sudo pip install mysql-python
+sudo pip install mysql-python psycopg2
 cd /tmp && git clone https://git.openstack.org/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
 
