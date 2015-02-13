@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+1: Ivan Berezovskiy <iberezovskiy@mirantis.com>
+Code-Review+2: Denis Egorenko <degorenko@mirantis.com>
+Workflow+1: Denis Egorenko <degorenko@mirantis.com>
+Submitted-by: Jenkins
+Submitted-at: Fri, 13 Feb 2015 09:15:30 +0000
+Reviewed-on: https://review.openstack.org/154800
+Project: stackforge/sahara-ci-config
+Branch: refs/heads/master
