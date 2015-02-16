@@ -151,6 +151,9 @@ case $plugin in
               upload_image "vanilla-2.6" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-6
               PLUGIN_TYPE=vanilla2
+              if [ "$image_type" != "ubuntu" ] ; then
+                  SKIP_EDP_JOB_TYPES=Hive
+              fi
               ;;
        esac
     ;;
