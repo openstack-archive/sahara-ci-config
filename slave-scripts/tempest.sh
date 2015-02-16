@@ -61,4 +61,8 @@ sudo pip install $SAHARA_PATH/.
 write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
 start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
 
+#This is a workaround for problem when owner of the .ccahe directory is set to
+#root and it's impossible to compile sole libraries during tox execution
+sudo chown -R jenkins:jenkins /home/jenkins/.ccache
+
 tox -e all -- tempest.scenario.data_processing.client_tests
