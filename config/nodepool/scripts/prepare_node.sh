@@ -53,6 +53,9 @@ sudo apt-get install rabbitmq-server -y
 #install required libraries
 sudo apt-get install libxslt1-dev libffi-dev -y
 
+#Remove ccahe because it's useless for single-use nodes and may cause problems
+sudo apt-get remove -y ccache
+
 #glance-client is required for diskimage-integration jobs
 sudo pip install python-glanceclient
 sudo apt-get install qemu kpartx -y
