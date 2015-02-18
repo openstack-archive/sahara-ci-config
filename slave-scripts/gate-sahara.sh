@@ -97,7 +97,7 @@ case $JOB_TYPE in
 esac
 
 cd $WORKSPACE
-[ "$ZUUL_BRANCH" == "stable/icehouse" ] && git checkout stable/icehouse && sudo pip install -U -r requirements.txt
+[ "$ZUUL_BRANCH" == "stable/icehouse" ] && sudo pip install -U -r requirements.txt
 
 TOX_LOG=$WORKSPACE/.tox/venv/log/venv-1.log
 

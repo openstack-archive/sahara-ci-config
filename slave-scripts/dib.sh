@@ -220,7 +220,7 @@ create_database
 sudo rm -rf sahara
 git clone https://review.openstack.org/openstack/sahara
 cd sahara
-[ "$ZUUL_BRANCH" == "stable/icehouse" ] && git checkout stable/icehouse && sudo pip install -U -r requirements.txt
+[ "$ZUUL_BRANCH" == "stable/icehouse" ] && sudo pip install -U -r requirements.txt
 sudo pip install .
 
 enable_pypi
