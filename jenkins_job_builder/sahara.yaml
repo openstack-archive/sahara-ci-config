@@ -18,6 +18,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -47,6 +53,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -73,6 +85,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -99,6 +117,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -125,6 +149,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -151,6 +181,12 @@
           fail: true
       - timestamps
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
