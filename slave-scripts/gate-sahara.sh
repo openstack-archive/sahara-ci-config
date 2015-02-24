@@ -114,7 +114,7 @@ write_tests_conf $WORKSPACE/sahara/tests/integration/configs/itest.conf
 
 run_tests
 
-cat_logs $WORKSPACE
+print_python_env $WORKSPACE
 
 if [ "$FAILURE" != 0 ]; then
     exit 1
