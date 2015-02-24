@@ -12,13 +12,9 @@
       - zeromq-event
 
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-nova'
 
 - job-template:
@@ -35,13 +31,9 @@
       - zeromq-event
 
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-{network}'
 
 - job-template:
@@ -58,13 +50,9 @@
       - zeromq-event
 
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-nova'
 
 - job-template:
@@ -81,13 +69,9 @@
       - zeromq-event
 
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-neutron'
 
 - project:

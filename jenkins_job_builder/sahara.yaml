@@ -18,13 +18,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: trusty-neutron || trusty-nova
 
 - job:
@@ -47,13 +43,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: trusty-neutron || trusty-nova
 
 - job-template:
@@ -73,13 +65,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-neutron'
 
 - job-template:
@@ -99,13 +87,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-nova'
 
 - job-template:
@@ -125,13 +109,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-neutron'
 
 - job-template:
@@ -151,13 +131,9 @@
           fail: true
       - timestamps
     publishers:
+      - sahara-logs
       - console-log
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
     node: 'trusty-nova'
 
 - project:
