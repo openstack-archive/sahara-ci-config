@@ -12,6 +12,12 @@
       - zeromq-event
 
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -35,6 +41,12 @@
       - zeromq-event
 
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -58,6 +70,12 @@
       - zeromq-event
 
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
@@ -81,6 +99,12 @@
       - zeromq-event
 
     publishers:
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: '**/logs/*.txt'
+              copy-after-failure: true
       - console-log
       - trigger-parameterized-builds:
           - project: "integration-cleanup"

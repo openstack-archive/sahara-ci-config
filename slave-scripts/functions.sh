@@ -99,6 +99,7 @@ admin_tenant_name=ci" >> $conf_path
 start_sahara() {
   conf_path=$1
   conf_dir=$(dirname $1)
+  mkdir logs
   if [ "$ZUUL_BRANCH" == "stable/icehouse" ]
   then
      sahara_bin=sahara-api
@@ -113,12 +114,12 @@ start_sahara() {
      exit 1
   fi
   if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" -o "$PLUGIN_TYPE" == " transient" \) ]; then
-    screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file log-api.txt"
+    screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file logs/sahara-log-api.txt"
     sleep 2
-    screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-1.txt"
-    screen -dmS sahara-engine_2 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file log-engine-2.txt"
+    screen -dmS sahara-engine_1 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file logs/sahara-log-engine-1.txt"
+    screen -dmS sahara-engine_2 /bin/bash -c "PYTHONUNBUFFERED=1 sahara-engine --config-dir $conf_dir -d --log-file logs/sahara-log-engine-2.txt"
   else
-    screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-dir $conf_dir -d --log-file log.txt"
+    screen -dmS $sahara_bin /bin/bash -c "PYTHONUNBUFFERED=1 $sahara_bin --config-dir $conf_dir -d --log-file logs/sahara-log.txt"
   fi
 
   api_responding_timeout=30
@@ -272,25 +273,9 @@ run_tests() {
 
 cat_logs() {
   log_path=$1
-  echo "-----------Python integration env-----------"
+  echo "\n-----------Python integration env-----------"
   cd $log_path && .tox/integration/bin/pip freeze
 
-  echo "-----------Python sahara env-----------"
+  echo "\n-----------Python sahara env-----------"
   cd $log_path && pip freeze
-
-  if [ "$ZUUL_BRANCH" == "master" -a \( "$PLUGIN_TYPE" == "vanilla2" -a "$hadoop_version" == "2-4" -o "$PLUGIN_TYPE" == "hdp2" \) ]; then
-     echo "-----------Sahara API Log------------"
-     cat $log_path/log-api.txt
-     echo "-------------------------------------"
-     echo "-----------Sahara Engine Log---------"
-     echo "-----------Engine-1 Log---------"
-     cat $log_path/log-engine-1.txt
-     echo "-------------------------------------"
-     echo "-----------Engine-2 Log---------"
-     cat $log_path/log-engine-2.txt
-     echo "-------------------------------------"
-  else
-     echo "-----------Sahara Log------------"
-     cat $log_path/log.txt
-  fi
 }
