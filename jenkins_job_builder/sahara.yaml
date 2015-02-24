@@ -18,7 +18,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
@@ -47,7 +54,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
@@ -73,7 +87,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
@@ -99,7 +120,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
@@ -125,7 +153,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
@@ -151,7 +186,14 @@
           fail: true
       - timestamps
     publishers:
-      - console-log
+      - scp:
+          site: 'localhost'
+          files:
+            - target: 'logs/$LOG_PATH'
+              source: 'logs/*.txt'
+              keep-hierarchy: true
+              copy-after-failure: true
+              copy-console: true
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
