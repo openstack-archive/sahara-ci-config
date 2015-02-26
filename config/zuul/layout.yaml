@@ -124,6 +124,9 @@ jobs:
     branch: ^(master)$
   - name: tempest-sahara-tests
     branch: ^(master)$
+    # make voting when #1425835 will be fixed
+  - name: ^tempest-sahara.*$
+    voting: false
 #  - name: gate-ui-tests
 #    voting: false
 #    files:
