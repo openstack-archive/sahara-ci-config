@@ -105,9 +105,6 @@ jobs:
     branch: ^(master|stable/juno|stable/icehouse)$
   - name: gate-sahara-pep8-trunk
     voting: false
-    # make voting when #1425835 will be fixed
-  - name: ^tempest-sahara.*$
-    voting: false
   - name: ^gate-sahara-.*$
     files:
       - '^sahara/.*$'
