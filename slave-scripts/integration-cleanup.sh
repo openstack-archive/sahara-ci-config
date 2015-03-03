@@ -68,6 +68,7 @@ else
             if [ "$HADOOP_VERSION" == '2.4' ]; then
                 HADOOP_VERSION=2-4
             else
+                JOB_TYPE=""
                 HADOOP_VERSION=2-6
             fi
         fi
