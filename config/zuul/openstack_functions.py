@@ -11,7 +11,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+import uuid
 
 def set_log_url(item, job, params):
     if hasattr(item.change, 'refspec'):
@@ -39,3 +39,4 @@ def set_ci_tenant(item, job, params):
     single_use_node(item, job, params)
     params['CI_LAB_TENANT_ID'] = '-CI_LAB_TENANT_ID-'
     params['STACK_SAHARA_TENANT_ID'] = '-STACK_SAHARA_TENANT_ID-'
+    params['CLUSTER_HASH'] = str(uuid.uuid4()).split('-')[0]

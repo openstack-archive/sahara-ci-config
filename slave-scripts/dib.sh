@@ -89,6 +89,7 @@ rename_image() {
 ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 
 plugin="$1"
+CLUSTER_HASH=${RANDOM:-$CLUSTER_HASH}
 image_type=${2:-ubuntu}
 hadoop_version=1
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
@@ -233,7 +234,7 @@ start_sahara etc/sahara/sahara.conf
 
 cd /tmp/sahara
 
-CLUSTER_NAME="$HOST-$image_os-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
+CLUSTER_NAME="$HOST-$CLUSTER_HASH-$ZUUL_CHANGE"
 write_tests_conf
 
 run_tests
