@@ -11,6 +11,7 @@ ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 
 hadoop_version=1
+CLUSTER_HASH=${RANDOM:-$CLUSTER_HASH}
 SKIP_CINDER_TEST=False
 SKIP_CLUSTER_CONFIG_TEST=False
 SKIP_EDP_TEST=False
@@ -112,7 +113,7 @@ start_sahara etc/sahara/sahara.conf
 
 cd $WORKSPACE
 
-CLUSTER_NAME="$HOST-$hadoop_version-$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET"
+CLUSTER_NAME="$HOST-$CLUSTER_HASH-$ZUUL_CHANGE"
 write_tests_conf
 
 run_tests

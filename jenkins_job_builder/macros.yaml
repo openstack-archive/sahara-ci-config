@@ -180,7 +180,7 @@
       - trigger-parameterized-builds:
           - project: "integration-cleanup"
             predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
+               "CHANGE_NUMBER=$ZUUL_CHANGE\
                \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME"
 
