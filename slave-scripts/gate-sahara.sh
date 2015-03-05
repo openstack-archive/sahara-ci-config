@@ -1,130 +1,102 @@
 #!/bin/bash
 
+# source CI credentials
+. /home/jenkins/ci_openrc
+# source main functions
 . $FUNCTION_PATH
 
-check_openstack_host
+CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
+cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
-sudo pip install .
+SAHARA_PATH=${1:-$WORKSPACE}
+sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
+# default (deprecated) config file for integration tests
+tests_config_file="$SAHARA_PATH/sahara/tests/integration/configs/itest.conf"
+tests_config_file_template="$sahara_configs_path/itest.conf.sample"
 
-WORKSPACE=${1:-$WORKSPACE}
-ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
-JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
+job_type=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
+engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 
-hadoop_version=1
-CLUSTER_HASH=${RANDOM:-$CLUSTER_HASH}
-SKIP_CINDER_TEST=False
-SKIP_CLUSTER_CONFIG_TEST=False
-SKIP_EDP_TEST=False
-SKIP_MAP_REDUCE_TEST=True
-SKIP_SWIFT_TEST=True
-SKIP_SCALING_TEST=False
-SKIP_TRANSIENT_TEST=True
-SKIP_ONLY_TRANSIENT_TEST=False
-SKIP_ALL_TESTS_FOR_PLUGIN=False
-HDP_IMAGE=sahara_hdp_1_latest
-HDP_TWO_IMAGE=sahara_hdp_2_latest
-VANILLA_IMAGE=ubuntu_vanilla_1_latest
-VANILLA_TWO_IMAGE=ubuntu_vanilla_2.4_latest
-VANILLA_TWO_SIX_IMAGE=ubuntu_vanilla_2.6_latest
-SPARK_IMAGE=sahara_spark_latest
-HEAT_JOB=False
-TESTS_CONFIG_FILE="$WORKSPACE/sahara/tests/integration/configs/itest.conf"
+# Image names
+hdp_image=sahara_hdp_1_latest
+hdp_two_image=sahara_hdp_2_latest
+vanilla_image=ubuntu_vanilla_1_latest
+vanilla_two_four_image=ubuntu_vanilla_2.4_latest
+vanilla_two_six_image=ubuntu_vanilla_2.6_latest
+spark_image=sahara_spark_latest
+cdh_centos_image=centos_cdh_latest
+cdh_ubuntu_image=ubuntu_cdh_latest
 
-if [[ "$ENGINE_TYPE" == 'heat' ]]
-then
-    HEAT_JOB=True
-    echo "Heat detected"
-fi
-
-case $JOB_TYPE in
+case $job_type in
     hdp_1)
-       PLUGIN_TYPE=hdp1
-       echo "HDP1 detected"
+       plugin=hdp1
+       insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
        ;;
     hdp_2)
-       PLUGIN_TYPE=hdp2
-       hadoop_version=2
-       echo "HDP2 detected"
+       DISTRIBUTE_MODE=True
+       plugin=hdp2
+       insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
        ;;
-    vanilla*)
-       hadoop_version=$(echo $JOB_TYPE | awk -F '_' '{ print $2}')
-       if [ "$hadoop_version" == "1" ]; then
-          PLUGIN_TYPE=vanilla1
-          echo "Vanilla detected"
-       else
-          PLUGIN_TYPE=vanilla2
-          if [ "$hadoop_version" == "2.4" ]; then
-             hadoop_version=2-4
-             [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
-          else
-             hadoop_version=2-6
-             VANILLA_TWO_IMAGE=$VANILLA_TWO_SIX_IMAGE
-             [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
-             TESTS_CONFIG_FILE="$WORKSPACE/sahara-ci-config/config/sahara/sahara-test-config-vanilla-2.6.yaml"
-          fi
-          echo "Vanilla2 detected"
-       fi
+    vanilla_1)
+       plugin=vanilla1
+       insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
+       ;;
+    vanilla_2.4)
+       DISTRIBUTE_MODE=True
+       plugin=vanilla2
+       insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_four_image
+       insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.4.1
+       insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_EXAMPLES_JAR_PATH "/opt/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.4.1.jar"
+       ;;
+    vanilla_2.6)
+       DISTRIBUTE_MODE=True
+       plugin=vanilla2
+       tests_config_file="$sahara_configs_path/sahara-test-config-vanilla-2.6.yaml"
+       insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
     transient)
-       PLUGIN_TYPE=transient
-       SKIP_EDP_TEST=False
-       SKIP_TRANSIENT_TEST=False
-       SKIP_ONLY_TRANSIENT_TEST=True
-       SKIP_TRANSIENT_JOB=True
-       TRANSIENT_JOB=True
-       [ "$ZUUL_BRANCH" == "master" ] && VANILLA_TWO_IMAGE=$VANILLA_TWO_SIX_IMAGE
-       [ "$HEAT_JOB" == "True" ] && [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Heat_Transient plugin is not supported in stable/icehouse" && exit 0
-       echo "Transient detected"
+       plugin=transient
+       concurrency=3
+       insert_config_value $tests_config_file_template VANILLA_TWO SKIP_TRANSIENT_CLUSTER_TEST False
+       insert_config_value $tests_config_file_template VANILLA_TWO ONLY_TRANSIENT_CLUSTER_TEST True
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_four_image
+          insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.4.1
+       else
+          DISTRIBUTE_MODE=True
+          insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_six_image
+          insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.6.0
+       fi
        ;;
     cdh*)
-       os_version=$(echo $JOB_TYPE | awk -F '_' '{ print $2}')
-       if [ "$os_version" == "centos" ]; then
-          CDH_IMAGE=centos_cdh_latest
-          hadoop_version=2c
+       plugin=cdh
+       insert_config_value $sahara_conf_path DEFAULT plugins cdh
+       if [[ "$job_type" =~ centos ]]; then
+          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_centos_image
        else
-          CDH_IMAGE=ubuntu_cdh_latest
-          hadoop_version=2u
+          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_ubuntu_image
        fi
-       SKIP_SCALING_TEST=True
-       PLUGIN_TYPE=cdh
-       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
-       echo "CDH detected"
+       insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
+       insert_config_value $tests_config_file_template CDH CM_REPO_LIST_URL "http://$OPENSTACK_HOST/cdh-repo/cm.list"
+       insert_config_value $tests_config_file_template CDH CDH_REPO_LIST_URL "http://$OPENSTACK_HOST/cdh-repo/cdh.list"
        ;;
     spark)
-       PLUGIN_TYPE=spark
-       SKIP_EDP_TEST=False
-       SKIP_SCALING_TEST=False
-       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Spark plugin is not supported in stable/icehouse" && exit 0
-       [[ "$JOB_NAME" =~ scenario ]] && TESTS_CONFIG_FILE="$WORKSPACE/sahara-ci-config/config/sahara/sahara-test-config-spark.yaml"
-       echo "Spark detected"
+       plugin=spark
+       insert_config_value $sahara_conf_path DEFAULT plugins spark
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+           insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
+       else
+           tests_config_file="$sahara_configs_path/sahara-test-config-spark.yaml"
+           insert_scenario_value $tests_config_file spark_image
+       fi
        ;;
 esac
+echo "$plugin detected"
 
-cd $WORKSPACE
-[ "$ZUUL_BRANCH" == "stable/icehouse" ] && sudo pip install -U -r requirements.txt
-
-TOX_LOG=$WORKSPACE/.tox/venv/log/venv-1.log
-
-create_database
+[ "$ZUUL_BRANCH" != "master" ] && sudo pip install -U -r requirements.txt
+sudo pip install .
 enable_pypi
-
-write_sahara_main_conf etc/sahara/sahara.conf
-start_sahara etc/sahara/sahara.conf
-
-cd $WORKSPACE
-
-CLUSTER_NAME="$HOST-$CLUSTER_HASH-$ZUUL_CHANGE"
-write_tests_conf
-
-run_tests
-
-print_python_env $WORKSPACE
-
-if [ "$FAILURE" != 0 ]; then
-    exit 1
-fi
-
-if [[ "$STATUS" != 0 ]]
-then
-    exit 1
-fi
+write_sahara_main_conf "$sahara_conf_path" "$engine_type"
+write_tests_conf "$tests_config_file" "$cluster_name"
+start_sahara "$sahara_conf_path" && run_tests "$tests_config_file" "$plugin" "$concurrency"
+print_python_env
