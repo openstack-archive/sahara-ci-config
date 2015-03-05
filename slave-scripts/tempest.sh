@@ -62,3 +62,6 @@ write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
 start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
 
 tox -e all -- tempest.scenario.data_processing.client_tests
+
+mv logs $WORKSPACE
+print_python_env $WORKSPACE
