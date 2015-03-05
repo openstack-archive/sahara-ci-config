@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . $FUNCTION_PATH
+. /home/jenkins/ci_openrc
 
 PROJECT=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
 
@@ -16,8 +17,7 @@ else
    sudo pip install .
 fi
 
-check_openstack_host
-
+sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 TEMPEST=True
 IMAGE_ID=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 
@@ -58,10 +58,17 @@ create_database
 enable_pypi
 
 sudo pip install $SAHARA_PATH/.
-write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
-start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
+insert_config_value $sahara_conf_path DEFAULT plugins fake
+write_sahara_main_conf $sahara_conf_path
+start_sahara $sahara_conf_path
 
-tox -e all -- tempest.scenario.data_processing.client_tests
+STATUS=0
+tox -e all -- tempest.scenario.data_processing.client_tests || STATUS=1
 
 mv logs $WORKSPACE
 print_python_env $WORKSPACE
+
+if [ "$STATUS" != "0" ]
+then
+    exit 1
+fi

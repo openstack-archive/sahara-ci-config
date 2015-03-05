@@ -95,13 +95,7 @@ hadoop_version=1
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE
 SKIP_CINDER_TEST=True
 SKIP_CLUSTER_CONFIG_TEST=True
-SKIP_EDP_TEST=False
-SKIP_MAP_REDUCE_TEST=True
-SKIP_SWIFT_TEST=True
 SKIP_SCALING_TEST=True
-SKIP_TRANSIENT_TEST=True
-SKIP_ONLY_TRANSIENT_TEST=False
-SKIP_ALL_TESTS_FOR_PLUGIN=False
 VANILLA_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_1
 VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2
 HDP_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_1
@@ -109,11 +103,14 @@ HDP_TWO_IMAGE=$HOST-sahara-hdp-centos-${GERRIT_CHANGE_NUMBER}-hadoop_2
 SPARK_IMAGE=$HOST-sahara-spark-ubuntu-${GERRIT_CHANGE_NUMBER}
 CDH_IMAGE=$HOST-${image_type}-cdh-${GERRIT_CHANGE_NUMBER}
 TESTS_CONFIG_FILE='sahara/tests/integration/configs/itest.conf'
+sahara_conf_path=
 
 if [[ "$ENGINE_TYPE" == 'heat' ]]
 then
     HEAT_JOB=True
-    echo "Heat detected"
+    insert_config_value $sahara_conf_path DEFAULT infrastructure_engine heat
+else
+    insert_config_value $sahara_conf_path DEFAULT infrastructure_engine direct
 fi
 
 case $plugin in
@@ -138,21 +135,22 @@ case $plugin in
               ;;
            2.4)
               VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.4
-              [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
               PLUGIN_TYPE=vanilla2
+              DISTRIBUTE_MODE=True
               ;;
            2.6)
               VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.6
-              [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
+              [ "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/juno" && exit 0
               sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_6_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.6" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-6
               PLUGIN_TYPE=vanilla2
+              DISTRIBUTE_MODE=True
               # Skipping hive job check for fedora and centos images because it's causing the test failure
               if [ "$image_type" != "ubuntu" ] ; then
                   SKIP_EDP_JOB_TYPES=Hive
@@ -170,10 +168,10 @@ case $plugin in
        image_type="ubuntu"
        sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? ${SPARK_IMAGE}.qcow2
-       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Tests for Spark plugin is not implemented in stable/icehouse" && exit 0
        upload_image "spark" "ubuntu" ${SPARK_IMAGE}
        PLUGIN_TYPE=$plugin
        [[ "$JOB_NAME" =~ scenario ]] && TESTS_CONFIG_FILE="$WORKSPACE/sahara-ci-config/config/sahara/sahara-test-config-spark.yaml"
+       insert_config_value $sahara_conf_path DEFAULT plugins spark
     ;;
 
     hdp_1)
@@ -191,10 +189,10 @@ case $plugin in
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
        PLUGIN_TYPE="hdp2"
+       DISTRIBUTE_MODE=True
     ;;
 
     cdh)
-       [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "CDH plugin is not supported in stable/icehouse" && exit 0
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
        else
@@ -205,6 +203,7 @@ case $plugin in
        upload_image "cdh" ${username} ${CDH_IMAGE}
        hadoop_version="2"
        PLUGIN_TYPE=$plugin
+       insert_config_value $sahara_conf_path DEFAULT plugins cdh
     ;;
 esac
 
@@ -224,7 +223,6 @@ create_database
 sudo rm -rf sahara
 git clone https://review.openstack.org/openstack/sahara
 cd sahara
-[ "$ZUUL_BRANCH" == "stable/icehouse" ] && sudo pip install -U -r requirements.txt
 sudo pip install .
 
 enable_pypi
