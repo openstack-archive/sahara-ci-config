@@ -131,7 +131,7 @@ case $plugin in
        hadoop_version=$(echo $plugin | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
-              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_1_image_name=${VANILLA_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${VANILLA_IMAGE}.qcow2
               upload_image "vanilla-1" "${username}" ${VANILLA_IMAGE}
               PLUGIN_TYPE=vanilla1
@@ -139,7 +139,7 @@ case $plugin in
            2.4)
               VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.4
               [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Vanilla 2.4 plugin is not supported in stable/icehouse" && exit 0
-              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_4_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.4" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-4
@@ -148,7 +148,7 @@ case $plugin in
            2.6)
               VANILLA_TWO_IMAGE=$HOST-sahara-vanilla-${image_type}-${GERRIT_CHANGE_NUMBER}-hadoop_2.6
               [ "$ZUUL_BRANCH" == "stable/icehouse" -o "$ZUUL_BRANCH" == "stable/juno" ] && echo "Vanilla 2.6 plugin is not supported in stable/icehouse and stable/juno" && exit 0
-              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_6_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_vanilla_hadoop_2_6_image_name=${VANILLA_TWO_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
               check_error_code $? ${VANILLA_TWO_IMAGE}.qcow2
               upload_image "vanilla-2.6" "${username}" ${VANILLA_TWO_IMAGE}
               hadoop_version=2-6
@@ -168,7 +168,7 @@ case $plugin in
        popd
 
        image_type="ubuntu"
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p "spark"
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_spark_image_name=${SPARK_IMAGE} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p "spark"
        check_error_code $? ${SPARK_IMAGE}.qcow2
        [ "$ZUUL_BRANCH" == "stable/icehouse" ] && echo "Tests for Spark plugin is not implemented in stable/icehouse" && exit 0
        upload_image "spark" "ubuntu" ${SPARK_IMAGE}
@@ -178,7 +178,7 @@ case $plugin in
 
     hdp_1)
        image_type="centos"
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 1
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_1_image_name=${HDP_IMAGE} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${HDP_IMAGE}.qcow2
        upload_image "hdp1" "root" ${HDP_IMAGE}
        PLUGIN_TYPE="hdp1"
@@ -186,7 +186,7 @@ case $plugin in
 
     hdp_2)
        image_type="centos"
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p hdp -v 2
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" ${image_type}_hdp_hadoop_2_image_name=${HDP_TWO_IMAGE} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 2
        check_error_code $? ${HDP_TWO_IMAGE}.qcow2
        upload_image "hdp2" "root" ${HDP_TWO_IMAGE}
        hadoop_version="2"
@@ -200,7 +200,7 @@ case $plugin in
        else
            username='ubuntu'
        fi
-       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_5_3_${image_type}_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
+       sudo DIB_REPO_PATH="/home/jenkins/diskimage-builder" cloudera_5_3_${image_type}_image_name=${CDH_IMAGE} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
        check_error_code $? ${CDH_IMAGE}.qcow2
        upload_image "cdh" ${username} ${CDH_IMAGE}
        hadoop_version="2"
