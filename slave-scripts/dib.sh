@@ -89,7 +89,7 @@ rename_image() {
 ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 
 plugin="$1"
-CLUSTER_HASH=${RANDOM:-$CLUSTER_HASH}
+CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 image_type=${2:-ubuntu}
 hadoop_version=1
 GERRIT_CHANGE_NUMBER=$ZUUL_CHANGE

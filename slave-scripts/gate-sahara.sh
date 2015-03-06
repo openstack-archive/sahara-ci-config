@@ -11,7 +11,7 @@ ENGINE_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 JOB_TYPE=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 
 hadoop_version=1
-CLUSTER_HASH=${RANDOM:-$CLUSTER_HASH}
+CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 SKIP_CINDER_TEST=False
 SKIP_CLUSTER_CONFIG_TEST=False
 SKIP_EDP_TEST=False
