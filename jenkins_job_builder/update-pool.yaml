@@ -20,4 +20,4 @@
       - timed: '0 6 * * *'
 
     builders:
-      - shell:  "bash -e /opt/ci/jenkins-jobs/sahara-ci-config/slave-scripts/update_pool.sh"
+      - shell:  "/opt/ci/jenkins-jobs/sahara-ci-config/slave-scripts/update_pool.sh"

@@ -33,17 +33,17 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.42:5000/v2.0'
     project-id: 'ci'
-    max-servers: 5
+    max-servers: 6
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'CI_LAB_PRIVATE_NETWORK_ID'
+      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID'
     images:
       - name: trusty-neutron
         base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
-        setup: prepare_node_bare.sh
+        setup: prepare_node.sh
       - name: ui-neutron
         base-image: 'ubuntu-12.04'
         min-ram: 4096
@@ -54,17 +54,17 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.43:5000/v2.0'
     project-id: 'ci'
-    max-servers: 5
+    max-servers: 6
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'STACK_SAHARA_PRIVATE_NETWORK_ID'
+      - net-id: 'NOVA_NET_LAB_PRIVATE_NETWORK_ID'
     images:
       - name: trusty-nova
         base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
-        setup: prepare_node_bare.sh
+        setup: prepare_node.sh
 
 targets:
   - name: sahara-gate

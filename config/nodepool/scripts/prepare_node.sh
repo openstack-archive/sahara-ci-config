@@ -17,59 +17,55 @@
 # limitations under the License.
 
 HOSTNAME=$1
-SUDO=$2
-THIN=$3
+SUDO='true'
+THIN='true'
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
-sudo hostname $HOSTNAME
 wget https://git.openstack.org/cgit/openstack-infra/system-config/plain/install_puppet.sh
 sudo bash -xe install_puppet.sh
 sudo git clone https://review.openstack.org/p/openstack-infra/system-config.git \
     /root/config
 sudo /bin/bash /root/config/install_modules.sh
-#if [ -z "$NODEPOOL_SSH_KEY" ] ; then
 sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
     -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, enable_unbound => false, }"
-#else
-#    sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-#   -e "class {'openstack_project::single_use_slave': install_users => false, sudo => $SUDO, thin => $THIN, ssh_key => '$NODEPOOL_SSH_KEY', }"
-#fi
 
 sudo mkdir -p /opt/git
-#sudo -i python /opt/nodepool-scripts/cache_git_repos.py
+
+# APT_PACKAGES variable using for installing packages via apt-get
+# PIP_PACKAGES variable using for installing packages via pip
+APT_PACKAGES="mysql-server libpq-dev libmysqlclient-dev"
+# RabbitMQ for distributed Sahara mode
+APT_PACKAGES+=" rabbitmq-server"
+# Required libraries
+APT_PACKAGES+=" libxslt1-dev libffi-dev"
+# Required packages for DIB
+APT_PACKAGES+=" qemu kpartx"
+# pep8-trunk job requirements
+APT_PACKAGES+=" gettext"
+# Glance-client is required for diskimage-integration jobs
+PIP_PACKAGES="python-glanceclient==0.16"
+# Requirements for Sahara
+PIP_PACKAGES+=" mysql-python"
+# Requirements for Cloudera plugin
+PIP_PACKAGES+=" cm-api"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
-sudo apt-get -y install mysql-server libpq-dev libmysqlclient-dev
+
+sudo apt-get install -y $APT_PACKAGES
+#Remove ccahe because it's useless for single-use nodes and may cause problems
+sudo apt-get remove -y ccache
+
 mysql -uroot -p$MYSQL_PASS -Bse "create database sahara"
 mysql -uroot -p$MYSQL_PASS -Bse  "CREATE USER 'sahara-citest'@'localhost' IDENTIFIED BY 'sahara-citest'"
 mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON sahara.* TO 'sahara-citest'@'localhost'"
 mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 
-#install RabbitMQ for distributed Sahara mode
-sudo apt-get install rabbitmq-server -y
-
-#install required libraries
-sudo apt-get install libxslt1-dev libffi-dev -y
-
-#Remove ccahe because it's useless for single-use nodes and may cause problems
-sudo apt-get remove -y ccache
-
-#glance-client is required for diskimage-integration jobs
-sudo pip install python-glanceclient==0.16
-sudo apt-get install qemu kpartx -y
-
-#install Sahara requirements
-sudo pip install mysql-python psycopg2
+sudo pip install $PIP_PACKAGES
 cd /tmp && git clone https://git.openstack.org/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
-
-# install requirements for Cloudera plugin
-sudo pip install cm-api
-
-# pep8-trunk job requirements
-sudo apt-get install gettext -y
+cd /home/jenkins && rm -rf /tmp/sahara
 
 # Java tarbal for diskimage jobs
 sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
@@ -77,12 +73,32 @@ sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%
 
 pushd /home/jenkins
 sudo git clone https://git.openstack.org/openstack/tempest
-pushd tempest && sudo pip install -U -r requirements.txt && popd
+# temporary comment
+#pushd tempest && sudo pip install -U -r requirements.txt && popd
 RELEASE_DIB="0.1.29"
 sudo git clone https://git.openstack.org/openstack/diskimage-builder
 sudo git --git-dir=/home/jenkins/diskimage-builder/.git --work-tree=/home/jenkins/diskimage-builder/ checkout $RELEASE_DIB
 sudo chown -R jenkins:jenkins /home/jenkins
 popd
+
+# create simple openrc file
+if [[ "$HOSTNAME" =~ neutron ]]; then
+   OPENSTACK_HOST="172.18.168.42"
+   HOST="c1"
+   USE_NEUTRON=true
+else
+   OPENSTACK_HOST="172.18.168.43"
+   HOST="c2"
+   USE_NEUTRON=false
+fi
+echo "export OS_USERNAME=ci-user
+export OS_TENANT_NAME=ci
+export OS_PASSWORD=nova
+export OPENSTACK_HOST=$OPENSTACK_HOST
+export HOST=$HOST
+export USE_NEUTRON=$USE_NEUTRON
+export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
+" > /home/jenkins/ci_openrc
 
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
