@@ -13,7 +13,7 @@ network:
 clusters:
   - plugin_name: vanilla
     plugin_version: 2.6.0
-    image: %IMAGE_NAME%
+    image: %vanilla_two_six_image%
     node_group_templates:
       - name: worker-dn-nm
         flavor_id: '20'
@@ -67,7 +67,7 @@ clusters:
         node_configs:
           *ng_configs
     cluster:
-        name: %CLUSTER_NAME%-vanilla-v2
+        name: %cluster_name%
     cluster_template:
         name: vanilla-2-6-0
         node_group_templates:
