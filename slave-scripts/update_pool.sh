@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 for i in $(nodepool-client list | grep ci-lab | awk -F '|' '{ print $2 }')
 do

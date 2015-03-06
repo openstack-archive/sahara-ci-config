@@ -21,4 +21,4 @@
       - pollscm: "* * * * * "
 
     builders:
-      - shell:  "bash $WORKSPACE/slave-scripts/update_config.sh"
+      - shell:  "$WORKSPACE/slave-scripts/update_config.sh"
