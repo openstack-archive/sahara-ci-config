@@ -4,19 +4,14 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/tempest.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh
     properties:
       - zeromq-event
       - build-blocker:
           blocking-jobs:
              - "tempest-sahara-tests"
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -29,19 +24,14 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/tempest.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh
     properties:
       - zeromq-event
       - build-blocker:
           blocking-jobs:
              - "tempest-saharaclient-tests"
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -51,19 +41,13 @@
 - job-template:
     name: 'gate-saharaclient-neutron-{plugin-neutron}'
     defaults: global
-    concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh
     properties:
       - zeromq-event
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -73,19 +57,13 @@
 - job-template:
     name: 'gate-saharaclient-nova-{plugin-nova_network}'
     defaults: global
-    concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh
     properties:
       - zeromq-event
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -95,19 +73,13 @@
 - job-template:
     name: 'gate-sahara-neutron-{plugin-neutron}'
     defaults: global
-    concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=sahara-ci-config/slave-scripts bash sahara-ci-config/slave-scripts/gate-sahara.sh
     properties:
       - zeromq-event
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -117,19 +89,13 @@
 - job-template:
     name: 'gate-sahara-nova-{plugin-nova_network}'
     defaults: global
-    concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=sahara-ci-config/slave-scripts bash sahara-ci-config/slave-scripts/gate-sahara.sh
     properties:
       - zeromq-event
-    wrappers:
-      - timeout:
-          timeout: 120
-          fail: true
-      - timestamps
     publishers:
       - sahara-logs
       - console-log
@@ -166,7 +132,6 @@
                   \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
                  \n<p>This job destroys vms which were not deleted after integration tests"
     disabled: false
-    concurrent: false
     node: 'master'
 
     parameters:
@@ -184,9 +149,10 @@
           description:
 
     builders:
-    - shell: "rm -rf sahara-ci-config\
-            \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-            \nbash sahara-ci-config/slave-scripts/integration-cleanup.sh"
+    - shell: |
+            rm -rf sahara-ci-config
+            git clone https://git.openstack.org/stackforge/sahara-ci-config
+            bash sahara-ci-config/slave-scripts/integration-cleanup.sh
 
 - job:
     name: gate-sahara-pep8-trunk
@@ -196,14 +162,13 @@
                   \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
-    concurrent: true
     node: trusty-neutron || trusty-nova
 
     builders:
     - gerrit-git-prep
-    - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nbash -x sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh"
+    - shell: |
+            git clone https://git.openstack.org/stackforge/sahara-ci-config
+            bash sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh
     properties:
       - zeromq-event
     publishers:

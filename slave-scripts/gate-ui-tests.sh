@@ -1,8 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash -xe
 
-. $FUNCTION_PATH
-
-check_openstack_host
+. $FUNCTION_PATH/functions-common.sh
 
 sudo iptables -F
 if [ ! -d saharadashboard ]
