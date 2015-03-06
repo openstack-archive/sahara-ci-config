@@ -106,7 +106,7 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
-    branch: ^(master|stable/juno|stable/icehouse)$
+    branch: ^(master|stable/juno)$
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: ^gate-sahara-.*$

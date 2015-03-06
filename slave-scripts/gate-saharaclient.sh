@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-sudo rm -rf /tmp/sahara
+sudo pip install .
+
 git clone https://git.openstack.org/openstack/sahara /tmp/sahara
 cd /tmp/sahara
-# prepare test dependencies
-tox -e integration --notest
-
-# change sahara-client
-.tox/integration/bin/pip install $WORKSPACE
-
-bash -x /tmp/sahara-ci-config/slave-scripts/gate-sahara.sh /tmp/sahara
+if [ "$ZUUL_BRANCH" != "master" ]; then
+   git checkout "$ZUUL_BRANCH"
+   sudo pip install -U -r requirements.txt
+fi
+bash -x $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh /tmp/sahara
