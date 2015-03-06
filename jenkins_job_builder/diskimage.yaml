@@ -4,9 +4,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh hdp_2"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh hdp_2"
 
     properties:
       - zeromq-event
@@ -23,9 +22,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
       - zeromq-event
@@ -42,9 +40,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin}"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh {plugin}"
 
     properties:
       - zeromq-event
@@ -61,9 +58,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh spark"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh spark"
 
     properties:
       - zeromq-event
@@ -80,9 +76,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}"
 
     properties:
       - zeromq-event
@@ -99,9 +94,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.6 {os}"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.6 {os}"
 
     properties:
       - zeromq-event

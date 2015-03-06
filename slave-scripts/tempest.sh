@@ -1,10 +1,14 @@
 #!/bin/bash
 
-. $FUNCTION_PATH
+# source CI credentials
+. /home/jenkins/ci_openrc
+# source main functions
+. $FUNCTION_PATH/functions-common.sh
 
-PROJECT=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
+project=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
+image_id=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 
-if [ "$PROJECT" == "sahara" ]; then
+if [ "$project" == "sahara" ]; then
    SAHARA_PATH="$WORKSPACE"
    git clone http://github.com/openstack/python-saharaclient /tmp/saharaclient
    cd /tmp/saharaclient
@@ -15,59 +19,39 @@ else
    git clone http://github.com/openstack/sahara $SAHARA_PATH
    sudo pip install .
 fi
-
-check_openstack_host
-
-TEMPEST=True
-IMAGE_ID=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
+sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 
 cd /home/jenkins
-
 cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
 
 cd tempest
+# create tempest conf file
+insert_config_value etc/tempest.conf DEFAULT lock_path /tmp
+insert_config_value etc/tempest.conf identity admin_password $OS_PASSWORD
+insert_config_value etc/tempest.conf identity admin_tenant_name $OS_TENANT_NAME
+insert_config_value etc/tempest.conf identity admin_username $OS_USERNAME
+insert_config_value etc/tempest.conf identity password $OS_PASSWORD
+insert_config_value etc/tempest.conf identity tenant_name $OS_TENANT_NAME
+insert_config_value etc/tempest.conf identity username $OS_USERNAME
+insert_config_value etc/tempest.conf identity uri "http://$OPENSTACK_HOST:5000/v2.0/"
+insert_config_value etc/tempest.conf identity uri_v3 "http://$OPENSTACK_HOST:5000/v3/"
+insert_config_value etc/tempest.conf service_available neutron $USE_NEUTRON
+insert_config_value etc/tempest.conf service_available sahara true
 
-echo "[DEFAULT]
-lock_path = /tmp
+# create tests file
+[ "$USE_NEUTRON" == "true" ] && tenant_id=$NEUTRON_LAB_TENANT_ID
+[ "$USE_NEUTRON" == "false" ] && tenant_id=$NOVA_NET_LAB_TENANT_ID
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing flavor_id 2
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing sahara_url "http://localhost:8386/v1.1/$tenant_id"
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing ssh_username ubuntu
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing floating_ip_pool public
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing private_network private
+insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing fake_image_id $image_id
 
-[identity]
-admin_password = nova
-admin_tenant_name = ci
-admin_username = ci-user
-password = nova
-tenant_name = ci
-uri = http://$OPENSTACK_HOST:5000/v2.0/
-uri_v3 = http://$OPENSTACK_HOST:5000/v3/
-username = ci-user
-
-[service_available]
-neutron = $USE_NEUTRON
-sahara = true
-" > etc/tempest.conf
-
-echo "[data_processing]
-flavor_id=2
-sahara_url=http://localhost:8386/v1.1/$TENANT_ID
-ssh_username=ubuntu
-floating_ip_pool=public
-private_network=private
-fake_image_id=$IMAGE_ID
-" > tempest/scenario/data_processing/etc/sahara_tests.conf
-
-create_database
 enable_pypi
-
 sudo pip install $SAHARA_PATH/.
-write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
-start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
-
-STATUS=0
-tox -e all -- tempest.scenario.data_processing.client_tests || STATUS=1
-
-mv logs $WORKSPACE
-print_python_env $WORKSPACE
-
-if [ "$STATUS" != "0" ]
-then
-    exit 1
-fi
+insert_config_value $sahara_conf_path DEFAULT plugins fake
+write_sahara_main_conf $sahara_conf_path
+start_sahara $sahara_conf_path
+tox -e all -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
+print_python_env
