@@ -4,8 +4,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh hdp_2"
 
     properties:
@@ -23,8 +22,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
@@ -42,8 +40,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh {plugin}"
 
     properties:
@@ -61,8 +58,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh spark"
 
     properties:
@@ -80,8 +76,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}"
 
     properties:
@@ -99,8 +94,7 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/dib.sh vanilla_2.6 {os}"
 
     properties:
