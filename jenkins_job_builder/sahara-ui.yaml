@@ -16,9 +16,9 @@
 
     builders:
     - gerrit-git-prep
-    - shell:  "rm -rf sahara-ci-config\
-             \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-             \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-ui-tests.sh"
+    - shell:  |
+             git clone https://git.openstack.org/stackforge/sahara-ci-config
+             FUNCTION_PATH=sahara-ci-config/slave-scripts bash sahara-ci-config/slave-scripts/gate-ui-tests.sh
 
     publishers:
       - console-log
@@ -31,12 +31,7 @@
             - unstable: true
             - failure: true
             - aborted: true
-      - trigger-parameterized-builds:
-          - project: "integration-cleanup"
-            predefined-parameters:
-               "PREV_BUILD=$BUILD_NUMBER-$ZUUL_CHANGE-$ZUUL_PATCHSET\
-               \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+      - trigger-cleanup
 
 - project:
     name: sahara-dashboard
