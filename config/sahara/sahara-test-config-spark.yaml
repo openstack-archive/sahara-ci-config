@@ -13,7 +13,7 @@ network:
 clusters:
   - plugin_name: spark
     plugin_version: 1.0.0
-    image: %IMAGE_NAME%
+    image: %spark_image%
     node_group_templates:
       - name: master
         flavor_id: '20'
@@ -36,7 +36,7 @@ clusters:
         HDFS:
           dfs.replication: 1
     cluster:
-      name: %CLUSTER_NAME%-spark
+      name: %cluster_name%
     scenario:
       - run_jobs
     edp_jobs_flow: spark_edp

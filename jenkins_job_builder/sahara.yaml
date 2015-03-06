@@ -4,9 +4,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/tempest.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash -x $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
     properties:
       - zeromq-event
       - build-blocker:
@@ -29,9 +28,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/tempest.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash -x $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
     properties:
       - zeromq-event
       - build-blocker:
@@ -54,9 +52,8 @@
     concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash -x $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -76,9 +73,8 @@
     concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config /tmp/sahara-ci-config\
-              \nFUNCTION_PATH=/tmp/sahara-ci-config/slave-scripts/functions.sh bash -x /tmp/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts bash -x $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -98,9 +94,8 @@
     concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -120,9 +115,8 @@
     concurrent: true
     builders:
       - gerrit-git-prep
-      - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
-              \nFUNCTION_PATH=sahara-ci-config/slave-scripts/functions.sh bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
+              \nFUNCTION_PATH=sahara-ci-config/slave-scripts bash -x sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     wrappers:
@@ -201,8 +195,7 @@
 
     builders:
     - gerrit-git-prep
-    - shell: "rm -rf sahara-ci-config\
-              \ngit clone https://git.openstack.org/stackforge/sahara-ci-config\
+    - shell: "git clone https://git.openstack.org/stackforge/sahara-ci-config\
               \nbash -x sahara-ci-config/slave-scripts/gate-sahara-pep8-trunk.sh"
     properties:
       - zeromq-event
