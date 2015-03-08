@@ -182,7 +182,8 @@
             predefined-parameters:
                "CHANGE_NUMBER=$ZUUL_CHANGE\
                \nPREV_JOB=$JOB_NAME\
-               \nHOST_NAME=$NODE_NAME"
+               \nHOST_NAME=$NODE_NAME\
+               \nCLUSTER_HASH=$CLUSTER_HASH"
 
 - publisher:
     name: console-log-periodic
