@@ -47,7 +47,7 @@ sahara = true
 
 echo "[data_processing]
 flavor_id=2
-sahara_url=http://localhost:8386/v1.1/$TENANT_ID
+sahara_url=http://localhost:8386/v1.1
 ssh_username=ubuntu
 floating_ip_pool=public
 private_network=private
