@@ -57,7 +57,7 @@ sudo apt-get install libxslt1-dev libffi-dev -y
 sudo apt-get remove -y ccache
 
 #glance-client is required for diskimage-integration jobs
-sudo pip install python-glanceclient
+sudo pip install python-glanceclient==0.16
 sudo apt-get install qemu kpartx -y
 
 #install Sahara requirements
