@@ -60,8 +60,8 @@ sudo pip install $SAHARA_PATH/.
 write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
 start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
 
-STATUS=0
-tox -e all -- tempest.scenario.data_processing.client_tests || STATUS=1
+tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
+STATUS=$(grep "\ -\ Failed" tox.log | awk -F ':' '{print $2}')
 
 mv logs $WORKSPACE
 print_python_env $WORKSPACE
