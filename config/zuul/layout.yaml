@@ -128,6 +128,9 @@ jobs:
     branch: ^(master)$
   - name: tempest-sahara-tests
     branch: ^(master)$
+    voting: false
+  - name: tempest-saharaclient-tests
+    voting: false
   - name: dib-nova-direct-spark-aio
     branch: ^(stable/juno)$
   - name: gate-saharaclient-neutron-direct-spark-aio
