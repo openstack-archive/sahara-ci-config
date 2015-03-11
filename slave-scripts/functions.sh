@@ -278,7 +278,7 @@ run_tests() {
         vanilla2)
            if [[ "$JOB_NAME" =~ scenario ]]; then
               tox -e scenario $TESTS_CONFIG_FILE | tee tox.log
-              STATUS=$(grep "\ -\ Failed" tox.log | awk -F ':' '{print $2}')
+              STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
            else
               tox -e integration -- vanilla2 --concurrency=1
               STATUS=$?
@@ -295,7 +295,7 @@ run_tests() {
         spark)
           if [[ "$JOB_NAME" =~ scenario ]]; then
              tox -e scenario $TESTS_CONFIG_FILE | tee tox.log
-             STATUS=$(grep "\ -\ Failed" tox.log | awk -F ':' '{print $2}')
+             STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
           else
              tox -e integration -- spark --concurrency=1
              STATUS=$?

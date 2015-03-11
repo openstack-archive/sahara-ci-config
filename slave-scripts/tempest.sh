@@ -61,7 +61,7 @@ write_sahara_main_conf $SAHARA_PATH/etc/sahara/sahara.conf
 start_sahara $SAHARA_PATH/etc/sahara/sahara.conf
 
 tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
-STATUS=$(grep "\ -\ Failed" tox.log | awk -F ':' '{print $2}')
+STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
 
 mv logs $WORKSPACE
 print_python_env $WORKSPACE
