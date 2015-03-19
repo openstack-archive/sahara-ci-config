@@ -1,7 +1,5 @@
 #!/bin/bash -xe
 
-source /usr/local/jenkins/slave_scripts/select-mirror.sh openstack sahara
-
 set -o pipefail
 
 # replace hacking with master tarball
