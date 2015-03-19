@@ -148,7 +148,7 @@ run_tests() {
   then
       # Temporary use additional log file, due to wrong status code from tox scenario tests
       # tox -e scenario $config || failure "Integration tests are failed"
-      tox -e scenario $config | tee log.txt
+      tox -e scenario $config | tee tox.log
       STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
       [ "$STATUS" != "0" ] && failure "Integration tests have failed"
   else

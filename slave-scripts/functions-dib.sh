@@ -21,25 +21,25 @@ upload_image() {
 
    case "$plugin" in
            vanilla-1)
-             image_properties="--property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_1.2.1=True --property _sahara_tag_1.1.2=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
            vanilla-2.4)
-             image_properties="--property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_2.4.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
            vanilla-2.6)
-             image_properties="--property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_2.6.0=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
            hdp1)
-             image_properties="--property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_1.3.2=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
            hdp2)
-             image_properties="--property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
            cdh)
-             image_properties="--property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_5.3.0=True --property _sahara_tag_5=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
            spark)
-             image_properties="--property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'=${username}"
+             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
            ;;
    esac
    register_new_image "$image" "$image_properties"

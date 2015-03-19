@@ -53,6 +53,7 @@ case $job_type in
               insert_config_value $tests_config_file_template VANILLA SKIP_CINDER_TEST True
               insert_config_value $tests_config_file_template VANILLA SKIP_CLUSTER_CONFIG_TEST True
               insert_config_value $tests_config_file_template VANILLA SKIP_SCALING_TEST True
+              insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
               plugin=vanilla1
               ;;
            2.4)
@@ -63,6 +64,7 @@ case $job_type in
               insert_config_value $tests_config_file_template VANILLA_TWO SKIP_CINDER_TEST True
               insert_config_value $tests_config_file_template VANILLA_TWO SKIP_CLUSTER_CONFIG_TEST True
               insert_config_value $tests_config_file_template VANILLA_TWO SKIP_SCALING_TEST True
+              insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_four_image
               plugin=vanilla2
               ;;
            2.6)
@@ -92,6 +94,7 @@ case $job_type in
           insert_config_value $tests_config_file_template SPARK SKIP_CINDER_TEST True
           insert_config_value $tests_config_file_template SPARK SKIP_CLUSTER_CONFIG_TEST True
           insert_config_value $tests_config_file_template SPARK SKIP_SCALING_TEST True
+          insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
           plugin=spark
        fi
        insert_config_value $sahara_conf_path DEFAULT plugins spark
@@ -104,6 +107,7 @@ case $job_type in
        insert_config_value $tests_config_file_template HDP SKIP_CINDER_TEST True
        insert_config_value $tests_config_file_template HDP SKIP_CLUSTER_CONFIG_TEST True
        insert_config_value $tests_config_file_template HDP SKIP_SCALING_TEST True
+       insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
        plugin=hdp1
     ;;
 
@@ -115,6 +119,7 @@ case $job_type in
        insert_config_value $tests_config_file_template HDP2 SKIP_CINDER_TEST True
        insert_config_value $tests_config_file_template HDP2 SKIP_CLUSTER_CONFIG_TEST True
        insert_config_value $tests_config_file_template HDP2 SKIP_SCALING_TEST True
+       insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
        plugin=hdp2
     ;;
 
@@ -131,8 +136,7 @@ case $job_type in
        insert_config_value $tests_config_file_template CDH SKIP_CINDER_TEST True
        insert_config_value $tests_config_file_template CDH SKIP_CLUSTER_CONFIG_TEST True
        insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
-       insert_config_value $tests_config_file_template CDH CM_REPO_LIST_URL "http://$OPENSTACK_HOST/cdh-repo/cm.list"
-       insert_config_value $tests_config_file_template CDH CDH_REPO_LIST_URL "http://$OPENSTACK_HOST/cdh-repo/cdh.list"
+       insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_image
        plugin=cdh
     ;;
 esac

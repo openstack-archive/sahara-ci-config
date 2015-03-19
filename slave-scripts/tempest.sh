@@ -55,7 +55,7 @@ write_sahara_main_conf $sahara_conf_path "direct"
 start_sahara $sahara_conf_path
 # Temporary use additional log file, due to wrong status code from tox scenario tests
 # tox -e all -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
-tox -e all -- tempest.scenario.data_processing.client_tests | tee log.txt
+tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
 STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
 [ "$STATUS" != "0" ] && failure "Tempest tests have failed"
 print_python_env
