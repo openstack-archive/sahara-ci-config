@@ -106,7 +106,7 @@ run_tests_for_dib_image() {
   if [[ "$JOB_NAME" =~ scenario ]]; then
       tox -e scenario $config || tee log.txt
       STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
-      [ "$STATUS" != "0" ] && failure "Integration tests have failed"
+      if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   else
       tox -e integration -- $plugin --concurrency=1 || failure "Integration tests have failed"
   fi
