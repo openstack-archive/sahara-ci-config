@@ -98,7 +98,7 @@ export OPENSTACK_HOST=$OPENSTACK_HOST
 export HOST=$HOST
 export USE_NEUTRON=$USE_NEUTRON
 export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
-" > /home/jenkins/ci_openrc
+" | sudo tee /home/jenkins/ci_openrc
 
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"

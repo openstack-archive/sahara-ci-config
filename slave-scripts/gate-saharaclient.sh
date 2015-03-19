@@ -15,4 +15,4 @@ else
   .tox/integration/bin/pip install $WORKSPACE
 fi
 
-bash -x $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh /tmp/sahara
+$WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh /tmp/sahara
