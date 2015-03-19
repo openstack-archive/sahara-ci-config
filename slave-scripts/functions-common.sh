@@ -150,7 +150,7 @@ run_tests() {
       # tox -e scenario $config || failure "Integration tests are failed"
       tox -e scenario $config | tee tox.log
       STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
-      [ "$STATUS" != "0" ] && failure "Integration tests have failed"
+      if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   else
       tox -e integration -- $plugin --concurrency=$concurrency || failure "Integration tests have failed"
   fi

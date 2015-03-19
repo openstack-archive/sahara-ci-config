@@ -57,5 +57,5 @@ start_sahara $sahara_conf_path
 # tox -e all -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
 tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
 STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
-[ "$STATUS" != "0" ] && failure "Tempest tests have failed"
+if [ "$STATUS" != "0" ]; then failure "Tempest tests have failed"; fi
 print_python_env
