@@ -108,9 +108,8 @@
     plugin-neutron:
      - direct-vanilla_1-aio
      - heat-vanilla_2.4
-     - heat-vanilla_2.6-scenario
+     - heat-vanilla_2.6
      - direct-spark-aio
-     - direct-spark-aio-scenario
      - direct-transient
      - heat-transient
     plugin-nova_network:
