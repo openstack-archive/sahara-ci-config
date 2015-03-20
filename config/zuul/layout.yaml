@@ -105,9 +105,9 @@ jobs:
     branch: ^(master|stable/juno)$
   - name: gate-sahara-pep8-trunk
     voting: false
-  - name: ^gate-sahara-.*$
+  - name: ^gate-sahara.*$
     files:
-      - '^sahara/.*$'
+      - '^sahara.*/.*$'
       - '^tools/.*$'
       - '^[^\/]*$'
   - name: ^dib-neutron-heat-vanilla_2.4-.*$
@@ -116,6 +116,10 @@ jobs:
     branch: ^(stable/juno)$
   - name: ^tempest-sahara.*$
     branch: ^(master)$
+    files:
+      - '^sahara.*/.*$'
+      - '^tools/.*$'
+      - '^[^\/]*$'
     voting: false
   - name: dib-neutron-direct-vanilla_1-fedora-aio
     voting: false
