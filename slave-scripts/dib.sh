@@ -150,6 +150,6 @@ sudo pip install .
 enable_pypi
 write_sahara_main_conf "$sahara_conf_path" "$engine"
 write_tests_conf "$tests_config_file" "$cluster_name"
-start_sahara "$sahara_conf_path" && run_tests_for_dib_image "$tests_config_file" "$plugin"
+start_sahara "$sahara_conf_path" && run_tests "$tests_config_file" "$plugin"
 print_python_env
 cleanup_image "$job_type" "$image_type"

@@ -70,44 +70,30 @@ cleanup_image() {
   local job_type=$1
   local os=$2
   if [ "$ZUUL_PIPELINE" == "check" -o "$ZUUL_BRANCH" != "master" ]; then
-     delete_image "$CUR_NAME"
+     delete_image "$CUR_IMAGE"
   else
      case $job_type in
         vanilla*)
            hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
            delete_image ${os}_vanilla_${hadoop_version}_latest
-           rename_image "$CUR_NAME" ${os}_vanilla_${hadoop_version}_latest
+           rename_image "$CUR_IMAGE" ${os}_vanilla_${hadoop_version}_latest
            ;;
         hdp_1)
            delete_image sahara_hdp_1_latest
-           rename_image "$CUR_NAME" sahara_hdp_1_latest
+           rename_image "$CUR_IMAGE" sahara_hdp_1_latest
            ;;
         hdp_2)
            delete_image sahara_hdp_2_latest
-           rename_image "$CUR_NAME" sahara_hdp_2_latest
+           rename_image "$CUR_IMAGE" sahara_hdp_2_latest
            ;;
         cdh)
            delete_image ${os}_cdh_latest
-           rename_image "$CUR_NAME" ${os}_cdh_latest
+           rename_image "$CUR_IMAGE" ${os}_cdh_latest
            ;;
         spark)
            delete_image sahara_spark_latest
-           rename_image "$CUR_NAME" sahara_spark_latest
+           rename_image "$CUR_IMAGE" sahara_spark_latest
            ;;
      esac
-  fi
-}
-
-run_tests_for_dib_image() {
-  local config=$1
-  local plugin=$2
-  echo "Integration tests are started"
-  export PYTHONUNBUFFERED=1
-  if [[ "$JOB_NAME" =~ scenario ]]; then
-      tox -e scenario $config || tee tox.log
-      STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
-      if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
-  else
-      tox -e integration -- $plugin --concurrency=1 || failure "Integration tests have failed"
   fi
 }
