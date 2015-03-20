@@ -52,50 +52,14 @@
       - trigger-cleanup
     node: 'trusty-nova'
 
-- job:
-    name: 'dib-nova-direct-spark-aio-scenario'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh spark
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
 - job-template:
-    name: 'dib-neutron-heat-vanilla_2.4-{os}'
+    name: 'dib-neutron-heat-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh vanilla_2.4 {os}
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-neutron'
-
-- job-template:
-    name: 'dib-neutron-heat-vanilla_2.6-{os}-scenario'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh vanilla_2.6 {os}
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
 
     properties:
       - zeromq-event
@@ -130,6 +94,7 @@
           plugin:
             - spark
             - hdp_1
-     - 'dib-nova-direct-spark-aio-scenario'
-     - 'dib-neutron-heat-vanilla_2.4-{os}'
-     - 'dib-neutron-heat-vanilla_2.6-{os}-scenario'
+     - 'dib-neutron-heat-{plugin}-{os}':
+          plugin:
+            - vanilla_2.4
+            - vanilla_2.6
