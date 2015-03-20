@@ -30,16 +30,31 @@ cdh_ubuntu_image=ubuntu_cdh_latest
 case $job_type in
     hdp_1)
        plugin=hdp1
-       insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
+       else
+          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+          insert_scenario_value $tests_config_file hdp_image
+       fi
        ;;
     hdp_2)
        DISTRIBUTE_MODE=True
        plugin=hdp2
-       insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
+       else
+          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+          insert_scenario_value $tests_config_file hdp_two_image
+       fi
        ;;
     vanilla_1)
        plugin=vanilla1
-       insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
+       else
+          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+          insert_scenario_value $tests_config_file vanilla_image
+       fi
        ;;
     vanilla_2.4)
        DISTRIBUTE_MODE=True
@@ -50,32 +65,38 @@ case $job_type in
        ;;
     vanilla_2.6)
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/sahara-test-config-vanilla-2.6.yaml"
+       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-2.6.0.yaml"
        insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
     transient)
        plugin=transient
        concurrency=3
-       insert_config_value $tests_config_file_template VANILLA_TWO SKIP_TRANSIENT_CLUSTER_TEST False
-       insert_config_value $tests_config_file_template VANILLA_TWO ONLY_TRANSIENT_CLUSTER_TEST True
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template VANILLA_TWO SKIP_TRANSIENT_CLUSTER_TEST False
+          insert_config_value $tests_config_file_template VANILLA_TWO ONLY_TRANSIENT_CLUSTER_TEST True
           insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_four_image
           insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.4.1
        else
           DISTRIBUTE_MODE=True
-          insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_six_image
-          insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.6.0
+          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-transient.yaml"
+          insert_scenario_value $tests_config_file vanilla_two_six_image
        fi
        ;;
     cdh*)
        plugin=cdh
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
        if [[ "$job_type" =~ centos ]]; then
-          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_centos_image
+          cdh_image=$cdh_centos_image
        else
-          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_ubuntu_image
+          cdh_image=$cdh_ubuntu_image
        fi
-       insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
+       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
+          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_image
+          insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
+       else
+          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
+          insert_scenario_value $tests_config_file cdh_image
+       fi
        ;;
     spark)
        plugin=spark
@@ -83,7 +104,7 @@ case $job_type in
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
            insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
        else
-           tests_config_file="$sahara_templates_configs_path/sahara-test-config-spark.yaml"
+           tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
            insert_scenario_value $tests_config_file spark_image
        fi
        ;;

@@ -113,13 +113,14 @@ write_tests_conf() {
     NETWORK="nova-network"
     TENANT_ID=$NOVA_NET_LAB_TENANT_ID
   fi
-  if [[ "$JOB_NAME" =~ scenario ]]; then
-    insert_scenario_value $test_conf OS_USERNAME
-    insert_scenario_value $test_conf OS_PASSWORD
-    insert_scenario_value $test_conf OS_TENANT_NAME
-    insert_scenario_value $test_conf OPENSTACK_HOST
-    insert_scenario_value $test_conf NETWORK
-    insert_scenario_value $test_conf TENANT_ID
+  if [ "$ZUUL_BRANCH" == "master" ]; then
+    local test_scenario_common=$(dirname $1)/scenario-common.yaml
+    insert_scenario_value $test_scenario_common OS_USERNAME
+    insert_scenario_value $test_scenario_common OS_PASSWORD
+    insert_scenario_value $test_scenario_common OS_TENANT_NAME
+    insert_scenario_value $test_scenario_common OPENSTACK_HOST
+    insert_scenario_value $test_scenario_common NETWORK
+    insert_scenario_value $test_scenario_common TENANT_ID
     insert_scenario_value $test_conf cluster_name
   else
     cp $sahara_templates_configs_path/itest.conf.sample $test_conf
@@ -144,11 +145,12 @@ run_tests() {
   local concurrency=${3:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  if [[ "$JOB_NAME" =~ scenario ]]
+  if [ "$ZUUL_BRANCH" == "master" ]
   then
+      local scenario_common=$(dirname $1)/scenario-common.yaml
       # Temporary use additional log file, due to wrong status code from tox scenario tests
-      # tox -e scenario $config || failure "Integration tests are failed"
-      tox -e scenario $config | tee tox.log
+      # tox -e scenario $scenario_common $config || failure "Integration tests are failed"
+      tox -e scenario $scenario_common $config | tee tox.log
       STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
       if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   else
