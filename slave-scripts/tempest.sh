@@ -37,6 +37,10 @@ insert_config_value etc/tempest.conf identity uri "http://$OPENSTACK_HOST:5000/v
 insert_config_value etc/tempest.conf identity uri_v3 "http://$OPENSTACK_HOST:5000/v3/"
 insert_config_value etc/tempest.conf service_available neutron $USE_NEUTRON
 insert_config_value etc/tempest.conf service_available sahara true
+if [ "$USE_NEUTRON" == "true" ]; then
+    local public_network_id=$(neutron net-show "public" -f value -c id)
+    insert_config_value etc/tempest.conf network public_network_id $public_network_id
+fi
 
 # create tests file
 [ "$USE_NEUTRON" == "true" ] && tenant_id=$NEUTRON_LAB_TENANT_ID
