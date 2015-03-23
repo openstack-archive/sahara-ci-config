@@ -42,7 +42,6 @@ insert_config_value etc/tempest.conf service_available sahara true
 [ "$USE_NEUTRON" == "true" ] && tenant_id=$NEUTRON_LAB_TENANT_ID
 [ "$USE_NEUTRON" == "false" ] && tenant_id=$NOVA_NET_LAB_TENANT_ID
 insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing flavor_id 2
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing sahara_url "http://localhost:8386/v1.1/$tenant_id"
 insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing ssh_username ubuntu
 insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing floating_ip_pool public
 insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing private_network private
