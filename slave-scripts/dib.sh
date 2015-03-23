@@ -53,7 +53,7 @@ case $job_type in
        hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
-              sudo ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              bash -c "${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1"
               check_error_code $? ${vanilla_image}.qcow2
               upload_image "vanilla-1" "${username}" ${vanilla_image}
               if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
@@ -68,7 +68,7 @@ case $job_type in
               plugin=vanilla1
               ;;
            2.4)
-              sudo ${image_type}_vanilla_hadoop_2_4_image_name=${vanilla_two_four_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              bash -c "${image_type}_vanilla_hadoop_2_4_image_name=${vanilla_two_four_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4"
               check_error_code $? ${vanilla_two_four_image}.qcow2
               upload_image "vanilla-2.4" "${username}" ${vanilla_two_four_image}
               DISTRIBUTE_MODE=True
@@ -79,7 +79,7 @@ case $job_type in
               plugin=vanilla2
               ;;
            2.6)
-              sudo ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              bash -c "${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6"
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
@@ -95,7 +95,7 @@ case $job_type in
        python -m SimpleHTTPServer 8000 > /dev/null &
        popd
 
-       sudo ubuntu_spark_image_name=${spark_image} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p "spark"
+       bash -c "ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p spark"
        check_error_code $? ${spark_image}.qcow2
        upload_image "spark" "ubuntu" ${spark_image}
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
@@ -112,7 +112,7 @@ case $job_type in
     ;;
 
     hdp_1)
-       sudo centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
+       centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${hdp_image}.qcow2
        upload_image "hdp1" "root" ${hdp_image}
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
@@ -128,7 +128,7 @@ case $job_type in
     ;;
 
     hdp_2)
-       sudo centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 2
+       bash -c "centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 2"
        check_error_code $? ${hdp_two_image}.qcow2
        upload_image "hdp2" "root" ${hdp_two_image}
        DISTRIBUTE_MODE=True
@@ -150,7 +150,7 @@ case $job_type in
        else
            username='ubuntu'
        fi
-       sudo cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
+       bash -c "cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3"
        check_error_code $? ${cdh_image}.qcow2
        upload_image "cdh" ${username} ${cdh_image}
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
