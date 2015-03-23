@@ -1,7 +1,6 @@
 - job:
     name: 'dib-nova-heat-hdp_2'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
@@ -20,7 +19,6 @@
 - job-template:
     name: 'dib-{network}-direct-{plugin}-{os}-aio'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
@@ -39,7 +37,6 @@
 - job-template:
     name: 'dib-nova-direct-{plugin}-aio'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
@@ -58,7 +55,6 @@
 - job:
     name: 'dib-nova-direct-spark-aio-scenario'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
@@ -77,7 +73,6 @@
 - job-template:
     name: 'dib-neutron-heat-vanilla_2.4-{os}'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
@@ -96,7 +91,6 @@
 - job-template:
     name: 'dib-neutron-heat-vanilla_2.6-{os}-scenario'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - shell: |
