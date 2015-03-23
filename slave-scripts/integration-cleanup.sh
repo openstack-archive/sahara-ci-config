@@ -6,6 +6,9 @@ sleep 20
 source $JENKINS_HOME/credentials
 set -x
 job_type=$(echo $PREV_JOB | awk -F '-' '{ print $1 }')
+export os_username=$os_username
+export os_password=$os_password
+export os_tenant_name=$os_tenant_name
 if [[ "$HOST_NAME" =~ neutron ]]; then
     export os_auth_url="http://$OPENSTACK_HOST_NEUTRON_LAB:5000/v2.0"
     export os_image_endpoint="http://$OPENSTACK_HOST_NEUTRON_LAB:8004/v1/$NEUTRON_LAB_TENANT_ID"
