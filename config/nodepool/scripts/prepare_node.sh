@@ -67,10 +67,6 @@ cd /tmp && git clone https://git.openstack.org/openstack/sahara
 cd sahara && sudo pip install -U -r requirements.txt
 cd /home/jenkins && rm -rf /tmp/sahara
 
-# Java tarbal for diskimage jobs
-sudo wget --no-check-certificate --no-cookies --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-   -P /home/jenkins http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.tar.gz
-
 pushd /home/jenkins
 sudo git clone https://git.openstack.org/openstack/tempest
 # temporary comment
