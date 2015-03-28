@@ -20,7 +20,12 @@ if [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
 elif [ "$job_type" == "tempest" ]; then
     python cleanup.py cleanup .*sahara-cluster.*
 else
-    engine=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    if [ "$job_type" == "dib" ]; then
+      engine=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
+    else
+      engine=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
+    fi
+
     if [ "$engine" == "heat" ]
     then
         python cleanup.py cleanup-heat .*$host-$CHANGE_NUMBER-$CLUSTER_HASH.*
