@@ -42,12 +42,18 @@ case $job_type in
            username='cloud-user'
        else
            username=${image_type}
+           if [ "$image_type" == "fedora" ]; then
+              # This fix is workaround for problem with downloading fedora
+              # from cloud.fedoraproject.org
+              # we use the same version of fedora that is in DIB
+              FEDORA_OPTS="DIB_CLOUD_IMAGES=http://172.18.168.44/images BASE_IMAGE_FILE=fedora.x86_64.qcow2"
+           fi
        fi
 
        hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
-              sudo ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              sudo ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${vanilla_image}.qcow2
               upload_image "vanilla-1" "${username}" ${vanilla_image}
               insert_config_value $tests_config_file_template VANILLA SKIP_CINDER_TEST True
@@ -57,7 +63,7 @@ case $job_type in
               plugin=vanilla1
               ;;
            2.4)
-              sudo ${image_type}_vanilla_hadoop_2_4_image_name=${vanilla_two_four_image} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
+              sudo ${image_type}_vanilla_hadoop_2_4_image_name=${vanilla_two_four_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
               check_error_code $? ${vanilla_two_four_image}.qcow2
               upload_image "vanilla-2.4" "${username}" ${vanilla_two_four_image}
               DISTRIBUTE_MODE=True
@@ -68,7 +74,7 @@ case $job_type in
               plugin=vanilla2
               ;;
            2.6)
-              sudo ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              sudo ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} $FEDORA_OPTS JAVA_DOWNLOAD_URL='http://127.0.0.1:8000/jdk-7u51-linux-x64.tar.gz' SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
