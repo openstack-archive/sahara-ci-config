@@ -10,13 +10,13 @@ image_id=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 
 if [ "$project" == "sahara" ]; then
    SAHARA_PATH="$WORKSPACE"
-   git clone http://github.com/openstack/python-saharaclient /tmp/saharaclient
+   git clone https://git.openstack.org/openstack/python-saharaclient /tmp/saharaclient
    cd /tmp/saharaclient
    sudo pip install -U -r requirements.txt
    sudo pip install .
 else
    SAHARA_PATH=/tmp/sahara
-   git clone http://github.com/openstack/sahara $SAHARA_PATH
+   git clone https://git.openstack.org/openstack/sahara $SAHARA_PATH
    sudo pip install .
 fi
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
