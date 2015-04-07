@@ -4,6 +4,9 @@ ADMIN_RCFILE=$TOP_DIR/openrc
 PRIVATE_CIDR=10.0.0.0/24
 CINDER_CONF=/etc/cinder/cinder.conf
 NOVA_CONF=/etc/nova/nova.conf
+GLANCE_CACHE_CONF=/etc/glance/glance-cache.conf
+KEYSTONE_CONF=/etc/keystone/keystone.conf
+HEAT_CONF=/etc/heat/heat.conf
 
 source $TOP_DIR/functions-common
 
@@ -106,7 +109,8 @@ nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add pu
 #screen -dmS nova-network /bin/bash -c "/usr/local/bin/nova-network --config-file /etc/nova/nova.conf || touch /opt/stack/status/stack/n-net.failure"
 
 #setup expiration time for keystone
-sudo sed -i '/^\[token\]/a expiration=86400' /etc/keystone/keystone.conf
+#sudo sed -i '/^\[token\]/a expiration=86400' /etc/keystone/keystone.conf
+iniset $KEYSTONE_CONF token expiration 86400
 sudo service apache2 restart
 
 # setup security groups
@@ -130,7 +134,7 @@ keystone service-create --name sahara --type data_processing --description "Data
 keystone endpoint-create --service sahara --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
 # Setup Ceph
-echo "R" | bash $TOP_DIR/micro-osd.sh /srv/ceph
+echo "R" | bash $TOP_DIR/micro-osd.sh /home/ubuntu/ceph
 
 # Setup Ceph backend for Cinder
 inidelete $CINDER_CONF DEFAULT default_volume_type
@@ -141,12 +145,19 @@ inidelete $CINDER_CONF lvmdriver-1 volume_driver
 inidelete $CINDER_CONF lvmdriver-1 volume_backend_name
 iniset    $CINDER_CONF DEFAULT volume_driver cinder.volume.drivers.rbd.RBDDriver
 iniset    $CINDER_CONF DEFAULT rbd_pool data
+iniset    $GLANCE_CACHE_CONF DEFAULT image_cache_stall_time 43200
+
+#Setup Heat
+iniset    $HEAT_CONF database max_pool_size 1000
+iniset    $HEAT_CONF database max_overflow  1000
 
 # Setup path for Nova instances
-iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
+#iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
 
 # Restart OpenStack services
 screen -X -S stack quit
+killall -9 python
+killall -9 "/usr/bin/python"
 screen -dm -c $TOP_DIR/stack-screenrc
 sleep 10
 
