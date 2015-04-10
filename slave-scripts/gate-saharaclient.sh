@@ -3,7 +3,7 @@
 git clone https://git.openstack.org/openstack/sahara /tmp/sahara
 cd /tmp/sahara
 
-if [ "$ZUUL_BRANCH" == "master" ]; then
+if [ "$ZUUL_BRANCH" == "master" -o "$ZUUL_BRANCH" == "proposed/kilo" ]; then
   tox -e scenario --notest
   .tox/scenario/bin/pip install $WORKSPACE
 else

@@ -113,7 +113,7 @@ write_tests_conf() {
     NETWORK="nova-network"
     TENANT_ID=$NOVA_NET_LAB_TENANT_ID
   fi
-  if [ "$ZUUL_BRANCH" == "master" ]; then
+  if [ "$ZUUL_BRANCH" == "master" -o "$ZUUL_BRANCH" == "proposed/kilo" ]; then
     local test_scenario_common=$(dirname $1)/scenario-common.yaml
     insert_scenario_value $test_scenario_common OS_USERNAME
     insert_scenario_value $test_scenario_common OS_PASSWORD
@@ -145,7 +145,7 @@ run_tests() {
   local concurrency=${3:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  if [ "$ZUUL_BRANCH" == "master" ]
+  if [ "$ZUUL_BRANCH" == "master" -o "$ZUUL_BRANCH" == "proposed/kilo" ]
   then
       local scenario_common=$(dirname $1)/scenario-common.yaml
       # Temporary use additional log file, due to wrong status code from tox scenario tests

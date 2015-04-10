@@ -102,7 +102,7 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
-    branch: ^(master|stable/juno)$
+    branch: ^(master|stable/juno|proposed/kilo)$
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: ^gate-sahara-.*$
@@ -115,7 +115,7 @@ jobs:
   - name: ^gate-.*-vanilla_2.4$
     branch: ^(stable/juno)$
   - name: ^tempest-sahara.*$
-    branch: ^(master)$
+    branch: ^(master|proposed/kilo)$
     voting: false
   - name: dib-neutron-direct-vanilla_1-fedora-aio
     voting: false
