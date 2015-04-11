@@ -12,7 +12,7 @@ SAHARA_PATH=${1:-$WORKSPACE}
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 # default (deprecated) config file for integration tests
 tests_config_file="$SAHARA_PATH/sahara/tests/integration/configs/itest.conf"
-tests_config_file_template="$sahara_templates_configs_path/itest.conf.sample"
+tests_config_file_template="$sahara_configs_path/itest.conf.sample"
 
 job_type=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
@@ -33,7 +33,7 @@ case $job_type in
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
           insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+          tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
           insert_scenario_value $tests_config_file hdp_image
        fi
        ;;
@@ -43,7 +43,7 @@ case $job_type in
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
           insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+          tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
           insert_scenario_value $tests_config_file hdp_two_image
        fi
        ;;
@@ -52,7 +52,7 @@ case $job_type in
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
           insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+          tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
           insert_scenario_value $tests_config_file vanilla_image
        fi
        ;;
@@ -65,7 +65,7 @@ case $job_type in
        ;;
     vanilla_2.6)
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-2.6.0.yaml"
+       tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
        insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
     transient)
@@ -78,7 +78,7 @@ case $job_type in
           insert_config_value $tests_config_file_template VANILLA_TWO HADOOP_VERSION 2.4.1
        else
           DISTRIBUTE_MODE=True
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-transient.yaml"
+          tests_config_file="$sahara_templates_path/transient.yaml"
           insert_scenario_value $tests_config_file vanilla_two_six_image
        fi
        ;;
@@ -94,7 +94,7 @@ case $job_type in
           insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_image
           insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
+          tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
           insert_scenario_value $tests_config_file cdh_image
        fi
        ;;
@@ -104,7 +104,7 @@ case $job_type in
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
            insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
        else
-           tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
+           tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
            insert_scenario_value $tests_config_file spark_image
        fi
        ;;

@@ -12,7 +12,7 @@ cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 SAHARA_PATH="/tmp/sahara"
 # default (deprecated) config file for integration tests
 tests_config_file="$SAHARA_PATH/sahara/tests/integration/configs/itest.conf"
-tests_config_file_template="$sahara_templates_configs_path/itest.conf.sample"
+tests_config_file_template="$sahara_configs_path/itest.conf.sample"
 sahara_conf_path="$SAHARA_PATH/etc/sahara/sahara.conf"
 
 engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
@@ -57,7 +57,7 @@ case $job_type in
                  insert_config_value $tests_config_file_template VANILLA SKIP_SCALING_TEST True
                  insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
               else
-                 tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+                 tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
                  insert_scenario_value $tests_config_file vanilla_image
               fi
               plugin=vanilla1
@@ -78,7 +78,7 @@ case $job_type in
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
-              tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-2.6.0.yaml"
+              tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
               insert_scenario_value $tests_config_file vanilla_two_six_image
               ;;
        esac
@@ -94,7 +94,7 @@ case $job_type in
           insert_config_value $tests_config_file_template SPARK SKIP_SCALING_TEST True
           insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
+          tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
           insert_scenario_value $tests_config_file spark_image
        fi
        plugin=spark
@@ -111,7 +111,7 @@ case $job_type in
           insert_config_value $tests_config_file_template HDP SKIP_SCALING_TEST True
           insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+          tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
           insert_scenario_value $tests_config_file hdp_image
        fi
        plugin=hdp1
@@ -128,7 +128,7 @@ case $job_type in
           insert_config_value $tests_config_file_template HDP2 SKIP_SCALING_TEST True
           insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+          tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
           insert_scenario_value $tests_config_file hdp_two_image
        fi
        plugin=hdp2
@@ -150,7 +150,7 @@ case $job_type in
           insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
           insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_image
        else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
+          tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
           insert_scenario_value $tests_config_file cdh_image
        fi
        plugin=cdh

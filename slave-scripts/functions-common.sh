@@ -1,12 +1,13 @@
 #!/bin/bash -xe
 
-sahara_templates_configs_path=$WORKSPACE/sahara-ci-config/config/sahara
+sahara_templates_path=$SAHARA_PATH/etc/scenario/sahara-ci
+sahara_configs_path=$WORKSPACE/sahara-ci-config/config/sahara
 
 enable_pypi() {
   mkdir -p ~/.pip
   export PIP_USE_MIRRORS=True
-  cp $sahara_templates_configs_path/pip.conf ~/.pip/pip.conf
-  cp $sahara_templates_configs_path/.pydistutils.cfg ~/.pydistutils.cfg
+  cp $sahara_configs_path/pip.conf ~/.pip/pip.conf
+  cp $sahara_configs_path/.pydistutils.cfg ~/.pydistutils.cfg
 }
 
 conf_has_option() {
@@ -114,16 +115,16 @@ write_tests_conf() {
     TENANT_ID=$NOVA_NET_LAB_TENANT_ID
   fi
   if [ "$ZUUL_BRANCH" == "master" -o "$ZUUL_BRANCH" == "proposed/kilo" ]; then
-    local test_scenario_common=$(dirname $1)/scenario-common.yaml
-    insert_scenario_value $test_scenario_common OS_USERNAME
-    insert_scenario_value $test_scenario_common OS_PASSWORD
-    insert_scenario_value $test_scenario_common OS_TENANT_NAME
-    insert_scenario_value $test_scenario_common OPENSTACK_HOST
-    insert_scenario_value $test_scenario_common NETWORK
-    insert_scenario_value $test_scenario_common TENANT_ID
+    local test_scenario_credentials=$(dirname $1)/credentials.yaml
+    insert_scenario_value $test_scenario_credentials OS_USERNAME
+    insert_scenario_value $test_scenario_credentials OS_PASSWORD
+    insert_scenario_value $test_scenario_credentials OS_TENANT_NAME
+    insert_scenario_value $test_scenario_credentials OPENSTACK_HOST
+    insert_scenario_value $test_scenario_credentials NETWORK
+    insert_scenario_value $test_scenario_credentials TENANT_ID
     insert_scenario_value $test_conf cluster_name
   else
-    cp $sahara_templates_configs_path/itest.conf.sample $test_conf
+    cp $sahara_configs_path/itest.conf.sample $test_conf
     insert_config_value $test_conf COMMON OS_USERNAME $OS_USERNAME
     insert_config_value $test_conf COMMON OS_PASSWORD $OS_PASSWORD
     insert_config_value $test_conf COMMON OS_TENANT_NAME $OS_TENANT_NAME
@@ -147,10 +148,11 @@ run_tests() {
   export PYTHONUNBUFFERED=1
   if [ "$ZUUL_BRANCH" == "master" -o "$ZUUL_BRANCH" == "proposed/kilo" ]
   then
-      local scenario_common=$(dirname $1)/scenario-common.yaml
+      local scenario_credentials=$(dirname $1)/credentials.yaml
+      local scenario_edp=$(dirname $1)/edp.yaml
       # Temporary use additional log file, due to wrong status code from tox scenario tests
       # tox -e scenario $scenario_common $config || failure "Integration tests are failed"
-      tox -e scenario $scenario_common $config | tee tox.log
+      tox -e scenario $scenario_credentials $scenario_edp $config | tee tox.log
       STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
       if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   else
