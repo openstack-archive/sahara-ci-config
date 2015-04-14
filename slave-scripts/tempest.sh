@@ -10,14 +10,12 @@ image_id=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 
 if [ "$project" == "sahara" ]; then
    SAHARA_PATH="$WORKSPACE"
-   git clone https://git.openstack.org/openstack/python-saharaclient /tmp/saharaclient
-   cd /tmp/saharaclient
-   sudo pip install -U -r requirements.txt
-   sudo pip install .
+   SAHARACLIENT_PATH=/tmp/saharaclient
+   git clone https://git.openstack.org/openstack/python-saharaclient $SAHARACLIENT_PATH
 else
    SAHARA_PATH=/tmp/sahara
+   SAHARACLIENT_PATH="$WORKSPACE"
    git clone https://git.openstack.org/openstack/sahara $SAHARA_PATH
-   sudo pip install .
 fi
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 
@@ -54,9 +52,14 @@ sudo pip install $SAHARA_PATH/.
 insert_config_value $sahara_conf_path DEFAULT plugins fake
 write_sahara_main_conf $sahara_conf_path "direct"
 start_sahara $sahara_conf_path
+
+# Prepare env and install saharaclient
+tox -e all --notest
+.tox/all/bin/pip install $SAHARACLIENT_PATH/.
 # Temporary use additional log file, due to wrong status code from tox scenario tests
 # tox -e all -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
 tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
 STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
 if [ "$STATUS" != "0" ]; then failure "Tempest tests have failed"; fi
+.tox/all/bin/pip freeze > $WORKSPACE/logs/python-tempest-env.txt
 print_python_env
