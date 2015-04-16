@@ -77,7 +77,6 @@
      - vanilla_1
     os:
      - ubuntu
-     - fedora
      - centos
     network:
      - neutron
@@ -87,14 +86,10 @@
      - 'dib-{network}-direct-{plugin}-{os}-aio':
           network: nova
           plugin: cdh
-          os:
-            - ubuntu
-            - centos
      - 'dib-nova-direct-{plugin}-aio':
           plugin:
             - spark
             - hdp_1
      - 'dib-neutron-heat-{plugin}-{os}':
           plugin:
-            - vanilla_2.4
             - vanilla_2.6

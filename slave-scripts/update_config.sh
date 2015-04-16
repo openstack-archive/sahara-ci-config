@@ -1,8 +1,6 @@
 #!/bin/bash -e
 
 source $JENKINS_HOME/credentials
-sed "s%-NEUTRON_LAB_TENANT_ID-%$NEUTRON_LAB_TENANT_ID%g" -i $WORKSPACE/config/zuul/openstack_functions.py
-sed "s%-NOVA_NET_LAB_TENANT_ID-%$NOVA_NET_LAB_TENANT_ID%g" -i $WORKSPACE/config/zuul/openstack_functions.py
 
 sudo su - jenkins -c "cat $WORKSPACE/slave-scripts/credentials.conf > /etc/jenkins_jobs/credentials.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/zuul.conf > /etc/zuul/zuul.conf"
