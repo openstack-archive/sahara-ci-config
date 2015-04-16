@@ -35,8 +35,6 @@ def single_use_node(item, job, params):
         params['OFFLINE_NODE_WHEN_COMPLETE'] = '1'
 
 
-def set_ci_tenant(item, job, params):
+def set_params(item, job, params):
     single_use_node(item, job, params)
-    params['NEUTRON_LAB_TENANT_ID'] = '-NEUTRON_LAB_TENANT_ID-'
-    params['NOVA_NET_LAB_TENANT_ID'] = '-NOVA_NET_LAB_TENANT_ID-'
     params['CLUSTER_HASH'] = str(uuid.uuid4()).split('-')[0]
