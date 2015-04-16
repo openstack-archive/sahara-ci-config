@@ -28,6 +28,13 @@ cdh_centos_image=centos_cdh_latest
 cdh_ubuntu_image=ubuntu_cdh_latest
 
 case $job_type in
+    fake)
+       plugin=fake
+       fake_plugin_image=ubuntu-test-image
+       tests_config_file='$SAHARA_PATH/etc/scenario/sahara-ci/fake.yaml'
+       insert_scenario_value $tests_config_file fake_plugin_image
+       insert_config_value $sahara_conf_path DEFAULT plugins fake
+       ;;
     hdp_1)
        plugin=hdp1
        if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
