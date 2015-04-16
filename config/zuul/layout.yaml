@@ -28,7 +28,6 @@ projects:
   - name: openstack/sahara
     check:
       - gate-sahara-neutron-direct-vanilla_1-aio
-      - gate-sahara-neutron-heat-vanilla_2.4
       - gate-sahara-neutron-heat-vanilla_2.6
       - gate-sahara-neutron-direct-spark-aio
       - gate-sahara-neutron-direct-transient
@@ -43,7 +42,6 @@ projects:
   - name: openstack/python-saharaclient
     check:
       - gate-saharaclient-neutron-direct-vanilla_1-aio
-      - gate-saharaclient-neutron-heat-vanilla_2.4
       - gate-saharaclient-neutron-heat-vanilla_2.6
       - gate-saharaclient-neutron-direct-spark-aio
       - gate-saharaclient-neutron-direct-transient
@@ -68,9 +66,6 @@ projects:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
       - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
-      - dib-neutron-heat-vanilla_2.4-ubuntu
-      - dib-neutron-heat-vanilla_2.4-fedora
-      - dib-neutron-heat-vanilla_2.4-centos
       - dib-neutron-heat-vanilla_2.6-ubuntu
       - dib-neutron-heat-vanilla_2.6-fedora
       - dib-neutron-heat-vanilla_2.6-centos
@@ -83,9 +78,6 @@ projects:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
       - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
-      - dib-neutron-heat-vanilla_2.4-ubuntu
-      - dib-neutron-heat-vanilla_2.4-fedora
-      - dib-neutron-heat-vanilla_2.4-centos
       - dib-neutron-heat-vanilla_2.6-ubuntu
       - dib-neutron-heat-vanilla_2.6-fedora
       - dib-neutron-heat-vanilla_2.6-centos
@@ -102,28 +94,14 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_ci_tenant
-    branch: ^(master|stable/juno|proposed/kilo)$
-  - name: ^dib-neutron-heat-vanilla_2.4-.*$
-    branch: ^(stable/juno)$
-  - name: ^dib-neutron-heat-vanilla_2.6-.*$
-    skip-if:
-      - branch: ^(stable/juno)$
-  - name: ^gate-.*-vanilla_2.4$
-    branch: ^(stable/juno)$
+    branch: ^(master|proposed/kilo)$
   - name: ^gate-sahara.*$
     skip-if:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-  - name: ^gate-.*-vanilla_2.6$
-    skip-if:
-      - all-files-match-any:
-          - ^doc/.*$
-          - ^.*\.rst$
-      - branch: ^(stable/juno)$
   - name: ^tempest-sahara.*$
     skip-if:
-      - branch: ^stable/juno$
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
