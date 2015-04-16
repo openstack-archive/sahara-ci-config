@@ -3,7 +3,6 @@ credentials:
   os_password: %OS_PASSWORD%
   os_tenant: %OS_TENANT_NAME%
   os_auth_url: http://%OPENSTACK_HOST%:5000/v2.0
-  sahara_url: http://localhost:8386/v1.1/%TENANT_ID%
 
 network:
   type: %NETWORK%

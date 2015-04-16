@@ -23,7 +23,6 @@ else
     USE_NEUTRON=false
 fi
 
-VANILLA24_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-2.4.1-ubuntu-14.04.qcow2
 VANILLA26_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-2.6.0-ubuntu-14.04.qcow2
 VANILLA_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-1.2.1-ubuntu-14.04.qcow2
 HDP1_IMAGE_PATH=/home/ubuntu/images/centos_6-6_hdp-1.qcow2
@@ -71,7 +70,6 @@ nova flavor-create --is-public true m1.small 2 1024 20 1
 
 # add images for tests
 glance image-create --name ubuntu_vanilla_1_latest --file $VANILLA_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name ubuntu_vanilla_2.4_latest --file $VANILLA24_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name ubuntu_vanilla_2.6_latest --file $VANILLA26_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name sahara_hdp_1_latest --file $HDP1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'
 glance image-create --name sahara_hdp_2_latest --file $HDP2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='root'

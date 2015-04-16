@@ -10,9 +10,6 @@ CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH="/tmp/sahara"
-# default (deprecated) config file for integration tests
-tests_config_file="$SAHARA_PATH/sahara/tests/integration/configs/itest.conf"
-tests_config_file_template="$sahara_templates_configs_path/itest.conf.sample"
 sahara_conf_path="$SAHARA_PATH/etc/sahara/sahara.conf"
 
 engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
@@ -21,7 +18,6 @@ image_type=${2:-ubuntu}
 
 # Image names
 vanilla_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_1
-vanilla_two_four_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_2.4
 vanilla_two_six_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_2.6
 hdp_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_1
 hdp_two_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_2
@@ -36,45 +32,20 @@ case $job_type in
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
        else
-           username=${image_type}
-           if [ "$image_type" == "fedora" ]; then
-              # This fix is workaround for problem with downloading fedora
-              # from cloud.fedoraproject.org
-              # we use the same version of fedora that is in DIB
-              FEDORA_OPTS="DIB_CLOUD_IMAGES=http://172.18.168.44/images BASE_IMAGE_FILE=fedora.x86_64.qcow2"
-           fi
+           username='ubuntu'
        fi
 
        hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
-              env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${vanilla_image}.qcow2
               upload_image "vanilla-1" "${username}" ${vanilla_image}
-              if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
-                 insert_config_value $tests_config_file_template VANILLA SKIP_CINDER_TEST True
-                 insert_config_value $tests_config_file_template VANILLA SKIP_CLUSTER_CONFIG_TEST True
-                 insert_config_value $tests_config_file_template VANILLA SKIP_SCALING_TEST True
-                 insert_config_value $tests_config_file_template VANILLA IMAGE_NAME $vanilla_image
-              else
-                 tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
-                 insert_scenario_value $tests_config_file vanilla_image
-              fi
-              plugin=vanilla1
-              ;;
-           2.4)
-              env ${image_type}_vanilla_hadoop_2_4_image_name=${vanilla_two_four_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.4
-              check_error_code $? ${vanilla_two_four_image}.qcow2
-              upload_image "vanilla-2.4" "${username}" ${vanilla_two_four_image}
-              DISTRIBUTE_MODE=True
-              insert_config_value $tests_config_file_template VANILLA_TWO SKIP_CINDER_TEST True
-              insert_config_value $tests_config_file_template VANILLA_TWO SKIP_CLUSTER_CONFIG_TEST True
-              insert_config_value $tests_config_file_template VANILLA_TWO SKIP_SCALING_TEST True
-              insert_config_value $tests_config_file_template VANILLA_TWO IMAGE_NAME $vanilla_two_four_image
-              plugin=vanilla2
+              tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+              insert_scenario_value $tests_config_file vanilla_image
               ;;
            2.6)
-              env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} $FEDORA_OPTS SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
@@ -88,16 +59,8 @@ case $job_type in
        env ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p spark
        check_error_code $? ${spark_image}.qcow2
        upload_image "spark" "ubuntu" ${spark_image}
-       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
-          insert_config_value $tests_config_file_template SPARK SKIP_CINDER_TEST True
-          insert_config_value $tests_config_file_template SPARK SKIP_CLUSTER_CONFIG_TEST True
-          insert_config_value $tests_config_file_template SPARK SKIP_SCALING_TEST True
-          insert_config_value $tests_config_file_template SPARK IMAGE_NAME $spark_image
-       else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
-          insert_scenario_value $tests_config_file spark_image
-       fi
-       plugin=spark
+       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
+       insert_scenario_value $tests_config_file spark_image
        insert_config_value $sahara_conf_path DEFAULT plugins spark
     ;;
 
@@ -105,16 +68,8 @@ case $job_type in
        env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${hdp_image}.qcow2
        upload_image "hdp1" "root" ${hdp_image}
-       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
-          insert_config_value $tests_config_file_template HDP SKIP_CINDER_TEST True
-          insert_config_value $tests_config_file_template HDP SKIP_CLUSTER_CONFIG_TEST True
-          insert_config_value $tests_config_file_template HDP SKIP_SCALING_TEST True
-          insert_config_value $tests_config_file_template HDP IMAGE_NAME $hdp_image
-       else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
-          insert_scenario_value $tests_config_file hdp_image
-       fi
-       plugin=hdp1
+       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+       insert_scenario_value $tests_config_file hdp_image
     ;;
 
     hdp_2)
@@ -122,16 +77,8 @@ case $job_type in
        check_error_code $? ${hdp_two_image}.qcow2
        upload_image "hdp2" "root" ${hdp_two_image}
        DISTRIBUTE_MODE=True
-       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
-          insert_config_value $tests_config_file_template HDP2 SKIP_CINDER_TEST True
-          insert_config_value $tests_config_file_template HDP2 SKIP_CLUSTER_CONFIG_TEST True
-          insert_config_value $tests_config_file_template HDP2 SKIP_SCALING_TEST True
-          insert_config_value $tests_config_file_template HDP2 IMAGE_NAME $hdp_two_image
-       else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
-          insert_scenario_value $tests_config_file hdp_two_image
-       fi
-       plugin=hdp2
+       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+       insert_scenario_value $tests_config_file hdp_two_image
     ;;
 
     cdh)
@@ -144,16 +91,8 @@ case $job_type in
        check_error_code $? ${cdh_image}.qcow2
        upload_image "cdh" ${username} ${cdh_image}
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
-       if [ "$ZUUL_BRANCH" == "stable/juno" ]; then
-          insert_config_value $tests_config_file_template CDH SKIP_CINDER_TEST True
-          insert_config_value $tests_config_file_template CDH SKIP_CLUSTER_CONFIG_TEST True
-          insert_config_value $tests_config_file_template CDH SKIP_SCALING_TEST True
-          insert_config_value $tests_config_file_template CDH IMAGE_NAME $cdh_image
-       else
-          tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
-          insert_scenario_value $tests_config_file cdh_image
-       fi
-       plugin=cdh
+       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
+       insert_scenario_value $tests_config_file cdh_image
     ;;
 esac
 
@@ -166,6 +105,6 @@ sudo pip install .
 enable_pypi
 write_sahara_main_conf "$sahara_conf_path" "$engine"
 write_tests_conf "$tests_config_file" "$cluster_name"
-start_sahara "$sahara_conf_path" && run_tests "$tests_config_file" "$plugin"
+start_sahara "$sahara_conf_path" && run_tests "$tests_config_file"
 print_python_env
 cleanup_image "$job_type" "$image_type"
