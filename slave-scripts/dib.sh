@@ -99,8 +99,9 @@ esac
 
 cd $SAHARA_PATH
 if [ "$ZUUL_BRANCH" != "master" ]; then
+   git stash
    git checkout "$ZUUL_BRANCH"
-   sudo pip install -U -r requirements.txt
+   git stash pop
 fi
 sudo pip install .
 enable_pypi
