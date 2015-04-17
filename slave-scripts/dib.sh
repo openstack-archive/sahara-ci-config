@@ -26,7 +26,7 @@ spark_image=$HOST-sahara-spark-ubuntu-${ZUUL_CHANGE}
 cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
 
 # Clone Sahara
-git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH
+git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
 
 case $job_type in
     vanilla*)
@@ -98,10 +98,6 @@ case $job_type in
 esac
 
 cd $SAHARA_PATH
-if [ "$ZUUL_BRANCH" != "master" ]; then
-   git checkout "$ZUUL_BRANCH"
-   sudo pip install -U -r requirements.txt
-fi
 sudo pip install .
 enable_pypi
 write_sahara_main_conf "$sahara_conf_path" "$engine"
