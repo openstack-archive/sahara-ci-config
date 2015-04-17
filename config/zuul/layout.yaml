@@ -53,21 +53,11 @@ projects:
       - gate-sahara-pep8-trunk
       - tempest-saharaclient-tests
 
-  - name: openstack/sahara-dashboard
-    check:
-      - gate-uitests-tests
-
-#  - name: openstack/horizon
-#    check:
-#      - gate-ui-tests
-
   - name: openstack/sahara-image-elements
     check:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
-      - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
       - dib-neutron-heat-vanilla_2.6-ubuntu
-      - dib-neutron-heat-vanilla_2.6-fedora
       - dib-neutron-heat-vanilla_2.6-centos
       - dib-nova-direct-spark-aio
       - dib-nova-direct-hdp_1-aio
@@ -76,10 +66,8 @@ projects:
       - dib-nova-direct-cdh-centos-aio
     post:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
-      - dib-neutron-direct-vanilla_1-fedora-aio
       - dib-neutron-direct-vanilla_1-centos-aio
       - dib-neutron-heat-vanilla_2.6-ubuntu
-      - dib-neutron-heat-vanilla_2.6-fedora
       - dib-neutron-heat-vanilla_2.6-centos
       - dib-nova-direct-spark-aio
       - dib-nova-direct-hdp_1-aio
@@ -107,8 +95,3 @@ jobs:
           - ^.*\.rst$
   - name: gate-sahara-pep8-trunk
     voting: false
-#  - name: gate-ui-tests
-#    voting: false
-#    files:
-#      - '^openstack_dashboard/dashboards/project/data_processing.*$'
-#      - 'openstack_dashboard/api/sahara.py'
