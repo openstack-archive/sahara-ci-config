@@ -65,7 +65,6 @@ case $job_type in
        insert_scenario_value $tests_config_file spark_image
        ;;
 esac
-echo "$plugin detected"
 
 [ "$ZUUL_BRANCH" != "master" ] && sudo pip install -U -r requirements.txt
 sudo pip install .
