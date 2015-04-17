@@ -1,12 +1,14 @@
 #!/bin/bash -xe
 
-sahara_templates_configs_path=$WORKSPACE/sahara-ci-config/config/sahara
+sahara_configs_path=$WORKSPACE/sahara-ci-config/config/sahara
+ci_flavor_id=\'20\'
+medium_flavor_id=\'3\'
 
 enable_pypi() {
   mkdir -p ~/.pip
   export PIP_USE_MIRRORS=True
-  cp $sahara_templates_configs_path/pip.conf ~/.pip/pip.conf
-  cp $sahara_templates_configs_path/.pydistutils.cfg ~/.pydistutils.cfg
+  cp $sahara_configs_path/pip.conf ~/.pip/pip.conf
+  cp $sahara_configs_path/.pydistutils.cfg ~/.pydistutils.cfg
 }
 
 conf_has_option() {
@@ -111,13 +113,15 @@ write_tests_conf() {
   else
     NETWORK="nova-network"
   fi
-  local test_scenario_common=$(dirname $1)/scenario-common.yaml
-  insert_scenario_value $test_scenario_common OS_USERNAME
-  insert_scenario_value $test_scenario_common OS_PASSWORD
-  insert_scenario_value $test_scenario_common OS_TENANT_NAME
-  insert_scenario_value $test_scenario_common OPENSTACK_HOST
-  insert_scenario_value $test_scenario_common NETWORK
+  local test_scenario_credentials=$(dirname $1)/credentials.yaml
+  insert_scenario_value $test_scenario_credentials OS_USERNAME
+  insert_scenario_value $test_scenario_credentials OS_PASSWORD
+  insert_scenario_value $test_scenario_credentials OS_TENANT_NAME
+  insert_scenario_value $test_scenario_credentials OPENSTACK_HOST
+  insert_scenario_value $test_scenario_credentials NETWORK
   insert_scenario_value $test_conf cluster_name
+  insert_scenario_value $test_conf ci_flavor_id
+  insert_scenario_value $test_conf medium_flavor_id
 
   echo "----------- tests config -----------"
   cat $test_conf
@@ -129,10 +133,11 @@ run_tests() {
   local concurrency=${2:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  local scenario_common=$(dirname $1)/scenario-common.yaml
+  local scenario_credentials=$(dirname $1)/credentials.yaml
+  local scenario_edp=$(dirname $1)/edp.yaml
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   # tox -e scenario $scenario_common $config || failure "Integration tests are failed"
-  tox -e scenario $scenario_common $config | tee tox.log
+  tox -e scenario $scenario_credentials $scenario_edp $config | tee tox.log
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
 }

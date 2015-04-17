@@ -11,6 +11,7 @@ cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH="/tmp/sahara"
 sahara_conf_path="$SAHARA_PATH/etc/sahara/sahara.conf"
+sahara_templates_path=$SAHARA_PATH/etc/scenario/sahara-ci
 
 engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 job_type="$1"
@@ -41,7 +42,7 @@ case $job_type in
               env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
               check_error_code $? ${vanilla_image}.qcow2
               upload_image "vanilla-1" "${username}" ${vanilla_image}
-              tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+              tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
               insert_scenario_value $tests_config_file vanilla_image
               ;;
            2.6)
@@ -49,7 +50,7 @@ case $job_type in
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
-              tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-2.6.0.yaml"
+              tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
               insert_scenario_value $tests_config_file vanilla_two_six_image
               ;;
        esac
@@ -59,7 +60,7 @@ case $job_type in
        env ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p spark
        check_error_code $? ${spark_image}.qcow2
        upload_image "spark" "ubuntu" ${spark_image}
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
+       tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
        insert_scenario_value $tests_config_file spark_image
        insert_config_value $sahara_conf_path DEFAULT plugins spark
     ;;
@@ -68,7 +69,7 @@ case $job_type in
        env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
        check_error_code $? ${hdp_image}.qcow2
        upload_image "hdp1" "root" ${hdp_image}
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+       tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
        insert_scenario_value $tests_config_file hdp_image
     ;;
 
@@ -77,7 +78,7 @@ case $job_type in
        check_error_code $? ${hdp_two_image}.qcow2
        upload_image "hdp2" "root" ${hdp_two_image}
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+       tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
        insert_scenario_value $tests_config_file hdp_two_image
     ;;
 
@@ -90,8 +91,8 @@ case $job_type in
        env cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
        check_error_code $? ${cdh_image}.qcow2
        upload_image "cdh" ${username} ${cdh_image}
+       tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
        insert_scenario_value $tests_config_file cdh_image
     ;;
 esac

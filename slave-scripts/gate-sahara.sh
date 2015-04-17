@@ -10,6 +10,7 @@ cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH=${1:-$WORKSPACE}
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
+sahara_templates_path=$SAHARA_PATH/etc/scenario/sahara-ci
 
 job_type=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
@@ -25,27 +26,27 @@ cdh_ubuntu_image=ubuntu_cdh_latest
 
 case $job_type in
     hdp_1)
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp.yaml"
+       tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
        insert_scenario_value $tests_config_file hdp_image
        ;;
     hdp_2)
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-hdp-2.yaml"
+       tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
        insert_scenario_value $tests_config_file hdp_two_image
        ;;
     vanilla_1)
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-1.2.1.yaml"
+       tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
        insert_scenario_value $tests_config_file vanilla_image
        ;;
     vanilla_2.6)
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-vanilla-2.6.0.yaml"
+       tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
        insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
     transient)
        concurrency=3
        DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-transient.yaml"
+       tests_config_file="$sahara_templates_path/transient.yaml"
        insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
     cdh*)
@@ -55,12 +56,12 @@ case $job_type in
        else
           cdh_image=$cdh_ubuntu_image
        fi
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-cdh.yaml"
+       tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
        insert_scenario_value $tests_config_file cdh_image
        ;;
     spark)
        insert_config_value $sahara_conf_path DEFAULT plugins spark
-       tests_config_file="$sahara_templates_configs_path/scenario/sahara-scenario-spark.yaml"
+       tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
        insert_scenario_value $tests_config_file spark_image
        ;;
 esac
