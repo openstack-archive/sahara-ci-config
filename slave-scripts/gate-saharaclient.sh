@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-git clone https://git.openstack.org/openstack/sahara /tmp/sahara
+git clone https://git.openstack.org/openstack/sahara /tmp/sahara -b $ZUUL_BRANCH
 cd /tmp/sahara
 
 tox -e scenario --notest
