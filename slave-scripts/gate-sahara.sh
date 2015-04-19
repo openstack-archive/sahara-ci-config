@@ -66,7 +66,6 @@ case $job_type in
        ;;
 esac
 
-[ "$ZUUL_BRANCH" != "master" ] && sudo pip install -U -r requirements.txt
 sudo pip install .
 enable_pypi
 write_sahara_main_conf "$sahara_conf_path" "$engine_type"

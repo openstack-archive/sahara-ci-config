@@ -15,7 +15,7 @@ if [ "$project" == "sahara" ]; then
 else
    SAHARA_PATH=/tmp/sahara
    SAHARACLIENT_PATH="$WORKSPACE"
-   git clone https://git.openstack.org/openstack/sahara $SAHARA_PATH
+   git clone https://git.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
 fi
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 
