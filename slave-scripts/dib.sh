@@ -39,14 +39,14 @@ case $job_type in
        hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
        case $hadoop_version in
            1)
-              env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 1
+              env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 1
               check_error_code $? ${vanilla_image}.qcow2
               upload_image "vanilla-1" "${username}" ${vanilla_image}
               tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
               insert_scenario_value $tests_config_file vanilla_image
               ;;
            2.6)
-              env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p vanilla -i $image_type -v 2.6
+              env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 2.6
               check_error_code $? ${vanilla_two_six_image}.qcow2
               upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
               DISTRIBUTE_MODE=True
@@ -57,7 +57,7 @@ case $job_type in
     ;;
 
     spark)
-       env ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p spark
+       env ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark
        check_error_code $? ${spark_image}.qcow2
        upload_image "spark" "ubuntu" ${spark_image}
        tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
@@ -66,7 +66,7 @@ case $job_type in
     ;;
 
     hdp_1)
-       env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 1
+       env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 1
        check_error_code $? ${hdp_image}.qcow2
        upload_image "hdp1" "root" ${hdp_image}
        tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
@@ -74,7 +74,7 @@ case $job_type in
     ;;
 
     hdp_2)
-       env centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p hdp -v 2
+       env centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
        check_error_code $? ${hdp_two_image}.qcow2
        upload_image "hdp2" "root" ${hdp_two_image}
        DISTRIBUTE_MODE=True
@@ -88,7 +88,7 @@ case $job_type in
        else
            username='ubuntu'
        fi
-       env cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE bash -x diskimage-create/diskimage-create.sh -p cloudera -i $image_type -v 5.3
+       env cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $image_type -v 5.3
        check_error_code $? ${cdh_image}.qcow2
        upload_image "cdh" ${username} ${cdh_image}
        tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
