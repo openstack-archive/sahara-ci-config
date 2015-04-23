@@ -28,6 +28,9 @@ cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
 # Clone Sahara
 git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
 
+# make verbose the scripts execution of disk-image-create
+export DIB_DEBUG_TRACE=1
+
 case $job_type in
     vanilla*)
        if [ "${image_type}" == 'centos' ]; then
