@@ -2,7 +2,6 @@
 
 source $JENKINS_HOME/credentials
 
-sudo su - jenkins -c "cat $WORKSPACE/slave-scripts/credentials.conf > /etc/jenkins_jobs/credentials.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/zuul.conf > /etc/zuul/zuul.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/gearman-logging.conf > /etc/zuul/gearman-logging.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/layout.yaml > /etc/zuul/layout.yaml"
