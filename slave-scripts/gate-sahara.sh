@@ -23,6 +23,7 @@ vanilla_two_six_image=ubuntu_vanilla_2.6_latest
 spark_image=sahara_spark_latest
 cdh_centos_image=centos_cdh_latest
 cdh_ubuntu_image=ubuntu_cdh_latest
+mapr_402mrv2_image=ubuntu_mapr_latest
 
 case $job_type in
     hdp_1)
@@ -63,6 +64,11 @@ case $job_type in
        insert_config_value $sahara_conf_path DEFAULT plugins spark
        tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
        insert_scenario_value $tests_config_file spark_image
+       ;;
+    mapr)
+       insert_config_value $sahara_conf_path DEFAULT plugins mapr
+       tests_config_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
+       insert_scenario_value $tests_config_file mapr_402mrv2_image
        ;;
 esac
 
