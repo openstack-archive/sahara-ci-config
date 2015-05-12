@@ -16,6 +16,24 @@
       - trigger-cleanup
     node: 'trusty-nova'
 
+- job:
+    name: 'dib-neutron-heat-mapr'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - shell: |
+              git clone https://git.openstack.org/stackforge/sahara-ci-config
+              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr
+
+    properties:
+      - zeromq-event
+
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: 'trusty-neutron'
+
 - job-template:
     name: 'dib-{network}-direct-{plugin}-{os}-aio'
     defaults: global
