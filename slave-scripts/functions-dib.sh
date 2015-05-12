@@ -41,6 +41,9 @@ upload_image() {
            spark)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
            ;;
+           mapr)
+             image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_4.0.2.mrv2=True --property _sahara_username=${username}"
+           ;;
    esac
    register_new_image "$image" "$image_properties"
    CUR_IMAGE="$image"
@@ -93,6 +96,10 @@ cleanup_image() {
         spark)
            delete_image sahara_spark_latest
            rename_image "$CUR_IMAGE" sahara_spark_latest
+           ;;
+        mapr)
+           delete_image ubuntu_mapr_latest
+           rename_image "$CUR_IMAGE" ubuntu_mapr_latest
            ;;
      esac
   fi
