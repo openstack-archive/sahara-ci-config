@@ -8,7 +8,6 @@ enable_pypi() {
   mkdir -p ~/.pip
   export PIP_USE_MIRRORS=True
   cp $sahara_configs_path/pip.conf ~/.pip/pip.conf
-  cp $sahara_configs_path/.pydistutils.cfg ~/.pydistutils.cfg
 }
 
 conf_has_option() {
