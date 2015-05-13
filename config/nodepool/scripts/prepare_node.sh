@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-# Copyright (C) 2011-2013 OpenStack Foundation
+# Copyright (C) 2011-2015 OpenStack Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,23 +17,13 @@
 # limitations under the License.
 
 HOSTNAME=$1
-SUDO='true'
-THIN='true'
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
-wget https://git.openstack.org/cgit/openstack-infra/system-config/plain/install_puppet.sh
-sudo bash -xe install_puppet.sh
-sudo git clone https://review.openstack.org/p/openstack-infra/system-config.git \
-    /root/config
-sudo /bin/bash /root/config/install_modules.sh
-sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, enable_unbound => false, }"
-
-sudo mkdir -p /opt/git
-
+sudo apt-get update
+sudo apt-get upgrade -y
 # APT_PACKAGES variable using for installing packages via apt-get
 # PIP_PACKAGES variable using for installing packages via pip
-APT_PACKAGES="mysql-server libpq-dev libmysqlclient-dev"
+APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
 # RabbitMQ for distributed Sahara mode
 APT_PACKAGES+=" rabbitmq-server"
 # Required libraries
@@ -48,6 +38,7 @@ PIP_PACKAGES="python-glanceclient==0.16"
 PIP_PACKAGES+=" mysql-python"
 # Requirements for Cloudera plugin
 PIP_PACKAGES+=" cm-api"
+PIP_PACKAGES+=" pip tox"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
@@ -55,6 +46,7 @@ echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo d
 sudo apt-get install -y $APT_PACKAGES
 #Remove ccahe because it's useless for single-use nodes and may cause problems
 sudo apt-get remove -y ccache
+sudo apt-get clean
 
 mysql -uroot -p$MYSQL_PASS -Bse "create database sahara"
 mysql -uroot -p$MYSQL_PASS -Bse  "CREATE USER 'sahara-citest'@'localhost' IDENTIFIED BY 'sahara-citest'"
@@ -62,17 +54,21 @@ mysql -uroot -p$MYSQL_PASS -Bse "GRANT ALL ON sahara.* TO 'sahara-citest'@'local
 mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 
-sudo pip install $PIP_PACKAGES
-cd /tmp && git clone https://git.openstack.org/openstack/sahara
-cd sahara && sudo pip install -U -r requirements.txt
-cd /home/jenkins && rm -rf /tmp/sahara
+sudo pip install -U $PIP_PACKAGES
+git clone https://git.openstack.org/openstack/sahara /tmp/sahara
+sudo pip install -U -r /tmp/sahara/requirements.txt
+git clone https://git.openstack.org/openstack-infra/project-config /tmp/project-config
+sudo mkdir -p /usr/local/jenkins/
+sudo mv /tmp/project-config/jenkins/scripts /usr/local/jenkins/slave_scripts
+rm -rf /tmp/sahara /tmp/project-config
 
-pushd /home/jenkins
-sudo git clone https://git.openstack.org/openstack/tempest
-# temporary comment
-#pushd tempest && sudo pip install -U -r requirements.txt && popd
+# create jenkins user
+sudo useradd -d /home/jenkins -G sudo -s /bin/bash -m jenkins
+echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
+sudo mkdir /home/jenkins/.ssh
+
+sudo git clone https://git.openstack.org/openstack/tempest /home/jenkins/tempest
 sudo chown -R jenkins:jenkins /home/jenkins
-popd
 
 # create simple openrc file
 if [[ "$HOSTNAME" =~ neutron ]]; then
@@ -96,4 +92,4 @@ export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
 sync
-sleep 20
+sleep 5
