@@ -17,23 +17,12 @@
 # limitations under the License.
 
 HOSTNAME=$1
-SUDO='true'
-THIN='true'
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
-wget https://git.openstack.org/cgit/openstack-infra/system-config/plain/install_puppet.sh
-sudo bash -xe install_puppet.sh
-sudo git clone https://review.openstack.org/p/openstack-infra/system-config.git \
-    /root/config
-sudo /bin/bash /root/config/install_modules.sh
-sudo puppet apply --modulepath=/root/config/modules:/etc/puppet/modules \
-    -e "class {'openstack_project::single_use_slave': sudo => $SUDO, thin => $THIN, enable_unbound => false, }"
-
-sudo mkdir -p /opt/git
-
+sudo apt-get update
 # APT_PACKAGES variable using for installing packages via apt-get
 # PIP_PACKAGES variable using for installing packages via pip
-APT_PACKAGES="mysql-server libpq-dev libmysqlclient-dev"
+APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
 # RabbitMQ for distributed Sahara mode
 APT_PACKAGES+=" rabbitmq-server"
 # Required libraries
@@ -63,16 +52,16 @@ mysql -uroot -p$MYSQL_PASS -Bse "flush privileges"
 sudo service mysql stop
 
 sudo pip install $PIP_PACKAGES
-cd /tmp && git clone https://git.openstack.org/openstack/sahara
-cd sahara && sudo pip install -U -r requirements.txt
-cd /home/jenkins && rm -rf /tmp/sahara
+git clone https://git.openstack.org/openstack/sahara /tmp/sahara
+sudo pip install -U -r /tmp/sahara/requirements.txt
+rm -rf /tmp/sahara
 
-pushd /home/jenkins
-sudo git clone https://git.openstack.org/openstack/tempest
-# temporary comment
-#pushd tempest && sudo pip install -U -r requirements.txt && popd
+# create jenkins user
+sudo useradd -d /home/jenkins -G sudo -s /bin/bash -m jenkins
+echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
+
+sudo git clone https://git.openstack.org/openstack/tempest /home/jenkins/tempest
 sudo chown -R jenkins:jenkins /home/jenkins
-popd
 
 # create simple openrc file
 if [[ "$HOSTNAME" =~ neutron ]]; then
@@ -96,4 +85,4 @@ export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
 sudo su - jenkins -c "echo '
 JENKINS_PUBLIC_KEY' >> /home/jenkins/.ssh/authorized_keys"
 sync
-sleep 20
+sleep 5
