@@ -24,6 +24,7 @@ hdp_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_1
 hdp_two_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_2
 spark_image=$HOST-sahara-spark-ubuntu-${ZUUL_CHANGE}
 cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
+mapr_402mrv2_image=$HOST-${image_type}-mapr-${ZUUL_CHANGE}
 
 # Clone Sahara
 git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
@@ -97,6 +98,16 @@ case $job_type in
        tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
        insert_scenario_value $tests_config_file cdh_image
+    ;;
+
+    mapr)
+       env mapr_ubuntu_image_name=${mapr_402mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       check_error_code $? ${mapr_402mrv2_image}.qcow2
+       upload_image "mapr" "ubuntu" ${mapr_402mrv2_image}
+       DISTRIBUTE_MODE=True
+       tests_config_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
+       insert_config_value $sahara_conf_path DEFAULT plugins mapr
+       insert_scenario_value $tests_config_file mapr_402mrv2_image
     ;;
 esac
 
