@@ -38,7 +38,7 @@ projects:
       - gate-sahara-nova-direct-hdp_1-aio
       - gate-sahara-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
-      - tempest-sahara-tests
+#      - tempest-sahara-tests
 
   - name: openstack/python-saharaclient
     check:
@@ -53,7 +53,7 @@ projects:
       - gate-saharaclient-nova-direct-hdp_1-aio
       - gate-saharaclient-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
-      - tempest-saharaclient-tests
+#      - tempest-saharaclient-tests
 
   - name: openstack/sahara-image-elements
     check:
@@ -97,7 +97,8 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-  - name: dib-neutron-heat-mapr
+  - name: ^.*-neutron-heat-mapr$
     branch: master
+    voting: false
   - name: gate-sahara-pep8-trunk
     voting: false
