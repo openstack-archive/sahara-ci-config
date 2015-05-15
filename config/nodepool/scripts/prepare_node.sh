@@ -33,13 +33,13 @@ APT_PACKAGES+=" qemu kpartx"
 # pep8-trunk job requirements
 APT_PACKAGES+=" gettext"
 # Glance-client is required for diskimage-integration jobs
-PIP_PACKAGES="python-glanceclient==0.16"
+PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
 PIP_PACKAGES+=" mysql-python"
 # Requirements for Cloudera plugin
 PIP_PACKAGES+=" cm-api"
 # Upper cap due to problem with tox (2.0) which isolated system env variables
-PIP_PACKAGES+=" pip tox\<2.0"
+PIP_PACKAGES+=" pip tox<2.0"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
