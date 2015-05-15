@@ -7,6 +7,7 @@ NOVA_CONF=/etc/nova/nova.conf
 GLANCE_CACHE_CONF=/etc/glance/glance-cache.conf
 KEYSTONE_CONF=/etc/keystone/keystone.conf
 HEAT_CONF=/etc/heat/heat.conf
+MYSQL_CONF=/etc/mysql/my.cnf
 
 source $TOP_DIR/functions-common
 
@@ -34,18 +35,18 @@ MAPR_IMAGE_PATH=/home/ubuntu/images/ubuntu_mapr_latest.qcow2
 NATIVE_UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
 # setup ci tenant and ci users
-CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep -w id | awk '{print $4}')
-CI_USER_ID=$(keystone user-create --name ci-user --tenant_id $CI_TENANT_ID --pass nova |  grep -w id | awk '{print $4}')
-ADMIN_USER_ID=$(keystone user-list | grep admin | awk '{print $2}' | head -n 1)
-MEMBER_ROLE_ID=$(keystone role-list | grep Member | awk '{print $2}')
-HEAT_OWNER_ROLE_ID=$(keystone role-list | grep heat_stack_owner | awk '{print $2}')
+CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep -w id | get_field 2)
+CI_USER_ID=$(keystone user-create --name ci-user --tenant_id $CI_TENANT_ID --pass nova |  grep -w id | get_field 2)
+ADMIN_USER_ID=$(keystone user-list | grep -w admin | get_field 1)
+MEMBER_ROLE_ID=$(keystone role-list | grep -w Member | get_field 1)
+HEAT_OWNER_ROLE_ID=$(keystone role-list | grep -w heat_stack_owner | get_field 1)
 keystone user-role-add --user $CI_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
 keystone user-role-add --user $ADMIN_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
 #keystone user-role-add --user $CI_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
 #keystone user-role-add --user $ADMIN_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
-_MEMBER_ROLE_ID=$(keystone role-list | grep _member_ | awk '{print $2}')
+_MEMBER_ROLE_ID=$(keystone role-list | grep -w _member_ | get_field 1)
 keystone user-role-add --user $ADMIN_USER_ID --role $_MEMBER_ROLE_ID --tenant $CI_TENANT_ID
-ADMIN_ROLE_ID=$(keystone role-list | grep admin | awk '{print $2}')
+ADMIN_ROLE_ID=$(keystone role-list | grep -w admin | get_field 1)
 keystone user-role-add --user $CI_USER_ID --role $ADMIN_ROLE_ID --tenant $CI_TENANT_ID
 keystone user-role-add --user $ADMIN_USER_ID --role $ADMIN_ROLE_ID --tenant $CI_TENANT_ID
 
@@ -56,13 +57,10 @@ nova-manage project quota $CI_TENANT_ID --key cores --value 150
 cinder quota-update --volumes 100 $CI_TENANT_ID
 cinder quota-update --gigabytes 2000 $CI_TENANT_ID
 if $USE_NEUTRON; then
-  neutron quota-update --tenant_id $CI_TENANT_ID --port 64
-  neutron quota-update --tenant_id $CI_TENANT_ID --floatingip 64
+  neutron quota-update --tenant_id $CI_TENANT_ID --port 64 --floatingip 64 --security-group 1000 --security-group-rule 10000
 else
-  nova quota-update --floating-ips 64 $CI_TENANT_ID
+  nova quota-update --floating-ips 64 --security-groups 1000 --security-group-rules 10000 $CI_TENANT_ID
 fi
-nova quota-update --security-groups 1000 $CI_TENANT_ID
-nova quota-update --security-group-rules 10000 $CI_TENANT_ID
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
@@ -89,16 +87,16 @@ if $USE_NEUTRON; then
   # rename admin private network
   neutron net-update private --name admin-private
   # create neutron private network for ci tenant
-  PRIVATE_NET_ID=$(neutron net-create private | grep id | awk '{print $4}' | head -1)
-  SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep id | awk '{print $4}' | sed -n 2p)
-  ROUTER_ID=$(neutron router-create ci-router | grep id | awk '{print $4}' | head -1)
-  PUBLIC_NET_ID=$(neutron net-list | grep public | awk '{print $2}')
+  PRIVATE_NET_ID=$(neutron net-create private | grep -w id | get_field 2)
+  SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep -w id | get_field 2)
+  ROUTER_ID=$(neutron router-create ci-router | grep -w id | get_field 2)
+  PUBLIC_NET_ID=$(neutron net-list | grep -w public | get_field 1)
   FORMAT=" --request-format xml"
   neutron router-interface-add $ROUTER_ID $SUBNET_ID
   neutron router-gateway-set $ROUTER_ID $PUBLIC_NET_ID
   neutron subnet-update ci-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
 else
-  PRIVATE_NET_ID=$(nova net-list | grep private | awk '{print $2}')
+  PRIVATE_NET_ID=$(nova net-list | grep -w private | get_field 1)
 fi
 
 nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add public-jenkins > /dev/null
@@ -106,10 +104,8 @@ nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add pu
 #enable auto assigning of floating ips
 #ps -ef | grep -i "nova-network" | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 #sudo sed -i -e "s/default_floating_pool = public/&\nauto_assign_floating_ip = True/g" /etc/nova/nova.conf
-#screen -dmS nova-network /bin/bash -c "/usr/local/bin/nova-network --config-file /etc/nova/nova.conf || touch /opt/stack/status/stack/n-net.failure"
 
 #setup expiration time for keystone
-#sudo sed -i '/^\[token\]/a expiration=86400' /etc/keystone/keystone.conf
 iniset $KEYSTONE_CONF token expiration 86400
 sudo service apache2 restart
 
@@ -117,7 +113,7 @@ sudo service apache2 restart
 if $USE_NEUTRON; then
   #this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
   #CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
-  CI_DEFAULT_SECURITY_GROUP_ID=$(nova secgroup-list | grep ' default ' | get_field 1)
+  CI_DEFAULT_SECURITY_GROUP_ID=$(nova secgroup-list | grep -w default | get_field 1)
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
@@ -129,9 +125,12 @@ else
   nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
 fi
 
-#create Sahara endpoint for UI tests
-keystone service-create --name sahara --type data_processing --description "Data Processing Service"
-keystone endpoint-create --service sahara --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+#create Sahara endpoint for tests
+service_id=$(keystone service-create --name sahara --type data_processing --description "Data Processing Service" | grep -w id | get_field 2)
+keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+# create second endpoint due to bug: #1356053
+service_id=$(keystone service-create --name sahara --type data-processing --description "Data Processing Service" | grep -w id | get_field 2)
+keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
 # Setup Ceph
 echo "R" | bash $TOP_DIR/micro-osd.sh /home/ubuntu/ceph
@@ -153,6 +152,19 @@ iniset    $HEAT_CONF database max_overflow  1000
 
 # Setup path for Nova instances
 #iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
+
+# add squid iptables rule if not exists
+exists=$(sudo iptables-save | grep 3128)
+if [ "$exists" == "1" ]; then
+  if $USE_NEUTRON; then
+    sudo iptables -t nat -A PREROUTING -i br-ex -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.42:3128
+  else
+    sudo iptables -t nat -A PREROUTING -i br100 -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.43:3128
+  fi
+fi
+
+# set mysql max allowed connections to 1000
+iniset $MYSQL_CONF mysqld max_connections 1000
 
 # Restart OpenStack services
 screen -X -S stack quit
