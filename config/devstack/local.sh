@@ -56,13 +56,10 @@ nova-manage project quota $CI_TENANT_ID --key cores --value 150
 cinder quota-update --volumes 100 $CI_TENANT_ID
 cinder quota-update --gigabytes 2000 $CI_TENANT_ID
 if $USE_NEUTRON; then
-  neutron quota-update --tenant_id $CI_TENANT_ID --port 64
-  neutron quota-update --tenant_id $CI_TENANT_ID --floatingip 64
+  neutron quota-update --tenant_id $CI_TENANT_ID --port 64 --floatingip 64 --security-group 1000 --security-group-rule 10000
 else
-  nova quota-update --floating-ips 64 $CI_TENANT_ID
+  nova quota-update --floating-ips 64 --security-groups 1000 --security-group-rules 10000 $CI_TENANT_ID
 fi
-nova quota-update --security-groups 1000 $CI_TENANT_ID
-nova quota-update --security-group-rules 10000 $CI_TENANT_ID
 
 # create qa flavor
 nova flavor-create --is-public true qa-flavor 20 2048 40 1
@@ -129,9 +126,12 @@ else
   nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
 fi
 
-#create Sahara endpoint for UI tests
-keystone service-create --name sahara --type data_processing --description "Data Processing Service"
-keystone endpoint-create --service sahara --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+#create Sahara endpoint for tests
+service_id=$(keystone service-create --name sahara --type data_processing --description "Data Processing Service" | grep 'id' | awk '{print $4}')
+keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+# create second endpoint due to bug: #1356053
+service_id=$(keystone service-create --name sahara --type data-processing --description "Data Processing Service" | grep 'id' | awk '{print $4}')
+keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
 # Setup Ceph
 echo "R" | bash $TOP_DIR/micro-osd.sh /home/ubuntu/ceph
@@ -153,6 +153,16 @@ iniset    $HEAT_CONF database max_overflow  1000
 
 # Setup path for Nova instances
 #iniset $NOVA_CONF DEFAULT instances_path '/srv/nova'
+
+# add squid iptables rule if not exists
+exists=`sudo iptables-save | grep 3128`
+if [ "$exists" == "1" ]; then
+  if $USE_NEUTRON; then
+    sudo iptables -t nat -A PREROUTING -i br-ex -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.42:3128
+  else
+    sudo iptables -t nat -A PREROUTING -i br100 -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.43:3128
+  fi
+fi
 
 # Restart OpenStack services
 screen -X -S stack quit
