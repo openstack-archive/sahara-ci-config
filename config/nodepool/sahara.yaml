@@ -1,4 +1,4 @@
-script-dir: /opt/ci/config/modules/openstack_project/files/nodepool/scripts/
+script-dir: /opt/ci/files/nodepool-scripts
 dburi: 'mysql://nodepool@localhost/nodepool'
 
 cron:

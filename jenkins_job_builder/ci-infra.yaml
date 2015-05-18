@@ -66,7 +66,7 @@
 
     builders:
       - gerrit-git-prep
-      - shell: "bash /opt/ci/jenkins-jobs/sahara-ci-syntax-check.sh"
+      - shell: "bash /opt/ci/files/sahara-ci-syntax-check.sh"
 
     publishers:
       - console-log
@@ -118,4 +118,4 @@
       - timed: '0 6 * * *'
 
     builders:
-      - shell:  "/opt/ci/jenkins-jobs/sahara-ci-config/slave-scripts/update_pool.sh"
+      - shell:  "/opt/ci/files/update_pool.sh"

@@ -20,3 +20,5 @@ sed "s%JENKINS_PUBLIC_KEY%$JENKINS_PUBLIC_KEY%g" -i $WORKSPACE/config/nodepool/s
 
 NODEPOOL_SCRIPTS_DIR=$(sudo su - -c "cat /etc/nodepool/nodepool.yaml | grep 'script-dir:'" | awk '{print $2}')
 cp $WORKSPACE/config/nodepool/scripts/* $NODEPOOL_SCRIPTS_DIR
+
+cp $WORKSPACE/slave-scripts/update_pool.sh /opt/ci/files/
