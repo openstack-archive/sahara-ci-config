@@ -48,7 +48,7 @@ insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_
 insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing fake_image_id $image_id
 
 enable_pypi
-sudo pip install $SAHARA_PATH/.
+sudo pip install $SAHARA_PATH/. --no-cache-dir
 insert_config_value $sahara_conf_path DEFAULT plugins fake
 write_sahara_main_conf $sahara_conf_path "direct"
 start_sahara $sahara_conf_path

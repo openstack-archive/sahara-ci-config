@@ -73,7 +73,7 @@ case $job_type in
        ;;
 esac
 
-sudo pip install .
+sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_path" "$engine_type"
 write_tests_conf "$tests_config_file" "$cluster_name"
