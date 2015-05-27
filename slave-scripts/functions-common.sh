@@ -54,6 +54,7 @@ write_sahara_main_conf() {
   local conf_path=$1
   local engine=$2
   insert_config_value $conf_path DEFAULT infrastructure_engine $engine
+  insert_config_value $conf_path DEFAULT api_workers 4
   insert_config_value $conf_path DEFAULT use_identity_api_v3 true
   insert_config_value $conf_path DEFAULT use_neutron $USE_NEUTRON
   insert_config_value $conf_path DEFAULT min_transient_cluster_active_time 30
