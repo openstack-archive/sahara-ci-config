@@ -5,11 +5,12 @@
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
+              $WORKSPACE/check_ci_ancillary_patches.sh
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh hdp_2
-
     properties:
       - zeromq-event
-
+    wrappers:
+      - copy-map
     publishers:
       - sahara-logs
       - console-log
@@ -23,11 +24,12 @@
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
+              $WORKSPACE/check_ci_ancillary_patches.sh
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr
-
     properties:
       - zeromq-event
-
+    wrappers:
+      - copy-map
     publishers:
       - sahara-logs
       - console-log
@@ -41,11 +43,12 @@
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
+              $WORKSPACE/check_ci_ancillary_patches.sh
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
-
     properties:
       - zeromq-event
-
+    wrappers:
+      - copy-map
     publishers:
       - sahara-logs
       - console-log
@@ -59,11 +62,12 @@
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
+              $WORKSPACE/check_ci_ancillary_patches.sh
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin}
-
     properties:
       - zeromq-event
-
+    wrappers:
+      - copy-map
     publishers:
       - sahara-logs
       - console-log
@@ -77,11 +81,12 @@
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
+              $WORKSPACE/check_ci_ancillary_patches.sh
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
-
     properties:
       - zeromq-event
-
+    wrappers:
+      - copy-map
     publishers:
       - sahara-logs
       - console-log
