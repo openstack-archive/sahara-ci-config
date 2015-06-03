@@ -20,28 +20,25 @@ upload_image() {
    delete_image "$image"
 
    case "$plugin" in
-           vanilla-1)
+           vanilla_1.2.1)
              image_properties="--property _sahara_tag_1.2.1=True --property _sahara_tag_1.1.2=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
-           vanilla-2.4)
-             image_properties="--property _sahara_tag_2.4.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
-           ;;
-           vanilla-2.6)
+           vanilla_2.6.0)
              image_properties="--property _sahara_tag_2.6.0=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
-           hdp1)
+           hdp_1.3.2)
              image_properties="--property _sahara_tag_1.3.2=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
-           hdp2)
+           hdp_2.0.6)
              image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
-           cdh)
+           cdh_5.3.0)
              image_properties="--property _sahara_tag_5.3.0=True --property _sahara_tag_5=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
-           spark)
+           spark_1.0.0)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
            ;;
-           mapr)
+           mapr_4.0.2.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_4.0.2.mrv2=True --property _sahara_username=${username}"
            ;;
    esac
@@ -70,37 +67,12 @@ failure() {
 }
 
 cleanup_image() {
-  local job_type=$1
+  local plugin=$1
   local os=$2
   if [ "$ZUUL_PIPELINE" == "check" -o "$ZUUL_BRANCH" != "master" ]; then
      delete_image "$CUR_IMAGE"
   else
-     case $job_type in
-        vanilla*)
-           hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
-           delete_image ${os}_vanilla_${hadoop_version}_latest
-           rename_image "$CUR_IMAGE" ${os}_vanilla_${hadoop_version}_latest
-           ;;
-        hdp_1)
-           delete_image sahara_hdp_1_latest
-           rename_image "$CUR_IMAGE" sahara_hdp_1_latest
-           ;;
-        hdp_2)
-           delete_image sahara_hdp_2_latest
-           rename_image "$CUR_IMAGE" sahara_hdp_2_latest
-           ;;
-        cdh)
-           delete_image ${os}_cdh_latest
-           rename_image "$CUR_IMAGE" ${os}_cdh_latest
-           ;;
-        spark)
-           delete_image sahara_spark_latest
-           rename_image "$CUR_IMAGE" sahara_spark_latest
-           ;;
-        mapr)
-           delete_image ubuntu_mapr_latest
-           rename_image "$CUR_IMAGE" ubuntu_mapr_latest
-           ;;
-     esac
+     delete_image ${plugin}_${os}
+     rename_image "$CUR_IMAGE" ${plugin}_${os}
   fi
 }
