@@ -10,20 +10,16 @@ CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH="/tmp/sahara"
-sahara_conf_path="$SAHARA_PATH/etc/sahara/sahara.conf"
+sahara_conf_file="$SAHARA_PATH/etc/sahara/sahara.conf"
 sahara_templates_path=$SAHARA_PATH/etc/scenario/sahara-ci
 
 engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
-job_type="$1"
-image_type=${2:-ubuntu}
 
-# Image names
-vanilla_two_six_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_2.6
-hdp_two_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_2
-spark_image=$HOST-sahara-spark-ubuntu-${ZUUL_CHANGE}
-cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
-cdh_5_4_0_image=$HOST-${image_type}-cdh_5.4.0-${ZUUL_CHANGE}
-mapr_402mrv2_image=$HOST-${image_type}-mapr-${ZUUL_CHANGE}
+plugin="$1"
+os="$2"
+eval ${plugin//./_}_image=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
+mode="aio"
+sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
 git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
@@ -31,79 +27,66 @@ git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BR
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
 
-case $job_type in
-    vanilla_2.6)
-       if [ "${image_type}" == 'centos' ]; then
-           username='cloud-user'
-       else
-           username='ubuntu'
-       fi
+if [ "${os}" == 'c6.6' ]; then
+    username="cloud-user"
+    os_type="centos"
+else
+    username="ubuntu"
+    os_type="ubuntu"
+fi
 
-       env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 2.6
-       check_error_code $? ${vanilla_two_six_image}.qcow2
-       upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
-       DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
-       insert_scenario_value $tests_config_file vanilla_two_six_image
+case $plugin in
+    vanilla_2.6.0)
+       env ${os_type}_vanilla_hadoop_2_6_image_name=${vanilla_2_6_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.6
+       check_error_code $? ${vanilla_2_6_0_image}.qcow2
+       upload_image "${plugin}" "${username}" ${vanilla_2_6_0_image}
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml"
     ;;
 
-    spark)
-       env ubuntu_spark_image_name=${spark_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark
-       check_error_code $? ${spark_image}.qcow2
-       upload_image "spark" "ubuntu" ${spark_image}
-       tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
-       insert_scenario_value $tests_config_file spark_image
-       insert_config_value $sahara_conf_path DEFAULT plugins spark
+    spark_1.0.0)
+       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark
+       check_error_code $? ${spark_1_0_0_image}.qcow2
+       upload_image "${plugin}" "${username}" ${spark_1_0_0_image}
+       scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml"
     ;;
 
-    hdp_2)
-       env centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
-       check_error_code $? ${hdp_two_image}.qcow2
-       upload_image "hdp2" "cloud-user" ${hdp_two_image}
-       DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
-       insert_scenario_value $tests_config_file hdp_two_image
+    hdp_2.0.6)
+       env centos_hdp_hadoop_2_image_name=${hdp_2_0_6_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
+       check_error_code $? ${hdp_2_0_6_image}.qcow2
+       upload_image "${plugin}" "${username}" ${hdp_2_0_6_image}
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml"
     ;;
 
     cdh_5.3.0)
-       if [ "${image_type}" == 'centos' ]; then
-           username='cloud-user'
-       else
-           username='ubuntu'
-       fi
-       env cloudera_5_3_${image_type}_image_name=${cdh_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $image_type -v 5.3
-       check_error_code $? ${cdh_image}.qcow2
-       upload_image "cdh_5.3.0" ${username} ${cdh_image}
-       tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
-       insert_config_value $sahara_conf_path DEFAULT plugins cdh
-       insert_scenario_value $tests_config_file cdh_image
+       env cloudera_5_3_${os_type}_image_name=${cdh_5_3_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.3
+       check_error_code $? ${cdh_5_3_0_image}.qcow2
+       upload_image "${plugin}" "${username}" ${cdh_5_3_0_image}
+       scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml"
     ;;
 
     cdh_5.4.0)
        env cloudera_5_4_ubuntu_image_name=${cdh_5_4_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i ubuntu -v 5.4
        check_error_code $? ${cdh_5_4_0_image}.qcow2
-       upload_image "cdh_5.4.0" "ubuntu" ${cdh_5_4_0_image}
-       tests_config_file="$sahara_templates_path/cdh-5.4.0.yaml"
-       insert_config_value $sahara_conf_path DEFAULT plugins cdh
-       insert_scenario_value $tests_config_file cdh_5_4_0_image
+       upload_image "cdh_5.4.0" "${username}" ${cdh_5_4_0_image}
+       scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml"
     ;;
 
-    mapr)
-       env mapr_ubuntu_image_name=${mapr_402mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
-       check_error_code $? ${mapr_402mrv2_image}.qcow2
-       upload_image "mapr" "ubuntu" ${mapr_402mrv2_image}
-       DISTRIBUTE_MODE=True
-       tests_config_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
-       insert_config_value $sahara_conf_path DEFAULT plugins mapr
-       insert_scenario_value $tests_config_file mapr_402mrv2_image
+    mapr_4.0.2.mrv2)
+       env mapr_ubuntu_image_name=${mapr_4_0_2_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       check_error_code $? ${mapr_4_0_2_mrv2_image}.qcow2
+       upload_image "${plugin}" "${username}" ${mapr_4_0_2_mrv2_image}
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
     ;;
 esac
 
 cd $SAHARA_PATH
 sudo pip install . --no-cache-dir
 enable_pypi
-write_sahara_main_conf "$sahara_conf_path" "$engine"
-write_tests_conf "$tests_config_file" "$cluster_name"
-start_sahara "$sahara_conf_path" && run_tests "$tests_config_file"
+write_sahara_main_conf "$sahara_conf_file" "$engine" "$sahara_plugin"
+write_tests_conf "$scenario_conf_file" "$cluster_name" "\$${plugin//./_}_image"
+start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
 print_python_env
-cleanup_image "$job_type" "$image_type"
+cleanup_image "$plugin" "$os"
