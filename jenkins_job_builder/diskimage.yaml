@@ -1,65 +1,12 @@
-- job:
-    name: 'dib-nova-heat-hdp_2'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh hdp_2"
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
-- job:
-    name: 'dib-neutron-heat-mapr'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr"
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-neutron'
-
 - job-template:
-    name: 'dib-nova-direct-{plugin}-{os}-aio'
+    name: 'dib-{network}-{engine}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
       - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
-
     properties:
       - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
-- job:
-    name: 'dib-nova-direct-spark-aio'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin}"
-
-    properties:
-      - zeromq-event
-
     publishers:
       - sahara-logs
       - console-log
@@ -67,35 +14,49 @@
     node: 'trusty-nova'
 
 - job-template:
-    name: 'dib-neutron-heat-vanilla_2.6-{os}'
+    name: 'dib-{network}-{engine}-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
       - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
-
     properties:
       - zeromq-event
-
     publishers:
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-neutron'
+    node: 'trusty-{network}'
 
 - project:
     name: sahara-image-elements
     github-org: openstack
-    plugin: cdh_5.3.0
+    network: neutron
+    engine: heat
+    plugin: vanilla_2.6.0
     os:
-     - ubuntu
-     - centos
+     - u14
+     - c6.6
+
     jobs:
-     - 'dib-neutron-heat-vanilla_2.6-{os}'
-     - 'dib-nova-heat-hdp_2'
-     - 'dib-neutron-heat-mapr'
-     - 'dib-nova-direct-spark-aio'
-     - 'dib-nova-direct-{plugin}-{os}-aio'
-     - 'dib-nova-direct-{plugin}-{os}-aio':
-          plugin: cdh_5.4.0
-          os: ubuntu
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio'
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          engine: direct
+          plugin: 
+            - cdh_5.3.0
+            - cdh_5.4.0
+          os:
+            - u12
+            - c6.6
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          engine: direct
+          plugin: spark_1.0.0
+          os: u14
+     - 'dib-{network}-{engine}-{plugin}-{os}':
+          plugin: mapr_4.0.2.mrv2
+          os: u14
+     - 'dib-{network}-{engine}-{plugin}-{os}':
+          network: nova
+          plugin: hdp_2.0.6
+          os: c6.6
