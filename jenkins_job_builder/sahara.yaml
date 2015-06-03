@@ -1,7 +1,6 @@
-- job:
-    name: 'tempest-saharaclient-tests'
+- job-template:
+    name: 'tempest-{project_name}-tests'
     defaults: global
-    concurrent: false
     builders:
       - gerrit-git-prep
       - ci-config-prep
@@ -10,26 +9,7 @@
       - zeromq-event
       - build-blocker:
           blocking-jobs:
-             - "tempest-sahara-tests"
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: trusty-neutron || trusty-nova
-
-- job:
-    name: 'tempest-sahara-tests'
-    defaults: global
-    concurrent: false
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
-    properties:
-      - zeromq-event
-      - build-blocker:
-          blocking-jobs:
-             - "tempest-saharaclient-tests"
+             - "tempest-.*-tests"
     publishers:
       - sahara-logs
       - console-log
@@ -37,86 +17,49 @@
     node: trusty-neutron || trusty-nova
 
 - job-template:
-    name: 'gate-saharaclient-neutron-{plugin-neutron}'
+    name: 'gate-{project_name}-{network}-{engine}-{plugin}'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
     properties:
       - zeromq-event
     publishers:
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-neutron'
-
-- job-template:
-    name: 'gate-saharaclient-nova-{plugin-nova_network}'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
-    properties:
-      - zeromq-event
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
-- job-template:
-    name: 'gate-sahara-neutron-{plugin-neutron}'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
-    properties:
-      - zeromq-event
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-neutron'
-
-- job-template:
-    name: 'gate-sahara-nova-{plugin-nova_network}'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
-    properties:
-      - zeromq-event
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
+    node: 'trusty-{network}'
 
 - project:
-    name: sahara
-    github-org: openstack
-    plugin-neutron:
-     - direct-vanilla_1-aio
-     - heat-vanilla_2.6
-     - direct-spark-aio
-     - direct-transient
-     - heat-transient
-     - heat-mapr
-    plugin-nova_network:
-     - direct-cdh_5.3.0_ubuntu-aio
-     - direct-cdh_5.3.0_centos-aio
-     - direct-cdh_5.4.0-aio
-     - direct-hdp_1-aio
-     - heat-hdp_2
+    name: main
+    project_name:
+      - sahara
+      - saharaclient
+    network: neutron
+    engine: direct
+    plugin:
+      - vanilla_1.2.1-u14-aio
+      - spark_1.0.0-u14-aio
+      - transient-u14
     jobs:
-     - 'gate-sahara-neutron-{plugin-neutron}'
-     - 'gate-sahara-nova-{plugin-nova_network}'
-     - 'gate-saharaclient-neutron-{plugin-neutron}'
-     - 'gate-saharaclient-nova-{plugin-nova_network}'
+     - 'gate-{project_name}-{network}-{engine}-{plugin}'
+     - 'gate-{project_name}-{network}-{engine}-{plugin}':
+          engine: heat
+          plugin:
+             - vanilla_2.6.0-u14
+             - transient-u14
+             - mapr_4.0.2-u14
+     - 'gate-{project_name}-{network}-{engine}-{plugin}':
+          network: nova
+          plugin:
+             - cdh_5.3.0-u12-aio
+             - cdh_5.3.0-c6.6-aio
+             - cdh_5.4.0-u12-aio
+             - hdp_1.3.2-c6.6-aio
+             - hdp_2.0.6-c6.6:
+                 engine: heat
+     - 'tempest-{project_name}-tests'
 
 - job:
     name: gate-sahara-pep8-trunk
@@ -127,7 +70,6 @@
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
     node: trusty-neutron || trusty-nova
-
     builders:
     - gerrit-git-prep
     - ci-config-prep
