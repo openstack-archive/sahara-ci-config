@@ -1,51 +1,13 @@
-- job:
-    name: 'dib-nova-heat-hdp_2'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh hdp_2
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
-- job:
-    name: 'dib-neutron-heat-mapr'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-neutron'
-
 - job-template:
-    name: 'dib-{network}-direct-{plugin}-{os}-aio'
+    name: 'dib-{network}-{engine}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
-
     properties:
       - zeromq-event
-
     publishers:
       - sahara-logs
       - console-log
@@ -53,62 +15,62 @@
     node: 'trusty-{network}'
 
 - job-template:
-    name: 'dib-nova-direct-{plugin}-aio'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin}
-
-    properties:
-      - zeromq-event
-
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: 'trusty-nova'
-
-- job-template:
-    name: 'dib-neutron-heat-{plugin}-{os}'
+    name: 'dib-{network}-{engine}-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
       - shell: |
               git clone https://git.openstack.org/stackforge/sahara-ci-config
               FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
-
     properties:
       - zeromq-event
-
     publishers:
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-neutron'
+    node: 'trusty-{network}'
 
 - project:
     name: sahara-image-elements
     github-org: openstack
-    plugin:
-     - vanilla_1
-    os:
-     - ubuntu
-     - centos
     network:
      - neutron
+    engine:
+     - direct
+    plugin:
+     - vanilla_1.2.1
+    os:
+     - u14
+     - c6.6
+    
     jobs:
-     - 'dib-nova-heat-hdp_2'
-     - 'dib-neutron-heat-mapr'
-     - 'dib-{network}-direct-{plugin}-{os}-aio'
-     - 'dib-{network}-direct-{plugin}-{os}-aio':
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio'
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
           network: nova
-          plugin: cdh
-     - 'dib-nova-direct-{plugin}-aio':
-          plugin:
-            - spark
-            - hdp_1
-     - 'dib-neutron-heat-{plugin}-{os}':
-          plugin:
-            - vanilla_2.6
+          plugin: cdh_5.3.0
+          os:
+            - u12
+            - c6.6
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          plugin: spark_1.0.0
+          os:
+            - u14
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          plugin: hdp_1.3.2
+          os:
+            - c6.6
+     - 'dib-{network}-{engine}-{plugin}-{os}':
+          engine: heat
+          plugin: mapr_4.0.2.mrv2
+          os:
+            - u14
+     - 'dib-{network}-{engine}-{plugin}-{os}':
+          engine: heat
+          plugin: vanilla_2.6.0
+     - 'dib-{network}-{engine}-{plugin}-{os}':
+          engine: heat
+          plugin: hdp_2.0.6
+          os:
+            - c6.6
