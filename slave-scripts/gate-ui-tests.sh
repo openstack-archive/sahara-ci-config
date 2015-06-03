@@ -49,12 +49,12 @@ floating_ip_pool = 'public'
 keystone_url = 'http://$OPENSTACK_HOST:5000/v2.0'
 await_element = 120
 image_name_for_register = '$TEST_IMAGE'
-image_name_for_edit = "sahara-itests-ci-vanilla-image"
+image_name_for_edit = 'sahara-itests-ci-vanilla-image'
 security_groups = default
 [vanilla]
 skip_plugin_tests = False
 skip_edp_test = False
-base_image = "sahara-itests-ci-vanilla-image"
+base_image = 'sahara-itests-ci-vanilla-image'
 [hdp]
 skip_plugin_tests = False
 hadoop_version = '1.3.2'
