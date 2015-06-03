@@ -24,15 +24,16 @@ else
     USE_NEUTRON=false
 fi
 
-VANILLA26_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-2.6.0-ubuntu-14.04.qcow2
-VANILLA_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-1.2.1-ubuntu-14.04.qcow2
-HDP1_IMAGE_PATH=/home/ubuntu/images/centos_6-6_hdp-1.qcow2
-HDP2_IMAGE_PATH=/home/ubuntu/images/centos_6-6_hdp-2.qcow2
-CENTOS_CDH_IMAGE_PATH=/home/ubuntu/images/centos_sahara_cloudera_latest.qcow2
-UBUNTU_CDH_IMAGE_PATH=/home/ubuntu/images/ubuntu_sahara_cloudera_latest.qcow2
-SPARK_IMAGE_PATH=/home/ubuntu/images/sahara_spark_latest.qcow2
-MAPR_IMAGE_PATH=/home/ubuntu/images/ubuntu_mapr_latest.qcow2
-NATIVE_UBUNTU_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
+VANILLA_1_2_1_IMAGE_PATH=/home/ubuntu/images/vanilla_1.2.1_u14.qcow2
+VANILLA_2_6_0_IMAGE_PATH=/home/ubuntu/images/vanilla_2.6.0_u14.qcow2
+HDP_1_3_2_IMAGE_PATH=/home/ubuntu/images/hdp_1.3.2_c6.6.qcow2
+HDP_2_0_6_IMAGE_PATH=/home/ubuntu/images/hdp_2.0.6_c6.6.qcow2
+CENTOS_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_c6.6.qcow2
+UBUNTU_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_u12.qcow2
+UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
+SPARK_1_0_0_IMAGE_PATH=/home/ubuntu/images/spark_1.0.0_u14.qcow2
+MAPR_4_0_2_IMAGE_PATH=/home/ubuntu/images/mapr_4.0.2_u14.qcow2
+UBUNTU_12_04_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
 # setup ci tenant and ci users
 CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep -w id | get_field 2)
@@ -71,15 +72,16 @@ nova flavor-create --is-public true m1.small 2 1024 20 1
 source $ADMIN_RCFILE ci-user ci
 
 # add images for tests
-glance image-create --name ubuntu_vanilla_1_latest --file $VANILLA_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name ubuntu_vanilla_2.6_latest --file $VANILLA26_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name sahara_hdp_1_latest --file $HDP1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
-glance image-create --name sahara_hdp_2_latest --file $HDP2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
-glance image-create --name centos_cdh_latest --file $CENTOS_CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
-glance image-create --name ubuntu_cdh_latest --file $UBUNTU_CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
-glance image-create --name sahara_spark_latest --file $SPARK_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name ubuntu_mapr_latest --file $MAPR_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_4.0.2.mrv2'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name ubuntu-test-image --file $NATIVE_UBUNTU_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true
+glance image-create --name $(basename -s .qcow2 $VANILLA_1_2_1_IMAGE_PATH) --file $VANILLA_1_2_1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
+glance image-create --name $(basename -s .qcow2 $VANILLA_2_6_0_IMAGE_PATH) --file $VANILLA_2_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
+glance image-create --name $(basename -s .qcow2 $HDP_1_3_2_IMAGE_PATH) --file $HDP_1_3_2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
+glance image-create --name $(basename -s .qcow2 $HDP_2_0_6_IMAGE_PATH) --file $HDP_2_0_6_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
+glance image-create --name $(basename -s .qcow2 $CENTOS_CDH_5_3_0_IMAGE_PATH) --file $CENTOS_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
+glance image-create --name $(basename -s .qcow2 $UBUNTU_CDH_5_3_0_IMAGE_PATH) --file $UBUNTU_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
+glance image-create --name $(basename -s .qcow2 $UBUNTU_CDH_5_4_0_IMAGE_PATH) --file $UBUNTU_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
+glance image-create --name $(basename -s .qcow2 $SPARK_1_0_0_IMAGE_PATH) --file $SPARK_1_0_0_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
+glance image-create --name $(basename -s .qcow2 $MAPR_4_0_2_IMAGE_PATH) --file $MAPR_4_0_2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_4.0.2.mrv2'='True'  --property '_sahara_username'="ubuntu"
+glance image-create --name ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true
 glance image-update --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
 glance image-update --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
 
