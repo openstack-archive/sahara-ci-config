@@ -35,12 +35,3 @@
                \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME\
                \nCLUSTER_HASH=$CLUSTER_HASH"
-
-- wrapper:
-    name: copy-map
-    wrappers:
-      - copy-to-slave:
-          includes:
-            - patch_map
-            - check_ci_ancillary_patches.sh
-          relative-to: "userContent"
