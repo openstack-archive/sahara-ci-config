@@ -3,9 +3,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh hdp_2
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh hdp_2"
 
     properties:
       - zeromq-event
@@ -21,9 +20,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh mapr"
 
     properties:
       - zeromq-event
@@ -39,9 +37,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
       - zeromq-event
@@ -57,9 +54,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin}
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin}"
 
     properties:
       - zeromq-event
@@ -75,9 +71,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/dib.sh {plugin} {os}"
 
     properties:
       - zeromq-event
