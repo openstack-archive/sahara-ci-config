@@ -4,9 +4,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
     properties:
       - zeromq-event
       - build-blocker:
@@ -24,9 +23,8 @@
     concurrent: false
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
     properties:
       - zeromq-event
       - build-blocker:
@@ -43,9 +41,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     publishers:
@@ -59,9 +56,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
     properties:
       - zeromq-event
     publishers:
@@ -75,9 +71,8 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     publishers:
@@ -91,9 +86,7 @@
     defaults: global
     builders:
       - gerrit-git-prep
-      - shell: |
-              git clone https://git.openstack.org/stackforge/sahara-ci-config
-              FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     publishers:

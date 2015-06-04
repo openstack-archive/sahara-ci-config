@@ -3,6 +3,15 @@
     builders:
       - shell: "/usr/local/jenkins/slave_scripts/gerrit-git-prep.sh https://review.openstack.org https://review.openstack.org"
 
+- builder:
+    name: ci-config-prep
+    builders:
+      - shell: |
+            git clone https://git.openstack.org/stackforge/sahara-ci-config
+            wget https://sahara.mirantis.com/files/patch_map
+            wget https://sahara.mirantis.com/files/check_ci_ancillary_patches.sh
+            $WORKSPACE/check_ci_ancillary_patches.sh
+
 # ======================================================================
 
 - publisher:
