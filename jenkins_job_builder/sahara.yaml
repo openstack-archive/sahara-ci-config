@@ -86,6 +86,7 @@
     defaults: global
     builders:
       - gerrit-git-prep
+      - ci-config-prep
       - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
