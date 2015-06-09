@@ -72,7 +72,7 @@ case $job_type in
     hdp_1)
        env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 1
        check_error_code $? ${hdp_image}.qcow2
-       upload_image "hdp1" "root" ${hdp_image}
+       upload_image "hdp1" "cloud-user" ${hdp_image}
        tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
        insert_scenario_value $tests_config_file hdp_image
     ;;
@@ -80,7 +80,7 @@ case $job_type in
     hdp_2)
        env centos_hdp_hadoop_2_image_name=${hdp_two_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
        check_error_code $? ${hdp_two_image}.qcow2
-       upload_image "hdp2" "root" ${hdp_two_image}
+       upload_image "hdp2" "cloud-user" ${hdp_two_image}
        DISTRIBUTE_MODE=True
        tests_config_file="$sahara_templates_path/hdp-2.0.6.yaml"
        insert_scenario_value $tests_config_file hdp_two_image
