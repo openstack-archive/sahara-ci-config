@@ -33,8 +33,9 @@ projects:
       - gate-sahara-neutron-direct-transient
       - gate-sahara-neutron-heat-transient
       - gate-sahara-neutron-heat-mapr
-      - gate-sahara-nova-direct-cdh_ubuntu-aio
-      - gate-sahara-nova-direct-cdh_centos-aio
+      - gate-sahara-nova-direct-cdh_5.3.0_ubuntu-aio
+      - gate-sahara-nova-direct-cdh_5.3.0_centos-aio
+      - gate-sahara-nova-direct-cdh_5.4.0-aio
       - gate-sahara-nova-direct-hdp_1-aio
       - gate-sahara-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
@@ -48,8 +49,9 @@ projects:
       - gate-saharaclient-neutron-direct-transient
       - gate-saharaclient-neutron-heat-transient
       - gate-saharaclient-neutron-heat-mapr
-      - gate-saharaclient-nova-direct-cdh_ubuntu-aio
-      - gate-saharaclient-nova-direct-cdh_centos-aio
+      - gate-saharaclient-nova-direct-cdh_5.3.0_ubuntu-aio
+      - gate-saharaclient-nova-direct-cdh_5.3.0_centos-aio
+      - gate-saharaclient-nova-direct-cdh_5.4.0-aio
       - gate-saharaclient-nova-direct-hdp_1-aio
       - gate-saharaclient-nova-heat-hdp_2
       - gate-sahara-pep8-trunk
@@ -65,8 +67,9 @@ projects:
       - dib-nova-direct-spark-aio
       - dib-nova-direct-hdp_1-aio
       - dib-nova-heat-hdp_2
-      - dib-nova-direct-cdh-ubuntu-aio
-      - dib-nova-direct-cdh-centos-aio
+      - dib-nova-direct-cdh_5.3.0-ubuntu-aio
+      - dib-nova-direct-cdh_5.3.0-centos-aio
+      - dib-nova-direct-cdh_5.4.0-ubuntu-aio
     post:
       - dib-neutron-direct-vanilla_1-ubuntu-aio
       - dib-neutron-direct-vanilla_1-centos-aio
@@ -76,8 +79,9 @@ projects:
       - dib-nova-direct-spark-aio
       - dib-nova-direct-hdp_1-aio
       - dib-nova-heat-hdp_2
-      - dib-nova-direct-cdh-ubuntu-aio
-      - dib-nova-direct-cdh-centos-aio
+      - dib-nova-direct-cdh_5.3.0-ubuntu-aio
+      - dib-nova-direct-cdh_5.3.0-centos-aio
+      - dib-nova-direct-cdh_5.4.0-ubuntu-aio
 
   - name: stackforge/sahara-ci-config
     check:
@@ -98,6 +102,9 @@ jobs:
           - ^doc/.*$
           - ^.*\.rst$
   - name: ^.*-neutron-heat-mapr$
+    branch: master
+    voting: false
+  - name: ^.*-cdh_5.4.0-.*$
     branch: master
     voting: false
   - name: gate-sahara-pep8-trunk

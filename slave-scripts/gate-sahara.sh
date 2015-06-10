@@ -21,8 +21,9 @@ hdp_two_image=sahara_hdp_2_latest
 vanilla_image=ubuntu_vanilla_1_latest
 vanilla_two_six_image=ubuntu_vanilla_2.6_latest
 spark_image=sahara_spark_latest
-cdh_centos_image=centos_cdh_latest
-cdh_ubuntu_image=ubuntu_cdh_latest
+cdh_5_3_0_centos_image=centos_cdh_latest
+cdh_5_3_0_ubuntu_image=ubuntu_cdh_latest
+cdh_5_4_0_image=ubuntu_cdh_5.4.0_latest
 mapr_402mrv2_image=ubuntu_mapr_latest
 
 case $job_type in
@@ -50,16 +51,21 @@ case $job_type in
        tests_config_file="$sahara_templates_path/transient.yaml"
        insert_scenario_value $tests_config_file vanilla_two_six_image
        ;;
-    cdh*)
+    cdh_5.3.0*)
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
        if [[ "$job_type" =~ centos ]]; then
-          cdh_image=$cdh_centos_image
+          cdh_image=$cdh_5_3_0_centos_image
        else
-          cdh_image=$cdh_ubuntu_image
+          cdh_image=$cdh_5_3_0_ubuntu_image
        fi
        tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
        insert_scenario_value $tests_config_file cdh_image
        ;;
+    cdh_5.4.0)
+       insert_config_value $sahara_conf_path DEFAULT plugins cdh
+       tests_config_file="$sahara_templates_path/cdh-5.4.0.yaml"
+       insert_scenario_value $tests_config_file cdh_5_4_0_image
+    ;;
     spark)
        insert_config_value $sahara_conf_path DEFAULT plugins spark
        tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"

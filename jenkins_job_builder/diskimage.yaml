@@ -99,7 +99,11 @@
      - 'dib-{network}-direct-{plugin}-{os}-aio'
      - 'dib-{network}-direct-{plugin}-{os}-aio':
           network: nova
-          plugin: cdh
+          plugin: cdh_5.3.0
+     - 'dib-{network}-direct-{plugin}-{os}-aio':
+          network: nova
+          plugin: cdh_5.4.0
+          os: ubuntu
      - 'dib-nova-direct-{plugin}-aio':
           plugin:
             - spark
