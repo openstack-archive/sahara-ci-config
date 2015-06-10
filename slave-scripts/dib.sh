@@ -24,6 +24,7 @@ hdp_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_1
 hdp_two_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_2
 spark_image=$HOST-sahara-spark-ubuntu-${ZUUL_CHANGE}
 cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
+cdh_5.4.0_image=$HOST-${image_type}-cdh_5.4.0-${ZUUL_CHANGE}
 mapr_402mrv2_image=$HOST-${image_type}-mapr-${ZUUL_CHANGE}
 
 # Clone Sahara
@@ -98,6 +99,15 @@ case $job_type in
        tests_config_file="$sahara_templates_path/cdh-5.3.0.yaml"
        insert_config_value $sahara_conf_path DEFAULT plugins cdh
        insert_scenario_value $tests_config_file cdh_image
+    ;;
+
+    cdh_5.4.0)
+       env cloudera_5_4_ubuntu_image_name=${cdh_5.4.0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i ubuntu -v 5.4
+       check_error_code $? ${cdh_5.4.0_image}.qcow2
+       upload_image "cdh_5.4.0" "ubuntu" ${cdh_image}
+       tests_config_file="$sahara_templates_path/cdh-5.4.0.yaml"
+       insert_config_value $sahara_conf_path DEFAULT plugins cdh
+       insert_scenario_value $tests_config_file cdh_5.4.0_image
     ;;
 
     mapr)
