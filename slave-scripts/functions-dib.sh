@@ -35,8 +35,11 @@ upload_image() {
            hdp2)
              image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
-           cdh)
+           cdh_5.3.0)
              image_properties="--property _sahara_tag_5.3.0=True --property _sahara_tag_5=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
+           ;;
+           cdh_5.4.0)
+             image_properties="--property _sahara_tag_5.4.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
            spark)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
@@ -89,9 +92,13 @@ cleanup_image() {
            delete_image sahara_hdp_2_latest
            rename_image "$CUR_IMAGE" sahara_hdp_2_latest
            ;;
-        cdh)
+        cdh_5.3.0)
            delete_image ${os}_cdh_latest
            rename_image "$CUR_IMAGE" ${os}_cdh_latest
+           ;;
+        cdh_5.4.0)
+           delete_image ${os}_cdh_5.4.0_latest
+           rename_image "$CUR_IMAGE" ${os}_cdh_5.4.0_latest
            ;;
         spark)
            delete_image sahara_spark_latest
