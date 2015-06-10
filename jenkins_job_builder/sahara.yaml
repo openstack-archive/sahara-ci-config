@@ -109,6 +109,7 @@
     plugin-nova_network:
      - direct-cdh_ubuntu-aio
      - direct-cdh_centos-aio
+     - direct-cdh_5.4.0-aio
      - direct-hdp_1-aio
      - heat-hdp_2
     jobs:
