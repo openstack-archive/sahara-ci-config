@@ -89,7 +89,7 @@ case $job_type in
     ;;
 
     mapr)
-       env mapr_ubuntu_image_name=${mapr_402mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       env mapr_ubuntu_image_name=${mapr_402mrv2_image} MAPR_REPO_URL="http://172.18.168.44/files/mapr/" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
        check_error_code $? ${mapr_402mrv2_image}.qcow2
        upload_image "mapr" "ubuntu" ${mapr_402mrv2_image}
        DISTRIBUTE_MODE=True
