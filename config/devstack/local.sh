@@ -25,8 +25,6 @@ else
 fi
 
 VANILLA26_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-2.6.0-ubuntu-14.04.qcow2
-VANILLA_IMAGE_PATH=/home/ubuntu/images/sahara-vanilla-1.2.1-ubuntu-14.04.qcow2
-HDP1_IMAGE_PATH=/home/ubuntu/images/centos_6-6_hdp-1.qcow2
 HDP2_IMAGE_PATH=/home/ubuntu/images/centos_6-6_hdp-2.qcow2
 CENTOS_CDH_IMAGE_PATH=/home/ubuntu/images/centos_sahara_cloudera_latest.qcow2
 UBUNTU_CDH_IMAGE_PATH=/home/ubuntu/images/ubuntu_sahara_cloudera_latest.qcow2
@@ -71,9 +69,7 @@ nova flavor-create --is-public true m1.small 2 1024 20 1
 source $ADMIN_RCFILE ci-user ci
 
 # add images for tests
-glance image-create --name ubuntu_vanilla_1_latest --file $VANILLA_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.2.1'='True' --property '_sahara_tag_1.1.2'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 glance image-create --name ubuntu_vanilla_2.6_latest --file $VANILLA26_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name sahara_hdp_1_latest --file $HDP1_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_1.3.2'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
 glance image-create --name sahara_hdp_2_latest --file $HDP2_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
 glance image-create --name centos_cdh_latest --file $CENTOS_CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
 glance image-create --name ubuntu_cdh_latest --file $UBUNTU_CDH_IMAGE_PATH --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
