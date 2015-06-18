@@ -18,9 +18,7 @@ job_type="$1"
 image_type=${2:-ubuntu}
 
 # Image names
-vanilla_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_1
 vanilla_two_six_image=$HOST-sahara-vanilla-${image_type}-${ZUUL_CHANGE}-hadoop_2.6
-hdp_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_1
 hdp_two_image=$HOST-sahara-hdp-centos-${ZUUL_CHANGE}-hadoop_2
 spark_image=$HOST-sahara-spark-ubuntu-${ZUUL_CHANGE}
 cdh_image=$HOST-${image_type}-cdh-${ZUUL_CHANGE}
@@ -34,31 +32,19 @@ git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BR
 export DIB_DEBUG_TRACE=1
 
 case $job_type in
-    vanilla*)
+    vanilla_2.6)
        if [ "${image_type}" == 'centos' ]; then
            username='cloud-user'
        else
            username='ubuntu'
        fi
 
-       hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
-       case $hadoop_version in
-           1)
-              env ${image_type}_vanilla_hadoop_1_image_name=${vanilla_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 1
-              check_error_code $? ${vanilla_image}.qcow2
-              upload_image "vanilla-1" "${username}" ${vanilla_image}
-              tests_config_file="$sahara_templates_path/vanilla-1.2.1.yaml"
-              insert_scenario_value $tests_config_file vanilla_image
-              ;;
-           2.6)
-              env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 2.6
-              check_error_code $? ${vanilla_two_six_image}.qcow2
-              upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
-              DISTRIBUTE_MODE=True
-              tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
-              insert_scenario_value $tests_config_file vanilla_two_six_image
-              ;;
-       esac
+       env ${image_type}_vanilla_hadoop_2_6_image_name=${vanilla_two_six_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $image_type -v 2.6
+       check_error_code $? ${vanilla_two_six_image}.qcow2
+       upload_image "vanilla-2.6" "${username}" ${vanilla_two_six_image}
+       DISTRIBUTE_MODE=True
+       tests_config_file="$sahara_templates_path/vanilla-2.6.0.yaml"
+       insert_scenario_value $tests_config_file vanilla_two_six_image
     ;;
 
     spark)
@@ -68,14 +54,6 @@ case $job_type in
        tests_config_file="$sahara_templates_path/spark-1.0.0.yaml"
        insert_scenario_value $tests_config_file spark_image
        insert_config_value $sahara_conf_path DEFAULT plugins spark
-    ;;
-
-    hdp_1)
-       env centos_hdp_hadoop_1_image_name=${hdp_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 1
-       check_error_code $? ${hdp_image}.qcow2
-       upload_image "hdp1" "cloud-user" ${hdp_image}
-       tests_config_file="$sahara_templates_path/hdp-1.3.2.yaml"
-       insert_scenario_value $tests_config_file hdp_image
     ;;
 
     hdp_2)

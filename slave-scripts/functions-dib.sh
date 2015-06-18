@@ -20,17 +20,11 @@ upload_image() {
    delete_image "$image"
 
    case "$plugin" in
-           vanilla-1)
-             image_properties="--property _sahara_tag_1.2.1=True --property _sahara_tag_1.1.2=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
-           ;;
            vanilla-2.4)
              image_properties="--property _sahara_tag_2.4.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
            vanilla-2.6)
              image_properties="--property _sahara_tag_2.6.0=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
-           ;;
-           hdp1)
-             image_properties="--property _sahara_tag_1.3.2=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;
            hdp2)
              image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
@@ -79,14 +73,9 @@ cleanup_image() {
      delete_image "$CUR_IMAGE"
   else
      case $job_type in
-        vanilla*)
-           hadoop_version=$(echo $job_type | awk -F '_' '{print $2}')
-           delete_image ${os}_vanilla_${hadoop_version}_latest
-           rename_image "$CUR_IMAGE" ${os}_vanilla_${hadoop_version}_latest
-           ;;
-        hdp_1)
-           delete_image sahara_hdp_1_latest
-           rename_image "$CUR_IMAGE" sahara_hdp_1_latest
+        vanilla_2.6)
+           delete_image ${os}_vanilla_2.6_latest
+           rename_image "$CUR_IMAGE" ${os}_vanilla_2.6_latest
            ;;
         hdp_2)
            delete_image sahara_hdp_2_latest
