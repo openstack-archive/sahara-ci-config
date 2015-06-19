@@ -5,6 +5,7 @@ CUR_IMAGE=none
 register_new_image() {
    local image_name=$1
    local image_properties=$2
+   local image_file="$1/$1.qcow2"
    glance image-create --name $1 --file $1.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' $image_properties
 }
 
@@ -52,7 +53,7 @@ rename_image() {
 }
 
 check_error_code() {
-   if [ "$1" != "0" -o ! -f "$2" ]; then
+   if [ "$1" != "0" -o ! -d "$2" ]; then
        echo "$2 image isn't build"
        exit 1
    fi
