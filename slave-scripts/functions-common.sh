@@ -3,6 +3,7 @@
 sahara_configs_path=$WORKSPACE/sahara-ci-config/config/sahara
 ci_flavor_id=\'20\'
 medium_flavor_id=\'3\'
+large_flavor_id=\'4\'
 
 enable_pypi() {
   mkdir -p ~/.pip
@@ -122,6 +123,7 @@ write_tests_conf() {
   insert_scenario_value $test_conf cluster_name
   insert_scenario_value $test_conf ci_flavor_id
   insert_scenario_value $test_conf medium_flavor_id
+  insert_scenario_value $test_conf large_flavor_id
 
   echo "----------- tests config -----------"
   cat $test_conf
