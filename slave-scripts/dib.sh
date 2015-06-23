@@ -100,7 +100,7 @@ case $plugin in
     ;;
 
     mapr_4.0.2.mrv2)
-       env mapr_ubuntu_image_name=${mapr_4_0_2_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       env mapr_ubuntu_image_name=${mapr_4_0_2_mrv2_image} DIB_MAPR_ECO_DEB_REPO="http://172.18.168.44/files/mapr/" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
        check_error_code $? ${mapr_4_0_2_mrv2_image}.qcow2
        upload_image "${plugin}" "${username}" ${mapr_4_0_2_mrv2_image}
        mode=distribute
