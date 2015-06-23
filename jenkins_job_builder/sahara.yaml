@@ -66,7 +66,7 @@
           plugin:
              - vanilla_2.6.0
              - transient
-             - mapr_4.0.2
+             - mapr_4.0.2.mrv2
           os: u14
           network: neutron
      - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
