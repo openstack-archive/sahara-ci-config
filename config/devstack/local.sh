@@ -162,11 +162,10 @@ sleep 5
 squid_port="3128"
 sudo iptables-save | grep "$squid_port"
 if [ "$?" == "1" ]; then
-  ip_addr=$(ifconfig eth0 | grep -oP 'inet addr:\K\S+')
   if $USE_NEUTRON; then
-    sudo iptables -t nat -A PREROUTING -i br-ex -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to $ip_addr:$squid_port
+    sudo iptables -t nat -A PREROUTING -i br-ex -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.42:$squid_port
   else
-    sudo iptables -t nat -A PREROUTING -i br100 -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to $ip_addr:$squid_port
+    sudo iptables -t nat -A PREROUTING -i br100 -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.43:$squid_port
   fi
 fi
 
