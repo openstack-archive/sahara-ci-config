@@ -41,15 +41,7 @@ projects:
 
   - name: openstack/python-saharaclient
     check:
-      - gate-saharaclient-neutron-heat-vanilla_2.6.0-u14
-      - gate-saharaclient-neutron-direct-spark_1.0.0-u14-aio
-      - gate-saharaclient-neutron-direct-transient-u14
-      - gate-saharaclient-neutron-heat-transient-u14
-      - gate-saharaclient-neutron-heat-mapr_4.0.2.mrv2-u14
-      - gate-saharaclient-nova-direct-cdh_5.3.0-u12-aio
-      - gate-saharaclient-nova-direct-cdh_5.3.0-c6.6-aio
-      - gate-saharaclient-nova-direct-cdh_5.4.0-u12-aio
-      - gate-saharaclient-nova-heat-hdp_2.0.6-c6.6
+      - gate-saharaclient-distributed-heat-fake
       - gate-sahara-pep8-trunk
 #      - tempest-saharaclient-tests
 
