@@ -1,5 +1,5 @@
 - job-template:
-    name: 'tempest-{project_name}-tests'
+    name: 'tempest-{name}-tests'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -17,12 +17,27 @@
     node: trusty-neutron || trusty-nova
 
 - job-template:
-    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}'
+    name: 'gate-saharaclient-distributed-heat-fake'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
+    properties:
+      - zeromq-event
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: trusty-neutron || trusty-nova
+
+- job-template:
+    name: 'gate-sahara-{network}-{engine}-{plugin}-{os}'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     publishers:
@@ -32,12 +47,12 @@
     node: 'trusty-{network}'
 
 - job-template:
-    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
+    name: 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
     properties:
       - zeromq-event
     publishers:
@@ -47,10 +62,7 @@
     node: 'trusty-{network}'
 
 - project:
-    name: main
-    project_name:
-      - sahara
-      - saharaclient
+    name: sahara
     network: nova
     engine: direct
     plugin:
@@ -60,8 +72,8 @@
       - u12
       - c6.6
     jobs:
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio'
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
           engine: heat
           plugin:
              - vanilla_2.6.0
@@ -69,20 +81,26 @@
              - mapr_4.0.2.mrv2
           os: u14
           network: neutron
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
           plugin: transient
           os: u14
           network: neutron
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio':
           plugin: spark_1.0.0
           os: u14
           network: neutron
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat
           plugin: hdp_2.0.6
           os: c6.6
-     - 'tempest-{project_name}-tests'
+     - 'tempest-{name}-tests'
+
+- project:
+    name: saharaclient
+    jobs:
+     - 'gate-saharaclient-distributed-heat-fake'
+     - 'tempest-{name}-tests'
 
 - job:
     name: gate-sahara-pep8-trunk
