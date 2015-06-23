@@ -31,6 +31,7 @@ case $plugin in
     transient)
        # transient is using image with latest vanilla version
        image_name=vanilla_2.6.0_u14
+       sahara_plugin=vanilla
        concurrency=3
        mode=distribute
        scenario_conf_file="$sahara_templates_path/transient.yaml"
