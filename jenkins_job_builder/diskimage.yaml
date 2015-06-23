@@ -39,7 +39,7 @@
      - c6.6
 
     jobs:
-     - 'dib-{network}-{engine}-{plugin}-{os}-aio'
+     - 'dib-{network}-{engine}-{plugin}-{os}'
      - 'dib-{network}-{engine}-{plugin}-{os}-aio':
           network: nova
           engine: direct
