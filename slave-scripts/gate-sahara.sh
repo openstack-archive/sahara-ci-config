@@ -49,6 +49,10 @@ case $plugin in
        mode=distribute
        scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
        ;;
+    fake)
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/fake.yaml"
+       ;;
 esac
 
 sudo pip install . --no-cache-dir
