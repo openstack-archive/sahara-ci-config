@@ -68,7 +68,7 @@ case $plugin in
     ;;
 
     cdh_5.4.0)
-       env cloudera_5_4_ubuntu_image_name=${cdh_5_4_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i ubuntu -v 5.4
+       env cloudera_5_4_${os_type}_image_name=${cdh_5_4_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.4
        check_error_code $? ${cdh_5_4_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${cdh_5_4_0_image}
        scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml"
