@@ -62,8 +62,8 @@ upload_image() {
            cdh_5.4.0)
              image_properties="--property _sahara_tag_5.4.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
-           spark_1.0.0)
-             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
+           spark_1.3.x)
+             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.3.x=True --property _sahara_username=${username}"
            ;;
            mapr_4.0.2.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_4.0.2.mrv2=True --property _sahara_username=${username}"

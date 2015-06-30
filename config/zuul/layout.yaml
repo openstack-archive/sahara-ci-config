@@ -28,7 +28,7 @@ projects:
   - name: openstack/sahara
     check:
       - gate-sahara-neutron-heat-vanilla_2.6.0-u14
-      - gate-sahara-neutron-direct-spark_1.0.0-u14-aio
+      - gate-sahara-neutron-direct-spark_1.3.x-u14-aio
       - gate-sahara-neutron-direct-transient-u14
       - gate-sahara-neutron-heat-transient-u14
       - gate-sahara-neutron-heat-mapr_4.0.2.mrv2-u14
@@ -51,7 +51,7 @@ projects:
       - dib-neutron-heat-vanilla_2.6.0-u14
       - dib-neutron-heat-vanilla_2.6.0-c6.6
       - dib-neutron-heat-mapr_4.0.2.mrv2-u14
-      - dib-neutron-direct-spark_1.0.0-u14-aio
+      - dib-neutron-direct-spark_1.3.x-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio
@@ -61,7 +61,7 @@ projects:
       - dib-neutron-heat-vanilla_2.6.0-u14
       - dib-neutron-heat-vanilla_2.6.0-c6.6
       - dib-neutron-heat-mapr_4.0.2.mrv2-u14
-      - dib-neutron-direct-spark_1.0.0-u14-aio
+      - dib-neutron-direct-spark_1.3.x-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio

@@ -86,7 +86,7 @@
           os: u14
           network: neutron
      - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio':
-          plugin: spark_1.0.0
+          plugin: spark_1.3.x
           os: u14
           network: neutron
      - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
