@@ -53,6 +53,10 @@
           engine: direct
           plugin: spark_1.0.0
           os: u14
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          engine: direct
+          plugin: spark_1.3.1
+          os: u14
      - 'dib-{network}-{engine}-{plugin}-{os}':
           plugin: mapr_4.0.2.mrv2
           os: u14

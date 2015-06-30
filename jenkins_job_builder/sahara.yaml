@@ -89,6 +89,10 @@
           plugin: spark_1.0.0
           os: u14
           network: neutron
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio':
+          plugin: spark_1.3.1
+          os: u14
+          network: neutron
      - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat

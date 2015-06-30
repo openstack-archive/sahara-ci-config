@@ -46,10 +46,17 @@ case $plugin in
     ;;
 
     spark_1.0.0)
-       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark
+       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.0.2
        check_error_code $? ${spark_1_0_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${spark_1_0_0_image}
        scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml"
+    ;;
+
+    spark_1.3.1)
+       env ubuntu_spark_image_name=${spark_1_3_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.3.1
+       check_error_code $? ${spark_1_3_1_image}.qcow2
+       upload_image "${plugin}" "${username}" ${spark_1_3_1_image}
+       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml"
     ;;
 
     hdp_2.0.6)
