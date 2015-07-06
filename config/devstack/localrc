@@ -41,6 +41,7 @@ if [[ $(hostname -s) =~ neutron ]]; then
   NETWORK_GATEWAY=10.20.0.1
   FLOATING_RANGE=172.18.169.0/26
   PUBLIC_NETWORK_GATEWAY=172.18.169.1
+  IP_VERSION="4"
 
   # enable neutron and disable nova-net
   disable_service n-net
