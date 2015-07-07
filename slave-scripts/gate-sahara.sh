@@ -41,9 +41,12 @@ case $plugin in
        ;;
     cdh_5.4.0)
        scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml"
-    ;;
+       ;;
     spark_1.0.0)
        scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml"
+       ;;
+    spark_1.3.1)
+       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml"
        ;;
     mapr_4.0.2.mrv2)
        mode=distribute
