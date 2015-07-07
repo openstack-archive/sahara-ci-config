@@ -46,7 +46,7 @@ case $plugin in
     ;;
 
     spark_1.0.0)
-       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.0.2
+       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark
        check_error_code $? ${spark_1_0_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${spark_1_0_0_image}
        scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml"
