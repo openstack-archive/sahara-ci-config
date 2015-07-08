@@ -23,7 +23,17 @@ mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
-git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
+sahara_patch_exists=$(echo $ZUUL_CHANGES | grep -c "openstack/sahara:$ZUUL_BRANCH")
+if [ "$sahara_patch_exists" == "1" ]
+then
+  # when patch depends on patch to sahara
+  pushd $(pwd)
+  mkdir "$SAHARA_PATH" && cd "$SAHARA_PATH"
+  ZUUL_PROJECT="openstack/sahara" /usr/local/jenkins/slave_scripts/gerrit-git-prep.sh https://review.openstack.org https://review.openstack.org
+  popd
+else
+  git clone https://review.openstack.org/openstack/sahara "$SAHARA_PATH" -b "$ZUUL_BRANCH"
+fi
 
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
