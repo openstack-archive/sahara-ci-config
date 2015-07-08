@@ -23,7 +23,7 @@ mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
-git clone https://review.openstack.org/openstack/sahara $SAHARA_PATH -b $ZUUL_BRANCH
+get_dependency "$SAHARA_PATH" "openstack/sahara"
 
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1

@@ -5,6 +5,16 @@ eval ci_flavor_id="\'20\'"
 eval medium_flavor_id="\'3\'"
 eval large_flavor_id="\'4\'"
 
+check_dependency_patch() {
+  local project_name=$1
+  local zuul_changes=${ZUUL_CHANGES:-$2}
+  for dep in $(echo "$zuul_changes" | tr "^" "\n"); do
+     cur_proj=$(echo $dep|awk -F: '{print $1}')
+     [[ "$cur_proj" =~ ^"$project_name"$ ]] && return 0
+  done
+  return 1
+}
+
 conf_has_option() {
   local file=$1
   local section=$2
@@ -26,6 +36,22 @@ failure() {
   print_python_env
   echo "$reason"
   exit 1
+}
+
+get_dependency() {
+  local project_dir=$1
+  local project_name=$2
+  local branch=${ZUUL_BRANCH:-$3}
+  if check_dependency_patch "$project_name"
+  then
+    # when patch depends on patch to some project
+    pushd $(pwd)
+    mkdir "$project_dir" && cd "$project_dir"
+    ZUUL_PROJECT="$project_name" /usr/local/jenkins/slave_scripts/gerrit-git-prep.sh https://review.openstack.org https://review.openstack.org
+    popd
+  else
+    git clone https://review.openstack.org/"$project_name" "$project_dir" -b "$branch"
+  fi
 }
 
 insert_config_value() {

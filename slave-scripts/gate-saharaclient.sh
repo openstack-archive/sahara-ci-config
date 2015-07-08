@@ -1,9 +1,10 @@
 #!/bin/bash -xe
 
-git clone https://git.openstack.org/openstack/sahara /tmp/sahara -b $ZUUL_BRANCH
-cd /tmp/sahara
+sahara_path="/tmp/sahara"
+get_dependency "$sahara_path" "openstack/sahara"
+cd "$sahara_path"
 
 tox -e scenario --notest
 .tox/scenario/bin/pip install $WORKSPACE
 
-$WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh /tmp/sahara
+$WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh "$sahara_path"
