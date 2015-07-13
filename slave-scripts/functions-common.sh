@@ -103,15 +103,16 @@ print_python_env() {
 }
 
 run_tests() {
-  local config=$1
-  local concurrency=${2:-"1"}
+  local vars_template=$1
+  local config=$2
+  local concurrency=${3:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  local scenario_credentials=$(dirname $1)/credentials.yaml
+  local scenario_credentials=$(dirname $1)/credentials.yaml.mako
   local scenario_edp=$(dirname $1)/edp.yaml
   # Temporary use additional log file, due to wrong status code from tox scenario tests
-  # tox -e scenario $scenario_common $config || failure "Integration tests are failed"
-  tox -e scenario $scenario_credentials $scenario_edp $config | tee tox.log
+  # tox -e scenario -- --verbose -V $vars_template $scenario_common $config || failure "Integration tests are failed"
+  tox -e scenario -- --verbose -V $vars_template $scenario_credentials $scenario_edp $config | tee tox.log
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
 }
@@ -172,28 +173,29 @@ write_sahara_main_conf() {
 }
 
 write_tests_conf() {
-  local test_conf=$1
+  local template_vars_conf=$1
   local cluster_name=$2
-  local image_name=$3
-  local os_auth_url="http://$OPENSTACK_HOST:5000/v2.0/"
+  local plugin=$3
+  local image_name=$4
   if [ "$USE_NEUTRON" == "true" ]; then
     NETWORK="neutron"
   else
     NETWORK="nova-network"
   fi
-  local test_scenario_credentials=$(dirname $1)/credentials.yaml
-  insert_scenario_value $test_scenario_credentials credentials "" os_username $OS_USERNAME
-  insert_scenario_value $test_scenario_credentials credentials "" os_password $OS_PASSWORD
-  insert_scenario_value $test_scenario_credentials credentials "" os_tenant $OS_TENANT_NAME
-  insert_scenario_value $test_scenario_credentials credentials "" os_auth_url $os_auth_url
-  insert_scenario_value $test_scenario_credentials network "" "type" $NETWORK
-  insert_scenario_value $test_conf clusters node_group_templates image $image_name
-  insert_scenario_value $test_conf cluster "" name $cluster_name
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $ci_flavor_id ci_flavor_id
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $medium_flavor_id medium_flavor_id
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $large_flavor_id large_flavor_id
+echo "[DEFAULT]
+OS_USERNAME: $OS_USERNAME
+OS_PASSWORD: $OS_PASSWORD
+OS_TENANT_NAME: $OS_TENANT_NAME
+OPENSTACK_HOST: $OPENSTACK_HOST
+network_type: $NETWORK
+${plugin}_image: $image_name
+cluster_name: $cluster_name
+ci_flavor_id: $ci_flavor_id
+medium_flavor_id: $medium_flavor_id
+large_flavor_id: $large_flavor_id
+" | tee ${template_vars_conf}
 
   echo "----------- tests config -----------"
-  cat $test_conf
+  cat $template_vars_conf
   echo "---------------- end ---------------"
 }
