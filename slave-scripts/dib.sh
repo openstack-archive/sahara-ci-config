@@ -21,6 +21,7 @@ image_name=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
 eval ${plugin//./_}_image=$image_name
 mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
+template_vars_file=template_vars.ini
 
 # Clone Sahara
 get_dependency "$SAHARA_PATH" "openstack/sahara"
@@ -42,21 +43,24 @@ case $plugin in
        check_error_code $? ${vanilla_2_6_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${vanilla_2_6_0_image}
        mode=distribute
-       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml"
+       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
+       template_image_prefix="vanilla_two_six"
     ;;
 
     spark_1.0.0)
        env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.0.2
        check_error_code $? ${spark_1_0_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${spark_1_0_0_image}
-       scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml"
+       scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml.mako"
+       template_image_prefix="spark"
     ;;
 
     spark_1.3.1)
        env ubuntu_spark_image_name=${spark_1_3_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.3.1
        check_error_code $? ${spark_1_3_1_image}.qcow2
        upload_image "${plugin}" "${username}" ${spark_1_3_1_image}
-       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml"
+       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
+       template_image_prefix="spark_1_3"
     ;;
 
     hdp_2.0.6)
@@ -64,21 +68,24 @@ case $plugin in
        check_error_code $? ${hdp_2_0_6_image}.qcow2
        upload_image "${plugin}" "${username}" ${hdp_2_0_6_image}
        mode=distribute
-       scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml"
+       scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml.mako"
+       template_image_prefix="hdp_two"
     ;;
 
     cdh_5.3.0)
        env cloudera_5_3_${os_type}_image_name=${cdh_5_3_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.3
        check_error_code $? ${cdh_5_3_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${cdh_5_3_0_image}
-       scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml"
+       scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml.mako"
+       template_image_prefix="cdh"
     ;;
 
     cdh_5.4.0)
        env cloudera_5_4_${os_type}_image_name=${cdh_5_4_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.4
        check_error_code $? ${cdh_5_4_0_image}.qcow2
        upload_image "${plugin}" "${username}" ${cdh_5_4_0_image}
-       scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml"
+       scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml.mako"
+       template_image_prefix="cdh_5_4_0"
     ;;
 
     mapr_4.0.2.mrv2)
@@ -86,7 +93,8 @@ case $plugin in
        check_error_code $? ${mapr_4_0_2_mrv2_image}.qcow2
        upload_image "${plugin}" "${username}" ${mapr_4_0_2_mrv2_image}
        mode=distribute
-       scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml"
+       scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml.mako"
+       template_image_prefix="mapr_402mrv2"
     ;;
 esac
 
@@ -94,7 +102,7 @@ cd $SAHARA_PATH
 sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$engine" "$sahara_plugin"
-write_tests_conf "$scenario_conf_file" "$cluster_name" "$image_name"
-start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
+write_tests_conf "$template_vars_file" "$cluster_name" "$template_image_prefix" "$image_name"
+start_sahara "$sahara_conf_file" "$mode" && run_tests "$template_vars_file" "$sahara_templates_path" "$scenario_conf_file"
 print_python_env
 cleanup_image "$plugin" "$os"
