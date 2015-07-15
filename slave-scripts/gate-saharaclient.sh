@@ -1,5 +1,7 @@
 #!/bin/bash -xe
 
+. $FUNCTION_PATH/functions-common.sh
+
 sahara_path="/tmp/sahara"
 get_dependency "$sahara_path" "openstack/sahara"
 cd "$sahara_path"
