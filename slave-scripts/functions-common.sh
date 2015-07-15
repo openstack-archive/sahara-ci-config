@@ -189,9 +189,9 @@ write_tests_conf() {
   insert_scenario_value $test_scenario_credentials network "" "type" $NETWORK
   insert_scenario_value $test_conf clusters node_group_templates image $image_name
   insert_scenario_value $test_conf cluster "" name $cluster_name
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $ci_flavor_id ci_flavor_id
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $medium_flavor_id medium_flavor_id
-  insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $large_flavor_id large_flavor_id
+  insert_scenario_value $test_conf node_group_templates "\\$" flavor $ci_flavor_id ci_flavor_id
+  insert_scenario_value $test_conf node_group_templates "\\$" flavor $medium_flavor_id medium_flavor_id
+  insert_scenario_value $test_conf node_group_templates "\\$" flavor $large_flavor_id large_flavor_id
 
   echo "----------- tests config -----------"
   cat $test_conf
