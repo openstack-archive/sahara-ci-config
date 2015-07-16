@@ -37,6 +37,7 @@
     os:
      - u14
      - c6.6
+     - c7
 
     jobs:
      - 'dib-{network}-{engine}-{plugin}-{os}'
