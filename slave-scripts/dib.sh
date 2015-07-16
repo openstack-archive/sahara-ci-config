@@ -29,13 +29,20 @@ get_dependency "$SAHARA_PATH" "openstack/sahara"
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
 
-if [ "${os}" == 'c6.6' ]; then
-    username="cloud-user"
-    os_type="centos"
-else
-    username="ubuntu"
-    os_type="ubuntu"
-fi
+case "${os}" in
+    c6.6)
+        username="cloud-user"
+        os_type="centos"
+        ;;
+    u*)
+        username="ubuntu"
+        os_type="ubuntu"
+        ;;
+    *)
+        echo "Unrecognized OS: ${os}" >&2
+        exit 1
+        ;;
+esac
 
 case $plugin in
     vanilla_2.6.0)
