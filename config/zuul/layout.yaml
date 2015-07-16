@@ -98,6 +98,7 @@ jobs:
     branch: master
   - name: ^.*-spark_1.3.1-.*$
     branch: master
-    voting: false
+  - name: ^.*-spark_1.0.0-.*$
+    branch: stable/kilo
   - name: gate-sahara-pep8-trunk
     voting: false
