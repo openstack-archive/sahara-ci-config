@@ -34,6 +34,10 @@ case "${os}" in
         username="cloud-user"
         os_type="centos"
         ;;
+    c7)
+        username="centos"
+        os_type="centos7"
+        ;;
     u12 | u14)
         username="ubuntu"
         os_type="ubuntu"
