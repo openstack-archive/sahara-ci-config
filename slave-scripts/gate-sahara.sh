@@ -18,7 +18,6 @@ os=$(echo $JOB_NAME | awk -F '-' '{ print $6 }')
 image_name=${plugin}_${os}
 mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
-template_vars_file=template_vars.ini
 
 case $plugin in
     hdp_2.0.6)
@@ -72,6 +71,6 @@ esac
 sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$engine_type" "$sahara_plugin"
-write_tests_conf "$template_vars_file" "$cluster_name" "$template_image_prefix" "$image_name"
-start_sahara "$sahara_conf_file" "$mode" && run_tests "$template_vars_file" "$sahara_templates_path" "$scenario_conf_file" "$concurrency"
+write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name"
+start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file" "$concurrency"
 print_python_env

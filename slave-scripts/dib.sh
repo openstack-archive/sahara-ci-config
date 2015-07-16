@@ -21,7 +21,6 @@ image_name=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
 eval ${plugin//./_}_image=$image_name
 mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
-template_vars_file=template_vars.ini
 
 # Clone Sahara
 get_dependency "$SAHARA_PATH" "openstack/sahara"
@@ -113,7 +112,7 @@ cd $SAHARA_PATH
 sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$engine" "$sahara_plugin"
-write_tests_conf "$template_vars_file" "$cluster_name" "$template_image_prefix" "$image_name"
-start_sahara "$sahara_conf_file" "$mode" && run_tests "$template_vars_file" "$sahara_templates_path" "$scenario_conf_file"
+write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name"
+start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
 print_python_env
 cleanup_image "$plugin" "$os"

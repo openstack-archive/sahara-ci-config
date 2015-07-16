@@ -1,6 +1,8 @@
 #!/bin/bash -xe
 
 configs_path=$WORKSPACE/sahara-ci-config/config
+template_vars_file=template_vars.ini
+
 eval ci_flavor_id="\'20\'"
 eval medium_flavor_id="\'3\'"
 eval large_flavor_id="\'4\'"
@@ -103,17 +105,20 @@ print_python_env() {
 }
 
 run_tests() {
-  local vars_template=$1
-  local templates_path="$2"
-  local scenario_config=$3
-  local concurrency=${4:-"1"}
+  local scenario_config=$1
+  local concurrency=${2:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
+  local templates_path=$(dirname $scenario_config)
   local scenario_credentials="$templates_path/credentials.yaml.mako"
   local scenario_edp="$templates_path/edp.yaml"
   # Temporary use additional log file, due to wrong status code from tox scenario tests
-  # tox -e scenario -- --verbose -V $vars_template $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
-  tox -e scenario -- --verbose -V $vars_template $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
+    # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
+    tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  else
+    tox -e scenatio $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  fi
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
 }
@@ -174,15 +179,32 @@ write_sahara_main_conf() {
 }
 
 write_tests_conf() {
-  local template_vars_conf=$1
-  local cluster_name=$2
-  local image_prefix=$3
-  local image_name=$4
+  local cluster_name=$1
+  local image_prefix=$2
+  local image_name=$3
   if [ "$USE_NEUTRON" == "true" ]; then
     NETWORK="neutron"
   else
     NETWORK="nova-network"
   fi
+  if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
+    local test_conf=$(basename -s .mako $4)
+    local test_scenario_credentials=$(dirname $4)/credentials.yaml
+    local os_auth_url="http://$OPENSTACK_HOST:5000/v2.0/"
+    insert_scenario_value $test_scenario_credentials credentials "" os_username $OS_USERNAME
+    insert_scenario_value $test_scenario_credentials credentials "" os_password $OS_PASSWORD
+    insert_scenario_value $test_scenario_credentials credentials "" os_tenant $OS_TENANT_NAME
+    insert_scenario_value $test_scenario_credentials credentials "" os_auth_url $os_auth_url
+    insert_scenario_value $test_scenario_credentials network "" "type" $NETWORK
+    insert_scenario_value $test_conf clusters node_group_templates image $image_name
+    insert_scenario_value $test_conf cluster "" name $cluster_name
+    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $ci_flavor_id ci_flavor_id
+    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $medium_flavor_id medium_flavor_id
+    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $large_flavor_id large_flavor_id
+    echo "----------- tests config -----------"
+    cat $test_conf
+    echo "---------------- end ---------------"
+  else
 echo "[DEFAULT]
 OS_USERNAME: $OS_USERNAME
 OS_PASSWORD: $OS_PASSWORD
@@ -196,5 +218,6 @@ cluster_name: $cluster_name
 ci_flavor_id: $ci_flavor_id
 medium_flavor_id: $medium_flavor_id
 large_flavor_id: $large_flavor_id
-" | tee ${template_vars_conf}
+" | tee ${template_vars_file}
+  fi
 }
