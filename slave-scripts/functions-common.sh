@@ -114,10 +114,12 @@ run_tests() {
   local scenario_edp="$templates_path/edp.yaml"
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
+    scenario_credentials=${scenario_credentials%.*}
+    scenario_config=${scenario_config%.*}
+    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  else
     # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
     tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
-  else
-    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   fi
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
@@ -188,7 +190,7 @@ write_tests_conf() {
     NETWORK="nova-network"
   fi
   if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
-    local test_conf=$(basename -s .mako $4)
+    local test_conf=${4%.*}
     local test_scenario_credentials=$(dirname $4)/credentials.yaml
     local os_auth_url="http://$OPENSTACK_HOST:5000/v2.0/"
     insert_scenario_value $test_scenario_credentials credentials "" os_username $OS_USERNAME
