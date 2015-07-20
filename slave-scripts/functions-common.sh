@@ -117,7 +117,7 @@ run_tests() {
     # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
     tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   else
-    tox -e scenatio $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   fi
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
