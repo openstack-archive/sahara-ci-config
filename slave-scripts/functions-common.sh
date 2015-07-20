@@ -114,10 +114,10 @@ run_tests() {
   local scenario_edp="$templates_path/edp.yaml"
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
+    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  else
     # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
     tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
-  else
-    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   fi
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
