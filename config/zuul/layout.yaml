@@ -107,3 +107,5 @@ jobs:
     voting: false
   - name: gate-sahara-pep8-trunk
     voting: false
+  - name: gate-sahara-nova-heat-hdp_2.0.6-c6.6
+    voting: false
