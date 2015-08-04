@@ -53,6 +53,9 @@ upload_image() {
            vanilla_2.6.0)
              image_properties="--property _sahara_tag_2.6.0=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
+           vanilla_2.7.1)
+             image_properties="--property _sahara_tag_2.7.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
+           ;;
            hdp_2.0.6)
              image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
            ;;

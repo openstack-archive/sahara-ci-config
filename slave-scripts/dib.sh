@@ -56,6 +56,14 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
        template_image_prefix="vanilla_two_six"
     ;;
+    vanilla_2.7.1)
+      env ${os_type}_vanilla_hadoop_2_7_1_image_name=${vanilla_2_7_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.7.1
+      check_error_code $? ${vanilla_2_7_1_image}.qcow2
+      upload_image "${plugin}" "${username}" ${vanilla_2_7_1_image}
+      mode=distribute
+      scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
+      template_image_prefix="vanilla_two_seven_one"
+    ;;
 
     spark_1.0.0)
        env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.0.2
