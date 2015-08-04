@@ -30,6 +30,11 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
        template_image_prefix="vanilla_two_six"
        ;;
+    vanilla_2.7.1)
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
+       template_image_prefix="vanilla_two_seven_one"
+    ;;
     transient)
        # transient is using image with latest vanilla version
        image_name=vanilla_2.6.0_u14

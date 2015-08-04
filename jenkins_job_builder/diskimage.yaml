@@ -33,7 +33,9 @@
     github-org: openstack
     network: neutron
     engine: heat
-    plugin: vanilla_2.6.0
+    plugin:
+      - vanilla_2.6.0
+      - vanilla_2.7.1
     os:
      - u14
      - c6.6
