@@ -106,6 +106,14 @@ case $plugin in
        template_image_prefix="cdh_5_4_0"
     ;;
 
+    ambari_2.1)
+       env ambari_2_1_${os_type}_image_name=${ambari_2_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p ambari -i $os_type -v 2.1
+       check_error_code $? ${ambari_2_1_image}.qcow2
+       upload_image "${plugin}" "${username}" ${ambari_2_1_image}
+       scenario_conf_file="$sahara_templates_path/ambari-2.1.yaml.mako"
+       template_image_prefix="ambari_2_1"
+    ;;
+
     mapr_4.0.2.mrv2)
        env mapr_ubuntu_image_name=${mapr_4_0_2_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
        check_error_code $? ${mapr_4_0_2_mrv2_image}.qcow2
