@@ -59,6 +59,8 @@ projects:
       - dib-neutron-direct-spark_1.0.0-u14-aio
       - dib-neutron-direct-spark_1.3.1-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
+      - dib-nova-heat-ambari_2.1-u12
+      - dib-nova-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio
       - dib-nova-direct-cdh_5.4.0-u12-aio
@@ -73,6 +75,8 @@ projects:
       - dib-neutron-direct-spark_1.0.0-u14-aio
       - dib-neutron-direct-spark_1.3.1-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
+      - dib-nova-heat-ambari_2.1-u12
+      - dib-nova-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio
       - dib-nova-direct-cdh_5.4.0-u12-aio
@@ -117,3 +121,6 @@ jobs:
     voting: false
   - name: ^.*-nova-heat-hdp_2.0.6-c6.6$
     voting: false
+  - name: ^-nova-heat-ambari_2.1-.*$
+    voting: false
+    branch: master

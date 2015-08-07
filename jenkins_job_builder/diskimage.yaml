@@ -61,6 +61,12 @@
      - 'dib-{network}-{engine}-{plugin}-{os}':
           plugin: mapr_4.0.2.mrv2
           os: u14
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          plugin: ambari_2.1
+          os:
+            - u12
+            - c6.6
      - 'dib-{network}-{engine}-{plugin}-{os}':
           network: nova
           plugin: hdp_2.0.6
