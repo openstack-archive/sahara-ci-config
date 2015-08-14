@@ -109,6 +109,9 @@ jobs:
     branch: stable/kilo
   - name: ^.*-vanilla_2.7.1-.*$
     branch: master
+  - name: dib-neutron-heat-vanilla_2.7.1-c7
+    branch: master
+    voting: false
   - name: ^.*-vanilla_2.6.0-.*$
     branch: stable/kilo
   - name: gate-sahara-pep8-trunk
