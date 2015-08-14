@@ -34,7 +34,6 @@
     network: neutron
     engine: heat
     plugin:
-      - vanilla_2.6.0
       - vanilla_2.7.1
     os:
      - u14
@@ -62,6 +61,11 @@
           plugin: mapr_4.0.2.mrv2
           os: u14
      - 'dib-{network}-{engine}-{plugin}-{os}':
+          plugin: vanilla_2.6.0
+          os:
+            - u14
+            - c6.6
+    - 'dib-{network}-{engine}-{plugin}-{os}':
           network: nova
           plugin: hdp_2.0.6
           os: c6.6
