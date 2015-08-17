@@ -37,12 +37,16 @@ case $plugin in
     ;;
     transient)
        # transient is using image with latest vanilla version
-       image_name=vanilla_2.6.0_u14
+       if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
+        image_name=vanilla_2.6.0_u14
+        template_image_prefix="vanilla_two_six"
+       fi
+       image_name=vanilla_2.7.1_u14
        sahara_plugin=vanilla
        concurrency=3
        mode=distribute
        scenario_conf_file="$sahara_templates_path/transient.yaml.mako"
-       template_image_prefix="vanilla_two_six"
+       template_image_prefix="vanilla_two_seven_one"
        ;;
     cdh_5.3.0)
        scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml.mako"
