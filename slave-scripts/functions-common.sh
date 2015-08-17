@@ -111,7 +111,10 @@ run_tests() {
   export PYTHONUNBUFFERED=1
   local templates_path=$(dirname $scenario_config)
   local scenario_credentials="$templates_path/credentials.yaml.mako"
-  local scenario_edp="$templates_path/edp.yaml"
+  local scenario_edp="$templates_path/edp.yaml.mako"
+  if [ ! -f $scenario_edp ]; then
+    scenario_edp="$templates_path/edp.yaml"
+  fi
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
     scenario_credentials=${scenario_credentials%.*}
