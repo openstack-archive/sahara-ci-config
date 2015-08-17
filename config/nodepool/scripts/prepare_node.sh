@@ -20,7 +20,7 @@ HOSTNAME=$1
 MYSQL_PASS=MYSQL_ROOT_PASSWORD
 
 sudo apt-get update
-sudo apt-get upgrade -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" upgrade -y
 # APT_PACKAGES variable using for installing packages via apt-get
 # PIP_PACKAGES variable using for installing packages via pip
 APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
