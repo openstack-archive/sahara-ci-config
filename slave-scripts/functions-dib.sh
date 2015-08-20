@@ -41,7 +41,7 @@ register_new_image() {
 
 rename_image() {
    # 1 - source image, 2 - target image
-   glance image-update $1 --name $2
+   glance --debug image-update $1 --name $2
 }
 
 upload_image() {
