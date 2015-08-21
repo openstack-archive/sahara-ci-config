@@ -121,6 +121,6 @@ jobs:
     voting: false
   - name: ^.*-nova-heat-hdp_2.0.6-c6.6$
     voting: false
-  - name: ^-nova-heat-ambari_2.1-.*$
+  - name: ^.*-nova-heat-ambari_2.1-.*$
     voting: false
     branch: master
