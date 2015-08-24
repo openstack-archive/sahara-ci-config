@@ -41,7 +41,13 @@ register_new_image() {
 
 rename_image() {
    # 1 - source image, 2 - target image
-   glance --debug image-update $1 --name $2
+   # Workaround for #1173044
+   tmux new-session -d -s image "glance --debug image-update $1 --name $2 |& tee /tmp/glance-update; echo ${PIPESTATUS[0]} >> /tmp/glance-update"
+   sleep 5
+   cat /tmp/glance-image-update
+   STATUS=$(grep -q -w 'Property' /tmp/glance-image-update; echo $?)
+   return $STATUS
+   # end workaround
 }
 
 upload_image() {
