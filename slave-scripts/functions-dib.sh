@@ -22,7 +22,8 @@ cleanup_image() {
 
 delete_image() {
    # "|| true" here, to avoid error code producing in case of missing image
-   glance image-delete $1 || true
+   id=$(glance image-list | grep $1 | awk '{print $2}')
+   glance image-delete $id || true
 }
 
 failure() {
@@ -36,7 +37,7 @@ failure() {
 register_new_image() {
    local image_name=$1
    local image_properties=$2
-   glance image-create --name $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --is-public=true --property '_sahara_tag_ci'='True' $image_properties
+   glance image-create --name $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
 }
 
 rename_image() {
