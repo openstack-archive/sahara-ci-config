@@ -26,7 +26,14 @@ git log --pretty=oneline -n 1
 popd &>/dev/null
 
 cd /home/jenkins
-cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
+
+TEMPESTPLUGIN_TESTS=0
+if [ -f "$SAHARA_PATH/sahara/tests/tempest/scenario/data_processing/plugin.py" ]; then
+   # if the file exists, scenario tests are exposed as plugin for tempest
+   TEMPESTPLUGIN_TESTS=1
+else
+   cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
+fi
 
 cd tempest
 # create tempest conf file
@@ -46,12 +53,20 @@ if [ "$USE_NEUTRON" == "true" ]; then
     insert_config_value etc/tempest.conf network public_network_id $public_network_id
 fi
 
-# create tests file
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing flavor_id 2
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing ssh_username ubuntu
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing floating_ip_pool public
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing private_network private
-insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing fake_image_id $image_id
+if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
+   # create tests file
+   insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing flavor_id 2
+   insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing ssh_username ubuntu
+   insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing floating_ip_pool public
+   insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing private_network private
+   insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_processing fake_image_id $image_id
+else
+   insert_config_value etc/tempest.conf compute flavor_ref 2
+   insert_config_value etc/tempest.conf scenario ssh_user ubuntu
+   insert_config_value etc/tempest.conf network floating_network_name public
+   insert_config_value etc/tempest.conf compute fixed_network_name private
+   insert_config_value etc/tempest.conf data_processing fake_image_id $image_id
+fi
 
 enable_pypi
 sudo pip install $SAHARA_PATH/. --no-cache-dir
@@ -61,9 +76,14 @@ start_sahara $sahara_conf_path
 # Prepare env and install saharaclient
 tox -e all --notest
 .tox/all/bin/pip install $SAHARACLIENT_PATH/.
+if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
+   TOXENV="all"
+else
+   TOXENV="all-plugin"
+fi
 # Temporary use additional log file, due to wrong status code from tox scenario tests
-# tox -e all -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
-tox -e all -- tempest.scenario.data_processing.client_tests | tee tox.log
+# tox -e $TOXENV -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
+tox -e $TOXENV -- tempest.scenario.data_processing.client_tests | tee tox.log
 STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
 if [ "$STATUS" != "0" ]; then failure "Tempest tests have failed"; fi
 .tox/all/bin/pip freeze > $WORKSPACE/logs/python-tempest-env.txt
