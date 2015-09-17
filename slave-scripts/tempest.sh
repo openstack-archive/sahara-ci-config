@@ -19,6 +19,12 @@ else
 fi
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 
+# update tempest
+pushd /home/jenkins/tempest/ &>/dev/null
+git pull
+git log --pretty=oneline -n 1
+popd &>/dev/null
+
 cd /home/jenkins
 cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
 
