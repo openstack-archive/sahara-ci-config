@@ -19,6 +19,12 @@ else
 fi
 sahara_conf_path=$SAHARA_PATH/etc/sahara/sahara.conf
 
+# update tempest
+pushd /home/jenkins/tempest/ &>/dev/null
+git pull
+git log --pretty=oneline -n 1
+popd &>/dev/null
+
 cd /home/jenkins
 cp -r $SAHARA_PATH/sahara/tests/tempest tempest/
 
@@ -49,8 +55,7 @@ insert_config_value tempest/scenario/data_processing/etc/sahara_tests.conf data_
 
 enable_pypi
 sudo pip install $SAHARA_PATH/. --no-cache-dir
-insert_config_value $sahara_conf_path DEFAULT plugins fake
-write_sahara_main_conf $sahara_conf_path "direct"
+write_sahara_main_conf $sahara_conf_path "direct" "fake"
 start_sahara $sahara_conf_path
 
 # Prepare env and install saharaclient
