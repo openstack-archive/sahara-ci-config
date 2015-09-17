@@ -40,13 +40,13 @@ projects:
       - gate-sahara-nova-direct-cdh_5.4.0-c6.6-aio
       - gate-sahara-nova-heat-hdp_2.0.6-c6.6
       - gate-sahara-pep8-trunk
-#      - tempest-sahara-tests
+      - tempest-sahara-tests
 
   - name: openstack/python-saharaclient
     check:
       - gate-saharaclient-distributed-heat-fake
       - gate-sahara-pep8-trunk
-#      - tempest-saharaclient-tests
+      - tempest-saharaclient-tests
 
   - name: openstack/sahara-image-elements
     check:
@@ -96,10 +96,12 @@ jobs:
           - ^doc/.*$
           - ^.*\.rst$
   - name: ^tempest-sahara.*$
+    branch: master
     skip-if:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
+    voting: false
   - name: ^.*-mapr_4.0.2.mrv2-u14$
     branch: master
     voting: false
