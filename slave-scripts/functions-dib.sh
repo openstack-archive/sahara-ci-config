@@ -42,13 +42,8 @@ register_new_image() {
 
 rename_image() {
    # 1 - source image, 2 - target image
-   # Workaround for #1173044
-   tmux new-session -d -s image "glance --debug image-update $1 --name $2 |& tee /tmp/glance-image-update.log"
-   sleep 10
-   cat /tmp/glance-image-update.log
-   STATUS=$(grep -q -w 'Property' /tmp/glance-image-update.log; echo $?)
-   exit $STATUS
-   # end workaround
+   # Use v2 API Glance version as workaround for #1173044
+   glance --debug --os-image-api-version 2 image-update $1 --name $2
 }
 
 upload_image() {
