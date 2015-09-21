@@ -21,9 +21,8 @@ cleanup_image() {
 }
 
 delete_image() {
-   # "|| true" here, to avoid error code producing in case of missing image
-   id=$(glance image-list | grep $1 | awk '{print $2}')
-   glance image-delete $id || true
+   id=$(glance image-list | grep -w $1 | awk '{print $2}')
+   [ -n "$id" ] && glance image-delete $id
 }
 
 failure() {
@@ -42,13 +41,8 @@ register_new_image() {
 
 rename_image() {
    # 1 - source image, 2 - target image
-   # Workaround for #1173044
-   tmux new-session -d -s image "glance --debug image-update $1 --name $2 |& tee /tmp/glance-image-update.log"
-   sleep 10
-   cat /tmp/glance-image-update.log
-   STATUS=$(grep -q -w 'Property' /tmp/glance-image-update.log; echo $?)
-   exit $STATUS
-   # end workaround
+   # Use v2 API Glance version as workaround for #1173044
+   glance --debug --os-image-api-version 2 image-update $1 --name $2
 }
 
 upload_image() {
