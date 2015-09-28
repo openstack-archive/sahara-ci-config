@@ -97,6 +97,11 @@
           engine: heat
           plugin: hdp_2.0.6
           os: c6.6
+     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
+          network: nova
+          engine: heat
+          plugin: ambari_2.3
+          os: c6.6
      - 'tempest-{name}-tests'
 
 - project:

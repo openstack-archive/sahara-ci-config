@@ -39,6 +39,7 @@ projects:
       - gate-sahara-nova-direct-cdh_5.4.0-u12-aio
       - gate-sahara-nova-direct-cdh_5.4.0-c6.6-aio
       - gate-sahara-nova-heat-hdp_2.0.6-c6.6
+      - gate-sahara-nova-heat-ambari_2.3-c6.6
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -115,6 +116,9 @@ jobs:
     branch: stable/kilo
   - name: ^.*-vanilla_2.7.1-.*$
     branch: master
+  - name: ^.*-ambari_2.3-.*$
+    branch: master
+    voting: false
   - name: dib-neutron-heat-vanilla_2.7.1-c7
     branch: master
     voting: false
