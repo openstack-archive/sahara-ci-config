@@ -25,6 +25,11 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml.mako"
        template_image_prefix="hdp_two"
        ;;
+    ambari_2.3)
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/ambari-2.3.yaml.mako"
+       template_image_prefix="ambari_2_1"
+       ;;
     vanilla_2.6.0)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"

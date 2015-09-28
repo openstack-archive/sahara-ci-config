@@ -95,7 +95,9 @@
      - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat
-          plugin: hdp_2.0.6
+          plugin:
+            - hdp_2.0.6
+            - ambari_2.3
           os: c6.6
      - 'tempest-{name}-tests'
 
