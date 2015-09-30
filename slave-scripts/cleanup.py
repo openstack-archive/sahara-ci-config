@@ -1,11 +1,11 @@
+from cinderclient import client as cc
+from heatclient import client as hc
+from keystoneclient.v2_0 import client as kc
+from novaclient.v1_1 import client as nc
 import os
+import re
 import sys
 import time
-from novaclient.v1_1 import client as nc
-from keystoneclient.v2_0 import client as kc
-from heatclient import client as hc
-from cinderclient import client as cc
-import re
 
 CONF = dict()
 keys = ["os_username", "os_password", "os_auth_url", "os_tenant_name", "os_image_endpoint"]
