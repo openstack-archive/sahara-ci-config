@@ -8,7 +8,8 @@ import sys
 import time
 
 CONF = dict()
-keys = ["os_username", "os_password", "os_auth_url", "os_tenant_name", "os_image_endpoint"]
+keys = ["os_username", "os_password", "os_auth_url", "os_tenant_name",
+        "os_image_endpoint"]
 
 
 def load_conf():
