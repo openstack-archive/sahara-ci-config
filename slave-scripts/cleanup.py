@@ -55,7 +55,7 @@ def cleanup_heat():
     for stack in stacks:
         if name_regex.match(stack.stack_name):
             deleted_stacks.append(stack.stack_name)
-            print stack.stack_name
+            print(stack.stack_name)
             client.stacks.delete(stack.stack_name)
     if not deleted_stacks:
         return
@@ -67,8 +67,8 @@ def cleanup_heat():
     for stack in stacks:
         if stack.stack_name in deleted_stacks:
             # Resource cleanup is required
-            print "At least one stack wasn't deleted!"
-            print "Performing resources cleanup..."
+            print("At least one stack wasn't deleted!")
+            print("Performing resources cleanup...")
             cleanup()
 
 
@@ -83,7 +83,7 @@ def cleanup():
 
     for server in servers:
         if name_regex.match(server.name):
-            print server.name
+            print(server.name)
             fl_ips = client.floating_ips.findall(instance_id=server.id)
             for fl_ip in fl_ips:
                     client.floating_ips.delete(fl_ip.id)
@@ -92,12 +92,12 @@ def cleanup():
     time.sleep(20)
     for volume in volumes:
         if name_regex.match(volume.display_name):
-            print volume.display_name
+            print(volume.display_name)
             volume.delete()
 
     for group in secgroups:
         if name_regex.match(group.name):
-            print group.name
+            print(group.name)
             group.delete()
 
 
