@@ -88,14 +88,14 @@ projects:
 jobs:
   - name: ^.*$
     parameter-function: set_params
-    branch: ^(master|stable/kilo)$
+    branch: ^(master|stable/kilo|stable/liberty)$
   - name: ^gate-sahara.*$
     skip-if:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
   - name: ^tempest-sahara.*$
-    branch: master
+    branch: ^(master|stable/liberty)$
     skip-if:
       - all-files-match-any:
           - ^doc/.*$
@@ -107,13 +107,13 @@ jobs:
   - name: ^.*-cdh_5.3.0-.*$
     branch: stable/kilo
   - name: ^.*-cdh_5.4.0-.*$
-    branch: master
+    branch: ^(master|stable/liberty)$
   - name: ^.*-spark_1.3.1-.*$
-    branch: master
+    branch: ^(master|stable/liberty)$
   - name: ^.*-spark_1.0.0-.*$
     branch: stable/kilo
   - name: ^.*-vanilla_2.7.1-.*$
-    branch: master
+    branch: ^(master|stable/liberty)$
   - name: ^.*-ambari_2.3-.*$
     branch: master
     voting: false
