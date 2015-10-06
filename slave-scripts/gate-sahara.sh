@@ -84,7 +84,7 @@ case $plugin in
        ;;
 esac
 
-sudo pip install . --no-cache-dir
+sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$engine_type" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
