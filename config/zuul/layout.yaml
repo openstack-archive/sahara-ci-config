@@ -100,7 +100,6 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-    voting: false
   - name: ^.*-mapr_4.0.2.mrv2-u14$
     branch: master
     voting: false
