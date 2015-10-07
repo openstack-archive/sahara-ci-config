@@ -100,6 +100,8 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
+  - name: ^tempest-sahara.*$
+    branch: stable/liberty
     voting: false
   - name: ^.*-mapr_4.0.2.mrv2-u14$
     branch: master
