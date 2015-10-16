@@ -33,7 +33,7 @@ APT_PACKAGES+=" qemu kpartx"
 # pep8-trunk job requirements
 APT_PACKAGES+=" gettext"
 # Glance-client is required for diskimage-integration jobs
-PIP_PACKAGES="python-glanceclient==0.16"
+PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
 PIP_PACKAGES+=" mysql-python"
 # Requirements for Cloudera plugin
