@@ -1,4 +1,4 @@
 [gerrit]
 host=review.openstack.org
 port=29418
-project=stackforge/sahara-ci-config.git
+project=openstack/sahara-ci-config.git
