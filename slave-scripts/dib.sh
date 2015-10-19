@@ -115,13 +115,13 @@ case $plugin in
        template_image_prefix="ambari_2_1"
     ;;
 
-    mapr_4.0.2.mrv2)
-       env mapr_ubuntu_image_name=${mapr_4_0_2_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
-       check_error_code $? ${mapr_4_0_2_mrv2_image}.qcow2
-       upload_image "${plugin}" "${username}" ${mapr_4_0_2_mrv2_image}
+    mapr_5.0.0.mrv2)
+       env mapr_ubuntu_image_name=${mapr_5_0_0_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       check_error_code $? ${mapr_5_0_0_mrv2_image}.qcow2
+       upload_image "${plugin}" "${username}" ${mapr_5_0_0_mrv2_image}
        mode=distribute
-       scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml.mako"
-       template_image_prefix="mapr_402mrv2"
+       scenario_conf_file="$sahara_templates_path/mapr-5.0.0.mrv2.yaml.mako"
+       template_image_prefix="mapr_500mrv2"
     ;;
 esac
 

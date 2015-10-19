@@ -34,7 +34,7 @@ UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
 CENTOS_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_c6.6.qcow2
 SPARK_1_0_0_IMAGE_PATH=/home/ubuntu/images/spark_1.0.0_u14.qcow2
 SPARK_1_3_1_IMAGE_PATH=/home/ubuntu/images/spark_1.3.1_u14.qcow2
-MAPR_4_0_2_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_4.0.2.mrv2_u14.qcow2
+MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 UBUNTU_12_04_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
 # setup ci tenant and ci users
@@ -84,7 +84,7 @@ glance image-create --name $(basename -s .qcow2 $UBUNTU_CDH_5_4_0_IMAGE_PATH) --
 glance image-create --name $(basename -s .qcow2 $CENTOS_CDH_5_4_0_IMAGE_PATH) --file $CENTOS_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
 glance image-create --name $(basename -s .qcow2 $SPARK_1_0_0_IMAGE_PATH) --file $SPARK_1_0_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
 glance image-create --name $(basename -s .qcow2 $SPARK_1_3_1_IMAGE_PATH) --file $SPARK_1_3_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.3.1'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name $(basename -s .qcow2 $MAPR_4_0_2_MRV2_IMAGE_PATH) --file $MAPR_4_0_2_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_4.0.2.mrv2'='True'  --property '_sahara_username'="ubuntu"
+glance image-create --name $(basename -s .qcow2 $MAPR_5_0_0_MRV2_IMAGE_PATH) --file $MAPR_5_0_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_4.0.2.mrv2'='True'  --property '_sahara_username'="ubuntu"
 glance image-create --name ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare
 glance image-create --name fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_fake'='True' --property '_sahara_tag_0.1'='True' --property '_sahara_username'='ubuntu'
 glance image-update --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
