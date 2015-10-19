@@ -71,10 +71,10 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
        template_image_prefix="spark_1_3"
        ;;
-    mapr_4.0.2.mrv2)
+    mapr_5.0.0.mrv2)
        mode=distribute
-       scenario_conf_file="$sahara_templates_path/mapr-4.0.2.mrv2.yaml.mako"
-       template_image_prefix="mapr_402mrv2"
+       scenario_conf_file="$sahara_templates_path/mapr-5.0.0.mrv2.yaml.mako"
+       template_image_prefix="mapr_500mrv2"
        ;;
     fake)
        mode=distribute
