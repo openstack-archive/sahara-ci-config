@@ -7,8 +7,8 @@
 
       <p>If you would like to make changes to this job, please see:
 
-        <a href="https://git.openstack.org/stackforge/sahara-ci-config">
-          https://git.openstack.org/stackforge/sahara-ci-config
+        <a href="https://git.openstack.org/openstack/sahara-ci-config">
+          https://git.openstack.org/openstack/sahara-ci-config
         </a>
 
       </p>

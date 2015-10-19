@@ -81,7 +81,7 @@ projects:
       - dib-nova-direct-cdh_5.4.0-u12-aio
       - dib-nova-direct-cdh_5.4.0-c6.6-aio
 
-  - name: stackforge/sahara-ci-config
+  - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
 

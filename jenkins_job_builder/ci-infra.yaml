@@ -3,7 +3,7 @@
     project-type: freestyle
     defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                  \n<p>This job destroys vms which were not deleted after integration tests"
     disabled: false
     node: 'master'
@@ -25,7 +25,7 @@
     builders:
     - shell: |
             rm -rf sahara-ci-config
-            git clone https://git.openstack.org/stackforge/sahara-ci-config
+            git clone https://git.openstack.org/openstack/sahara-ci-config
             bash $WORKSPACE/sahara-ci-config/slave-scripts/integration-cleanup.sh
 
 - job:
@@ -33,7 +33,7 @@
     node: master
     project-type: freestyle
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Jenkins Jobs Update job <br/>\
                   \n<b>Description</b>: This job updates all other jobs from sahara-ci-config repo. <br/>\
                   \n<b>Maintainer</b>: Sergey Kolekonov<br/>"
@@ -43,7 +43,7 @@
 
     scm:
      - git:
-        url: https://git.openstack.org/stackforge/sahara-ci-config
+        url: https://git.openstack.org/openstack/sahara-ci-config
         branches:
           - "master"
 
@@ -58,7 +58,7 @@
     project-type: freestyle
     defaults: global
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                  \n<p>This job check syntax in *.yaml, *.sh, *.py files"
     disabled: false
     concurrent: false
@@ -76,7 +76,7 @@
     node: master
     project-type: freestyle
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Update job for Zuul and Nodepool <br/>\
                   \n<b>Description</b>: This job updates Zuul and Nodepool configs from sahara-ci-config repo. <br/>\
                   \n<b>Maintainer</b>: Sergey Kolekonov<br/>"
@@ -86,7 +86,7 @@
 
     scm:
      - git:
-        url: https://git.openstack.org/stackforge/sahara-ci-config
+        url: https://git.openstack.org/openstack/sahara-ci-config
         branches:
           - "master"
 
@@ -101,7 +101,7 @@
     node: master
     project-type: freestyle
     description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
-                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/stackforge/sahara-ci-config\">https://git.openstack.org/stackforge/sahara-ci-config</a></b>\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                   \n<p><b>Title</b>: Update Pool <br/>\
                   \n<b>Description</b>: This job updates vm pool using Nodepool. <br/>\
                   \n<b>Maintainer</b>: Sergey Kolekonov<br/>"

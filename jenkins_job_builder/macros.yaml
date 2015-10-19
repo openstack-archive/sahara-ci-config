@@ -7,7 +7,7 @@
     name: ci-config-prep
     builders:
       - shell: |
-            git clone https://git.openstack.org/stackforge/sahara-ci-config
+            git clone https://git.openstack.org/openstack/sahara-ci-config
             wget https://sahara.mirantis.com/files/patch_map
             wget https://sahara.mirantis.com/files/check_ci_ancillary_patches.sh
             chmod +x check_ci_ancillary_patches.sh
