@@ -114,7 +114,6 @@ jobs:
     branch: ^(master|stable/liberty)$
   - name: ^.*-ambari_2.3-.*$
     branch: master
-    voting: false
   - name: dib-neutron-heat-vanilla_2.7.1-c7
     branch: master
     voting: false
@@ -125,5 +124,4 @@ jobs:
   - name: ^.*-nova-heat-hdp_2.0.6-c6.6$
     voting: false
   - name: ^.*-nova-heat-ambari_2.1-.*$
-    voting: false
     branch: master
