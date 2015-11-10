@@ -82,10 +82,6 @@
              - mapr_5.0.0.mrv2
           os: u14
           network: neutron
-     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
-          plugin: transient
-          os: u14
-          network: neutron
      - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0

@@ -31,7 +31,6 @@ projects:
       - gate-sahara-neutron-heat-vanilla_2.7.1-u14
       - gate-sahara-neutron-direct-spark_1.0.0-u14-aio
       - gate-sahara-neutron-direct-spark_1.3.1-u14-aio
-      - gate-sahara-neutron-direct-transient-u14
       - gate-sahara-neutron-heat-transient-u14
       - gate-sahara-neutron-heat-mapr_5.0.0.mrv2-u14
       - gate-sahara-nova-direct-cdh_5.3.0-u12-aio
