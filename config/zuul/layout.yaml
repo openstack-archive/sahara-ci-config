@@ -111,6 +111,8 @@ jobs:
     branch: stable/kilo
   - name: ^.*-vanilla_2.7.1-.*$
     branch: ^(master|stable/liberty)$
+  - name: dib-neutron-heat-vanilla_2.7.1-c6.6
+    voting: false
   - name: ^.*-ambari_2.3-.*$
     branch: master
   - name: dib-neutron-heat-vanilla_2.7.1-c7
