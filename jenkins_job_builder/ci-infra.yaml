@@ -119,3 +119,15 @@
 
     builders:
       - shell:  "/opt/ci/files/update_pool.sh"
+
+- job:
+    name: noop
+    node: master
+    project-type: freestyle
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
+                  \n<p><b>Title</b>: Update Pool <br/>\
+                  \n<b>Description</b>: This job updates vm pool using Nodepool. <br/>\
+                  \n<b>Maintainer</b>: Sergey Kolekonov<br/>"
+    defaults: global
+    disabled: false
