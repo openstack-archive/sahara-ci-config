@@ -23,6 +23,12 @@ pipelines:
         - event: change-merged
         - event: comment-added
           comment_filter: (?i)^\s*rebuild(( sahara-ci))\s*$
+  - name: noop
+    manager: IndependentPipelineManager
+    trigger:
+      gerrit:
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(sahara-ci-)?recheck
 
 projects:
   - name: openstack/sahara
@@ -83,6 +89,10 @@ projects:
   - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
+
+  - name: openstack/heat
+    noop:
+      - noop
 
 jobs:
   - name: ^.*$
