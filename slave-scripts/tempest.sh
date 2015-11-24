@@ -65,7 +65,7 @@ else
    insert_config_value etc/tempest.conf scenario ssh_user ubuntu
    insert_config_value etc/tempest.conf network floating_network_name public
    insert_config_value etc/tempest.conf compute fixed_network_name private
-   insert_config_value etc/tempest.conf data_processing fake_image_id $image_id
+   insert_config_value etc/tempest.conf data-processing fake_image_id $image_id
 fi
 
 enable_pypi
