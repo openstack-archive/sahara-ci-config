@@ -70,7 +70,7 @@ fi
 
 enable_pypi
 sudo pip install $SAHARA_PATH/. --no-cache-dir
-write_sahara_main_conf $sahara_conf_path "direct" "fake"
+write_sahara_main_conf $sahara_conf_path "heat" "fake"
 start_sahara $sahara_conf_path
 
 # Prepare env and install saharaclient
