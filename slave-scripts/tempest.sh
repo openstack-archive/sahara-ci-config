@@ -79,6 +79,7 @@ if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
 else
    TOXENV="all-plugin"
 fi
+export OS_TEST_TIMEOUT=3600
 tox -e $TOXENV --notest
 .tox/$TOXENV/bin/pip install $SAHARACLIENT_PATH/.
 # Temporary use additional log file, due to wrong status code from tox scenario tests
