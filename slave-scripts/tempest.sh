@@ -79,6 +79,8 @@ if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
 else
    TOXENV="all-plugin"
 fi
+OLD_TIMEOUT=$OS_TEST_TIMEOUT
+export OS_TEST_TIMEOUT=1800
 tox -e $TOXENV --notest
 .tox/$TOXENV/bin/pip install $SAHARACLIENT_PATH/.
 # Temporary use additional log file, due to wrong status code from tox scenario tests
@@ -87,4 +89,5 @@ tox -e $TOXENV -- tempest.scenario.data_processing.client_tests | tee tox.log
 STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
 if [ "$STATUS" != "0" ]; then failure "Tempest tests have failed"; fi
 .tox/$TOXENV/bin/pip freeze > $WORKSPACE/logs/python-tempest-env.txt
+export OS_TEST_TIMEOUT=$OLD_TIMEOUT
 print_python_env
