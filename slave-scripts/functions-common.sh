@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 configs_path=$WORKSPACE/sahara-ci-config/config
-template_vars_file=template_vars.ini
+template_vars_file=/tmp/sahara-scenario/template_vars.ini
 
 eval ci_flavor_id="\'20\'"
 eval medium_flavor_id="\'3\'"
@@ -116,16 +116,18 @@ run_tests() {
     scenario_edp="$templates_path/edp.yaml"
   fi
   # Temporary use additional log file, due to wrong status code from tox scenario tests
+  pushd $SAHARA_TESTS_PATH
   if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
     scenario_credentials=${scenario_credentials%.*}
     scenario_config=${scenario_config%.*}
-    tox -e scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+    tox -e venv -- sahara-scenario $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   else
     # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
-    tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+    tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   fi
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
+  popd
 }
 
 scenario_has_option() {
