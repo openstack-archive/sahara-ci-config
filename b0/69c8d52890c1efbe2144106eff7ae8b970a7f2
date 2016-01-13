@@ -1,0 +1,10 @@
+Code-Review+1: Sergey Reshetnyak <sreshetniak@mirantis.com>
+Verified+1: Sahara Hadoop Cluster CI <elastic-hadoop-ci@mirantis.com>
+Code-Review+2: Denis Egorenko <degorenko@mirantis.com>
+Workflow+1: Denis Egorenko <degorenko@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 13 Jan 2016 15:30:41 +0000
+Reviewed-on: https://review.openstack.org/249770
+Project: openstack/sahara-ci-config
+Branch: refs/heads/master
