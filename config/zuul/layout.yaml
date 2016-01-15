@@ -48,6 +48,25 @@ projects:
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
+  - name: openstack/sahara-scenario
+    check:
+      - gate-sahara_tests-neutron-heat-vanilla_2.6.0-u14
+      - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14
+      - gate-sahara_tests-neutron-direct-spark_1.0.0-u14-aio
+      - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-aio
+      - gate-sahara_tests-neutron-heat-transient-u14
+      - gate-sahara_tests-neutron-heat-mapr_5.0.0.mrv2-u14
+      - gate-sahara_tests-nova-direct-cdh_5.3.0-u12-aio
+      - gate-sahara_tests-nova-direct-cdh_5.3.0-c6.6-aio
+      - gate-sahara_tests-nova-direct-cdh_5.4.0-u12-aio
+      - gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-aio
+      - gate-sahara_tests-nova-heat-hdp_2.0.6-c6.6
+      - gate-sahara_tests-nova-heat-ambari_2.3-c6.6
+      - gate-sahara_tests-nova-direct-cdh_5.4.0-u12-liberty
+      - gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-liberty
+      - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-liberty
+      - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14-liberty
+
   - name: openstack/python-saharaclient
     check:
       - gate-saharaclient-distributed-heat-fake
@@ -136,3 +155,5 @@ jobs:
     voting: false
   - name: ^.*-nova-heat-ambari_2.1-.*$
     branch: master
+  - name: ^.*-sahara_tests-.*$
+    branch: ^(master|stable/liberty|stable/kilo)$
