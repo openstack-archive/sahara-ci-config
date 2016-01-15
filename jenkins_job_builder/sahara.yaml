@@ -32,12 +32,12 @@
     node: trusty-neutron || trusty-nova
 
 - job-template:
-    name: 'gate-sahara-{network}-{engine}-{plugin}-{os}'
+    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
     properties:
       - zeromq-event
     publishers:
@@ -47,12 +47,12 @@
     node: 'trusty-{network}'
 
 - job-template:
-    name: 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio'
+    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
     properties:
       - zeromq-event
     publishers:
@@ -63,6 +63,9 @@
 
 - project:
     name: sahara
+    project_name:
+      - sahara
+      - sahara_tests
     network: nova
     engine: direct
     plugin:
@@ -72,8 +75,8 @@
       - u12
       - c6.6
     jobs:
-     - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio'
-     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
+     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
+     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
           engine: heat
           plugin:
              - vanilla_2.6.0
@@ -82,13 +85,13 @@
              - mapr_5.0.0.mrv2
           os: u14
           network: neutron
-     - 'gate-sahara-{network}-{engine}-{plugin}-{os}-aio':
+     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0
              -  spark_1.3.1
           os: u14
           network: neutron
-     - 'gate-sahara-{network}-{engine}-{plugin}-{os}':
+     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat
           plugin:
