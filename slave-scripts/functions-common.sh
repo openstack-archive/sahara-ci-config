@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 configs_path=$WORKSPACE/sahara-ci-config/config
-template_vars_file=/tmp/sahara-scenario/template_vars.ini
+template_vars_file=/tmp/template_vars.ini
 
 eval ci_flavor_id="\'20\'"
 eval medium_flavor_id="\'3\'"
@@ -193,25 +193,7 @@ write_tests_conf() {
     NETWORK="neutron"
   else
     NETWORK="nova-network"
-  fi
-  if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
-    local test_conf=${4%.*}
-    local test_scenario_credentials=$(dirname $4)/credentials.yaml
-    local os_auth_url="http://$OPENSTACK_HOST:5000/v2.0/"
-    insert_scenario_value $test_scenario_credentials credentials "" os_username $OS_USERNAME
-    insert_scenario_value $test_scenario_credentials credentials "" os_password $OS_PASSWORD
-    insert_scenario_value $test_scenario_credentials credentials "" os_tenant $OS_TENANT_NAME
-    insert_scenario_value $test_scenario_credentials credentials "" os_auth_url $os_auth_url
-    insert_scenario_value $test_scenario_credentials network "" "type" $NETWORK
-    insert_scenario_value $test_conf clusters node_group_templates image $image_name
-    insert_scenario_value $test_conf cluster "" name $cluster_name
-    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $ci_flavor_id ci_flavor_id
-    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $medium_flavor_id medium_flavor_id
-    insert_scenario_value $test_conf node_group_templates "\\$" flavor_id $large_flavor_id large_flavor_id
-    echo "----------- tests config -----------"
-    cat $test_conf
-    echo "---------------- end ---------------"
-  else
+  fi 
 echo "[DEFAULT]
 OS_USERNAME: $OS_USERNAME
 OS_PASSWORD: $OS_PASSWORD
@@ -226,5 +208,4 @@ ci_flavor_id: $ci_flavor_id
 medium_flavor_id: $medium_flavor_id
 large_flavor_id: $large_flavor_id
 " | tee ${template_vars_file}
-  fi
 }
