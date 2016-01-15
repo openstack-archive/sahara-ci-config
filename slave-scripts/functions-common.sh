@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 configs_path=$WORKSPACE/sahara-ci-config/config
-template_vars_file=/tmp/sahara-scenario/template_vars.ini
+template_vars_file=/tmp/template_vars.ini
 
 eval ci_flavor_id="\'20\'"
 eval medium_flavor_id="\'3\'"
