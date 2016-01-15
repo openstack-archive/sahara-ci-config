@@ -32,6 +32,21 @@
     node: trusty-neutron || trusty-nova
 
 - job-template:
+    name: 'gate-sahara-tests-{network}-{engine}-{plugin}-{os}'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara-tests.sh"
+    properties:
+      - zeromq-event
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: 'trusty-{network}'
+
+- job-template:
     name: 'gate-sahara-{network}-{engine}-{plugin}-{os}'
     defaults: global
     builders:
@@ -62,7 +77,9 @@
     node: 'trusty-{network}'
 
 - project:
-    name: sahara
+    name:
+      - sahara
+      - sahara-scenario
     network: nova
     engine: direct
     plugin:
