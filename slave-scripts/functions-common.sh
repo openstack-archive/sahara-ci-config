@@ -43,7 +43,7 @@ failure() {
 get_dependency() {
   local project_dir=$1
   local project_name=$2
-  local branch=${ZUUL_BRANCH:-$3}
+  local branch=$3
   if check_dependency_patch "$project_name"
   then
     # when patch depends on patch to some project

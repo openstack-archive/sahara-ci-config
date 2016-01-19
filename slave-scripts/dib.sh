@@ -24,10 +24,10 @@ mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
-get_dependency "$SAHARA_PATH" "openstack/sahara"
+get_dependency "$SAHARA_PATH" "openstack/sahara" "$ZUUL_BRANCH"
 
 # Clone Sahara Scenario tests
-get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario"
+get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario" "master"
 
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
