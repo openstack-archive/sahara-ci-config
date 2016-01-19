@@ -9,7 +9,7 @@ eval large_flavor_id="\'4\'"
 
 check_dependency_patch() {
   local project_name=$1
-  local zuul_changes=${ZUUL_CHANGES:-$2}
+  local zuul_changes=${ZUUL_CHANGES:+$2}
   for dep in $(echo "$zuul_changes" | tr "^" "\n"); do
      cur_proj=$(echo $dep|awk -F: '{print $1}')
      [[ "$cur_proj" =~ ^"$project_name"$ ]] && return 0

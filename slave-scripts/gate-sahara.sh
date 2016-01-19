@@ -14,7 +14,7 @@ sahara_conf_file=$SAHARA_PATH/etc/sahara/sahara.conf
 sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/sahara-ci
 
 # Clone Sahara Scenario tests
-get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario"
+get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario" "master"
 
 engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
