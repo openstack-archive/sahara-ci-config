@@ -9,12 +9,12 @@ CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH=${1:-$WORKSPACE}
-SAHARA_TESTS_PATH="/tmp/sahara-scenario"
+SAHARA_TESTS_PATH="/tmp/sahara-tests"
 sahara_conf_file=$SAHARA_PATH/etc/sahara/sahara.conf
 sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/sahara-ci
 
 # Clone Sahara Scenario tests
-get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario"
+get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests"
 
 engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
