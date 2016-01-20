@@ -10,7 +10,7 @@ CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH="/tmp/sahara"
-SAHARA_TESTS_PATH="/tmp/sahara-scenario"
+SAHARA_TESTS_PATH="/tmp/sahara-tests"
 sahara_conf_file="$SAHARA_PATH/etc/sahara/sahara.conf"
 sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/sahara-ci
 
@@ -27,7 +27,7 @@ sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 get_dependency "$SAHARA_PATH" "openstack/sahara" "$ZUUL_BRANCH"
 
 # Clone Sahara Scenario tests
-get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-scenario" "master"
+get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
 
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
