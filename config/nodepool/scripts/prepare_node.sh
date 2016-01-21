@@ -62,7 +62,7 @@ sudo pip install -U -r /tmp/sahara/requirements.txt
 git clone https://git.openstack.org/openstack-infra/project-config /tmp/project-config
 sudo mkdir -p /usr/local/jenkins/
 sudo mv /tmp/project-config/jenkins/scripts /usr/local/jenkins/slave_scripts
-rm -rf /tmp/sahara /tmp/project-config
+rm -rf /tmp/sahara /tmp/sahara-scenario /tmp/project-config
 
 # create jenkins user
 sudo useradd -d /home/jenkins -G sudo -s /bin/bash -m jenkins
