@@ -51,6 +51,9 @@ case "${os}" in
         ;;
 esac
 
+# pass image name vars to tox env
+echo -e "[venv]\npassenv = *" >> $WORKSPACE/tox.ini
+
 case $plugin in
     vanilla_2.6.0)
        env ${os_type}_vanilla_hadoop_2_6_image_name=${vanilla_2_6_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.6
