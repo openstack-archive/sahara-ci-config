@@ -115,6 +115,14 @@
           os: c6.6
      - 'tempest-{name}-tests'
      - 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
+     - 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+          network: neutron
+          engine: heat
+          plugin:
+            - vanilla_2.7.1
+            - spark_1.3.1
+          os: u14
+
 
 - project:
     name: saharaclient
