@@ -51,11 +51,10 @@ case $plugin in
        # transient is using image with latest vanilla version
        if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
         image_name=vanilla_2.6.0_u14
-        template_image_prefix="vanilla_two_six"
        else
         image_name=vanilla_2.7.1_u14
-        template_image_prefix="vanilla_two_seven_one"
-       fi
+       fi	
+       template_image_prefix="vanilla_two_seven_one"
        sahara_plugin=vanilla
        concurrency=3
        mode=distribute
