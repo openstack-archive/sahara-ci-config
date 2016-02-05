@@ -78,6 +78,9 @@ upload_image() {
            spark_1.3.1)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.3.1=True --property _sahara_username=${username}"
            ;;
+	   spark_1.6.0)
+             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.6.0=True --property _sahara_username=${username}"
+           ;;
            mapr_5.0.0.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.0.0.mrv2=True --property _sahara_username=${username}"
            ;;

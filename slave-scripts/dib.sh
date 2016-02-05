@@ -85,6 +85,14 @@ case $plugin in
        template_image_prefix="spark_1_3"
     ;;
 
+    spark_1.6.0)
+       env ubuntu_spark_image_name=${spark_1_6_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.6
+       check_error_code $? ${spark_1_6_0_image}.qcow2
+       upload_image "${plugin}" "${username}" ${spark_1_6_0_image}
+       scenario_conf_file="$sahara_templates_path/spark-1.6.0.yaml.mako"
+       template_image_prefix="spark_1_6"
+    ;;
+
     hdp_2.0.6)
        env centos_hdp_hadoop_2_image_name=${hdp_2_0_6_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
        check_error_code $? ${hdp_2_0_6_image}.qcow2

@@ -37,6 +37,7 @@ projects:
       - gate-sahara-neutron-heat-vanilla_2.7.1-u14
       - gate-sahara-neutron-direct-spark_1.0.0-u14-aio
       - gate-sahara-neutron-direct-spark_1.3.1-u14-aio
+      - gate-sahara-neutron-direct-spark_1.6.0-u14-aio
       - gate-sahara-neutron-heat-transient-u14
       - gate-sahara-neutron-heat-mapr_5.0.0.mrv2-u14
       - gate-sahara-nova-direct-cdh_5.3.0-u12-aio
@@ -54,6 +55,7 @@ projects:
       - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14
       - gate-sahara_tests-neutron-direct-spark_1.0.0-u14-aio
       - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-aio
+      - gate-sahara_tests-neutron-direct-spark_1.6.0-u14-aio
       - gate-sahara_tests-neutron-heat-transient-u14
       - gate-sahara_tests-neutron-heat-mapr_5.0.0.mrv2-u14
       - gate-sahara_tests-nova-direct-cdh_5.3.0-u12-aio
@@ -83,6 +85,7 @@ projects:
       - dib-neutron-heat-mapr_5.0.0.mrv2-u14
       - dib-neutron-direct-spark_1.0.0-u14-aio
       - dib-neutron-direct-spark_1.3.1-u14-aio
+      - dib-neutron-direct-spark_1.6.0-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
       - dib-nova-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
@@ -98,6 +101,7 @@ projects:
       - dib-neutron-heat-mapr_5.0.0.mrv2-u14
       - dib-neutron-direct-spark_1.0.0-u14-aio
       - dib-neutron-direct-spark_1.3.1-u14-aio
+      - dib-neutron-direct-spark_1.6.0-u14-aio
       - dib-nova-heat-hdp_2.0.6-c6.6
       - dib-nova-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
@@ -138,6 +142,9 @@ jobs:
     branch: ^(master|stable/liberty)$
   - name: ^.*-spark_1.0.0-.*$
     branch: stable/kilo
+  - name: ^.*-spark_1.6.0-.*$
+    branch: master
+    voting: false
   - name: ^.*-vanilla_2.7.1-.*$
     branch: ^(master|stable/liberty)$
   - name: dib-neutron-heat-vanilla_2.7.1-c6.6

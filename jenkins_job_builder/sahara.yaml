@@ -104,6 +104,7 @@
           plugin:
              -  spark_1.0.0
              -  spark_1.3.1
+             -  spark_1.6.0
           os: u14
           network: neutron
      - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
