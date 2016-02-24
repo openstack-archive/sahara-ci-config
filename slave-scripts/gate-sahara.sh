@@ -25,6 +25,15 @@ image_name=${plugin}_${os}
 mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
+case $ZUUL_BRANCH in
+    stable/liberty)
+       sahara_templates_path="$sahara_templates_path/liberty"
+       ;;
+    stable/kilo)
+       sahara_templates_path="$sahara_templates_path/kilo"
+       ;;
+esac
+
 case $plugin in
     hdp_2.0.6)
        mode=distribute
