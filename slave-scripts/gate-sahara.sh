@@ -11,7 +11,8 @@ cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 SAHARA_PATH=${1:-$WORKSPACE}
 SAHARA_TESTS_PATH=${2:-"/tmp/sahara-tests"}
 sahara_conf_file=$SAHARA_PATH/etc/sahara/sahara.conf
-sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/sahara-ci
+sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/defaults
+tests_etc=$sahara_templates_path
 
 # Clone Sahara Scenario tests
 if [ "$ZUUL_PROJECT" != "openstack/sahara-tests" ]; then
@@ -24,6 +25,15 @@ os=$(echo $JOB_NAME | awk -F '-' '{ print $6 }')
 image_name=${plugin}_${os}
 mode="aio"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
+
+case $ZUUL_BRANCH in
+    stable/liberty)
+       sahara_templates_path="$sahara_templates_path/liberty"
+       ;;
+    stable/kilo)
+       sahara_templates_path="$sahara_templates_path/kilo"
+       ;;
+esac
 
 case $plugin in
     hdp_2.0.6)
