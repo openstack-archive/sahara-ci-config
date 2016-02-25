@@ -36,18 +36,18 @@ projects:
       - gate-sahara-neutron-heat-vanilla_2.6.0-u14
       - gate-sahara-neutron-heat-vanilla_2.7.1-u14
       - gate-sahara-neutron-direct-spark_1.0.0-u14-aio
-      - gate-sahara-neutron-direct-spark_1.3.1-u14-aio
-      - gate-sahara-neutron-direct-spark_1.6.0-u14-aio
+      - gate-sahara-neutron-heat-spark_1.3.1-u14-aio
+      - gate-sahara-neutron-heat-spark_1.6.0-u14-aio
       - gate-sahara-neutron-heat-transient-u14
       - gate-sahara-neutron-heat-mapr_5.0.0.mrv2-u14
       - gate-sahara-nova-direct-cdh_5.3.0-u12-aio
       - gate-sahara-nova-direct-cdh_5.3.0-c6.6-aio
-      - gate-sahara-nova-direct-cdh_5.4.0-u12-aio
-      - gate-sahara-nova-direct-cdh_5.4.0-c6.6-aio
-      - gate-sahara-nova-direct-cdh_5.5.0-u12-aio
-      - gate-sahara-nova-direct-cdh_5.5.0-c6.6-aio
-      - gate-sahara-nova-heat-hdp_2.0.6-c6.6
-      - gate-sahara-nova-heat-ambari_2.3-c6.6
+      - gate-sahara-neutron-heat-cdh_5.4.0-u12-aio
+      - gate-sahara-neutron-heat-cdh_5.4.0-c6.6-aio
+      - gate-sahara-neutron-heat-cdh_5.5.0-u12-aio
+      - gate-sahara-neutron-heat-cdh_5.5.0-c6.6-aio
+      - gate-sahara-neutron-heat-hdp_2.0.6-c6.6
+      - gate-sahara-neutron-heat-ambari_2.3-c6.6
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -56,21 +56,21 @@ projects:
       - gate-sahara_tests-neutron-heat-vanilla_2.6.0-u14
       - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14
       - gate-sahara_tests-neutron-direct-spark_1.0.0-u14-aio
-      - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-aio
-      - gate-sahara_tests-neutron-direct-spark_1.6.0-u14-aio
+      - gate-sahara_tests-neutron-heat-spark_1.3.1-u14-aio
+      - gate-sahara_tests-neutron-heat-spark_1.6.0-u14-aio
       - gate-sahara_tests-neutron-heat-transient-u14
       - gate-sahara_tests-neutron-heat-mapr_5.0.0.mrv2-u14
       - gate-sahara_tests-nova-direct-cdh_5.3.0-u12-aio
       - gate-sahara_tests-nova-direct-cdh_5.3.0-c6.6-aio
-      - gate-sahara_tests-nova-direct-cdh_5.4.0-u12-aio
-      - gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-aio
-      - gate-sahara_tests-nova-direct-cdh_5.5.0-u12-aio
-      - gate-sahara_tests-nova-direct-cdh_5.5.0-c6.6-aio
-      - gate-sahara_tests-nova-heat-hdp_2.0.6-c6.6
-      - gate-sahara_tests-nova-heat-ambari_2.3-c6.6
-      - gate-sahara_tests-nova-direct-cdh_5.4.0-u12-liberty
-      - gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-liberty
-      - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-liberty
+      - gate-sahara_tests-neutron-heat-cdh_5.4.0-u12-aio
+      - gate-sahara_tests-neutron-heat-cdh_5.4.0-c6.6-aio
+      - gate-sahara_tests-neutron-heat-cdh_5.5.0-u12-aio
+      - gate-sahara_tests-neutron-heat-cdh_5.5.0-c6.6-aio
+      - gate-sahara_tests-neutron-heat-hdp_2.0.6-c6.6
+      - gate-sahara_tests-neutron-heat-ambari_2.3-c6.6
+      - gate-sahara_tests-neutron-heat-cdh_5.4.0-u12-liberty
+      - gate-sahara_tests-neutron-heat-cdh_5.4.0-c6.6-liberty
+      - gate-sahara_tests-neutron-heat-spark_1.3.1-u14-liberty
       - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14-liberty
 
   - name: openstack/python-saharaclient
@@ -88,16 +88,16 @@ projects:
       - dib-neutron-heat-vanilla_2.7.1-c7
       - dib-neutron-heat-mapr_5.0.0.mrv2-u14
       - dib-neutron-direct-spark_1.0.0-u14-aio
-      - dib-neutron-direct-spark_1.3.1-u14-aio
-      - dib-neutron-direct-spark_1.6.0-u14-aio
-      - dib-nova-heat-hdp_2.0.6-c6.6
-      - dib-nova-heat-ambari_2.1-c6.6
+      - dib-neutron-heat-spark_1.3.1-u14-aio
+      - dib-neutron-heat-spark_1.6.0-u14-aio
+      - dib-neutron-heat-hdp_2.0.6-c6.6
+      - dib-neutron-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio
-      - dib-nova-direct-cdh_5.4.0-u12-aio
-      - dib-nova-direct-cdh_5.4.0-c6.6-aio
-      - dib-nova-direct-cdh_5.5.0-u12-aio
-      - dib-nova-direct-cdh_5.5.0-c6.6-aio
+      - dib-neutron-heat-cdh_5.4.0-u12-aio
+      - dib-neutron-heat-cdh_5.4.0-c6.6-aio
+      - dib-neutron-heat-cdh_5.5.0-u12-aio
+      - dib-neutron-heat-cdh_5.5.0-c6.6-aio
     post:
       - dib-neutron-heat-vanilla_2.6.0-u14
       - dib-neutron-heat-vanilla_2.6.0-c6.6
@@ -106,16 +106,16 @@ projects:
       - dib-neutron-heat-vanilla_2.7.1-c7
       - dib-neutron-heat-mapr_5.0.0.mrv2-u14
       - dib-neutron-direct-spark_1.0.0-u14-aio
-      - dib-neutron-direct-spark_1.3.1-u14-aio
-      - dib-neutron-direct-spark_1.6.0-u14-aio
-      - dib-nova-heat-hdp_2.0.6-c6.6
-      - dib-nova-heat-ambari_2.1-c6.6
+      - dib-neutron-heat-spark_1.3.1-u14-aio
+      - dib-neutron-heat-spark_1.6.0-u14-aio
+      - dib-neutron-heat-hdp_2.0.6-c6.6
+      - dib-neutron-heat-ambari_2.1-c6.6
       - dib-nova-direct-cdh_5.3.0-u12-aio
       - dib-nova-direct-cdh_5.3.0-c6.6-aio
-      - dib-nova-direct-cdh_5.4.0-u12-aio
-      - dib-nova-direct-cdh_5.4.0-c6.6-aio
-      - dib-nova-direct-cdh_5.5.0-u12-aio
-      - dib-nova-direct-cdh_5.5.0-c6.6-aio
+      - dib-neutron-heat-cdh_5.4.0-u12-aio
+      - dib-neutron-heat-cdh_5.4.0-c6.6-aio
+      - dib-neutron-heat-cdh_5.5.0-u12-aio
+      - dib-neutron-heat-cdh_5.5.0-c6.6-aio
 
   - name: openstack/sahara-ci-config
     check:
@@ -170,9 +170,9 @@ jobs:
     branch: stable/kilo
   - name: gate-sahara-pep8-trunk
     voting: false
-  - name: ^.*-nova-heat-hdp_2.0.6-c6.6$
+  - name: ^.*-neutron-heat-hdp_2.0.6-c6.6$
     voting: false
-  - name: ^.*-nova-heat-ambari_2.1-.*$
+  - name: ^.*-neutron-heat-ambari_2.1-.*$
     branch: master
   - name: ^.*-sahara_tests-.*$
     branch: ^(master|stable/liberty|stable/kilo)$
