@@ -1,4 +1,11 @@
 #!/bin/bash -x
+
+for i in $(env | awk -F"=" '{print $1}') ; do
+  if [[ $i =~ OS_ ]]; then
+    unset $i
+  fi
+done
+
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ADMIN_RCFILE=$TOP_DIR/openrc
 PRIVATE_CIDR=10.0.0.0/24
@@ -11,17 +18,14 @@ MYSQL_CONF=/etc/mysql/my.cnf
 
 source $TOP_DIR/functions-common
 
-if [ -e "$ADMIN_RCFILE" ]; then
-    source $ADMIN_RCFILE admin admin
-else
-    echo "Can't source '$ADMIN_RCFILE'!"
-    exit 1
-fi
-
-if [[ $(nova endpoints | grep neutron) != "" ]]; then
+if [[ $(openstack --os-cloud=devstack-admin endpoint list | grep -w neutron) != "" ]]; then
     USE_NEUTRON=true
+    HOST_IP='172.18.168.42'
+    INTERFACE='br-ex'
 else
     USE_NEUTRON=false
+    HOST_IP='172.18.168.43'
+    INTERFACE='br100'
 fi
 
 VANILLA_2_6_0_IMAGE_PATH=/home/ubuntu/images/vanilla_2.6.0_u14.qcow2
@@ -37,58 +41,65 @@ SPARK_1_3_1_IMAGE_PATH=/home/ubuntu/images/spark_1.3.1_u14.qcow2
 MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 UBUNTU_12_04_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
 
+export OS_CLOUD='devstack-admin'
+
 # setup ci tenant and ci users
-CI_TENANT_ID=$(keystone tenant-create --name ci --description 'CI tenant' | grep -w id | get_field 2)
-CI_USER_ID=$(keystone user-create --name ci-user --tenant_id $CI_TENANT_ID --pass nova |  grep -w id | get_field 2)
-ADMIN_USER_ID=$(keystone user-list | grep -w admin | get_field 1)
-MEMBER_ROLE_ID=$(keystone role-list | grep -w Member | get_field 1)
-HEAT_OWNER_ROLE_ID=$(keystone role-list | grep -w heat_stack_owner | get_field 1)
-keystone user-role-add --user $CI_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
-keystone user-role-add --user $ADMIN_USER_ID --role $MEMBER_ROLE_ID --tenant $CI_TENANT_ID
+CI_TENANT_ID=$(openstack project create ci --description 'CI tenant' | grep -w id | get_field 2)
+CI_USER_ID=$(openstack user create ci-user --project $CI_TENANT_ID --password nova |  grep -w id | get_field 2)
+ADMIN_USER_ID=$(openstack user list | grep -w admin | get_field 1)
+MEMBER_ROLE_ID=$(openstack role list | grep -w Member | get_field 1)
+HEAT_OWNER_ROLE_ID=$(openstack role list | grep -w heat_stack_owner | get_field 1)
+openstack role add --user $CI_USER_ID --project $CI_TENANT_ID $MEMBER_ROLE_ID
+openstack role add --user $ADMIN_USER_ID --project $CI_TENANT_ID $MEMBER_ROLE_ID
 #keystone user-role-add --user $CI_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
 #keystone user-role-add --user $ADMIN_USER_ID --role $HEAT_OWNER_ROLE_ID --tenant $CI_TENANT_ID
-_MEMBER_ROLE_ID=$(keystone role-list | grep -w _member_ | get_field 1)
-keystone user-role-add --user $ADMIN_USER_ID --role $_MEMBER_ROLE_ID --tenant $CI_TENANT_ID
-ADMIN_ROLE_ID=$(keystone role-list | grep -w admin | get_field 1)
-keystone user-role-add --user $CI_USER_ID --role $ADMIN_ROLE_ID --tenant $CI_TENANT_ID
-keystone user-role-add --user $ADMIN_USER_ID --role $ADMIN_ROLE_ID --tenant $CI_TENANT_ID
-
-# setup quota for ci tenant
-nova-manage project quota $CI_TENANT_ID --key ram --value 200000
-nova-manage project quota $CI_TENANT_ID --key instances --value 64
-nova-manage project quota $CI_TENANT_ID --key cores --value 150
-cinder quota-update --volumes 100 $CI_TENANT_ID
-cinder quota-update --gigabytes 2000 $CI_TENANT_ID
-if $USE_NEUTRON; then
-  neutron quota-update --tenant_id $CI_TENANT_ID --port 64 --floatingip 64 --security-group 1000 --security-group-rule 10000
-else
-  nova quota-update --floating-ips 64 --security-groups 1000 --security-group-rules 10000 $CI_TENANT_ID
-fi
+ADMIN_ROLE_ID=$(openstack role list | grep -w admin | get_field 1)
+openstack role add --user $CI_USER_ID --project $CI_TENANT_ID $ADMIN_ROLE_ID
+openstack role add --user $ADMIN_USER_ID --project $CI_TENANT_ID $ADMIN_ROLE_ID
 
 # create qa flavor
-nova flavor-create --is-public true qa-flavor 20 2048 40 1
-nova flavor-delete m1.small
-nova flavor-create --is-public true m1.small 2 1024 20 1
+openstack flavor create --public --id 20 --ram 2048 --disk 40 --vcpus 1 qa-flavor
+openstack flavor delete m1.small
+openstack flavor create --public --id 2 --ram 1024 --disk 20 --vcpus 1 m1.small
 
 # switch to ci-user credentials
 source $ADMIN_RCFILE ci-user ci
+export OS_CLOUD='devstack-ci'
+
+echo "  devstack-ci:
+    auth:
+      auth_url: http://${HOST_IP}:35357
+      password: nova
+      project_domain_id: default
+      project_name: ci
+      user_domain_id: default
+      username: ci-user
+    identity_api_version: '3'
+    region_name: RegionOne
+" >> /etc/openstack/clouds.yaml
+
+# setup quota for ci tenant
+openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
+if $USE_NEUTRON; then
+  neutron quota-update --tenant_id $CI_TENANT_ID --port 64
+fi
 
 # add images for tests
-glance image-create --name $(basename -s .qcow2 $VANILLA_2_6_0_IMAGE_PATH) --file $VANILLA_2_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name $(basename -s .qcow2 $VANILLA_2_7_1_IMAGE_PATH) --file $VANILLA_2_7_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.7.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
-glance image-create --name $(basename -s .qcow2 $HDP_2_0_6_IMAGE_PATH) --file $HDP_2_0_6_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
-glance image-create --name $(basename -s .qcow2 $AMBARI_2_3_IMAGE_PATH) --file $AMBARI_2_3_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='cloud-user'
-glance image-create --name $(basename -s .qcow2 $CENTOS_CDH_5_3_0_IMAGE_PATH) --file $CENTOS_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
-glance image-create --name $(basename -s .qcow2 $UBUNTU_CDH_5_3_0_IMAGE_PATH) --file $UBUNTU_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
-glance image-create --name $(basename -s .qcow2 $UBUNTU_CDH_5_4_0_IMAGE_PATH) --file $UBUNTU_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
-glance image-create --name $(basename -s .qcow2 $CENTOS_CDH_5_4_0_IMAGE_PATH) --file $CENTOS_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
-glance image-create --name $(basename -s .qcow2 $SPARK_1_0_0_IMAGE_PATH) --file $SPARK_1_0_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name $(basename -s .qcow2 $SPARK_1_3_1_IMAGE_PATH) --file $SPARK_1_3_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.3.1'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name $(basename -s .qcow2 $MAPR_5_0_0_MRV2_IMAGE_PATH) --file $MAPR_5_0_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.0.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
-glance image-create --name ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare
-glance image-create --name fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_fake'='True' --property '_sahara_tag_0.1'='True' --property '_sahara_username'='ubuntu'
-glance image-update --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
-glance image-update --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
+openstack image create $(basename -s .qcow2 $VANILLA_2_6_0_IMAGE_PATH) --file $VANILLA_2_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
+openstack image create $(basename -s .qcow2 $VANILLA_2_7_1_IMAGE_PATH) --file $VANILLA_2_7_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.7.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
+openstack image create $(basename -s .qcow2 $HDP_2_0_6_IMAGE_PATH) --file $HDP_2_0_6_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.0.6'='True' --property '_sahara_tag_hdp'='True' --property '_sahara_username'='cloud-user'
+openstack image create $(basename -s .qcow2 $AMBARI_2_3_IMAGE_PATH) --file $AMBARI_2_3_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='cloud-user'
+openstack image create $(basename -s .qcow2 $CENTOS_CDH_5_3_0_IMAGE_PATH) --file $CENTOS_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
+openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_3_0_IMAGE_PATH) --file $UBUNTU_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_4_0_IMAGE_PATH) --file $UBUNTU_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $CENTOS_CDH_5_4_0_IMAGE_PATH) --file $CENTOS_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
+openstack image create $(basename -s .qcow2 $SPARK_1_0_0_IMAGE_PATH) --file $SPARK_1_0_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.0.0'='True'  --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $SPARK_1_3_1_IMAGE_PATH) --file $SPARK_1_3_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.3.1'='True'  --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $MAPR_5_0_0_MRV2_IMAGE_PATH) --file $MAPR_5_0_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.0.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
+openstack image create ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare
+openstack image create fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_fake'='True' --property '_sahara_tag_0.1'='True' --property '_sahara_username'='ubuntu'
+openstack image set --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
+openstack image set --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
 
 if $USE_NEUTRON; then
   # rename admin private network
@@ -117,7 +128,7 @@ fi
 if $USE_NEUTRON; then
   #this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
   #CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
-  CI_DEFAULT_SECURITY_GROUP_ID=$(nova secgroup-list | grep -w default | get_field 1)
+  CI_DEFAULT_SECURITY_GROUP_ID=$(openstack security group list | grep -w default | get_field 1)
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
   neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
@@ -130,11 +141,11 @@ else
 fi
 
 #create Sahara endpoint for tests
-service_id=$(keystone service-create --name sahara --type data_processing --description "Data Processing Service" | grep -w id | get_field 2)
-keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+service_id=$(openstack service create data_processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
+openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 # create second endpoint due to bug: #1356053
-service_id=$(keystone service-create --name sahara --type data-processing --description "Data Processing Service" | grep -w id | get_field 2)
-keystone endpoint-create --service-id $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+service_id=$(openstack service create data-processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
+openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
 # Setup Ceph
 echo "R" | bash $TOP_DIR/micro-osd.sh /home/ubuntu/ceph
@@ -153,6 +164,7 @@ inidelete $CINDER_CONF lvmdriver-1 volume_backend_name
 iniset $CINDER_CONF DEFAULT volume_driver cinder.volume.drivers.rbd.RBDDriver
 iniset $CINDER_CONF DEFAULT rbd_pool data
 iniset $GLANCE_CACHE_CONF DEFAULT image_cache_stall_time 43200
+iniset $NOVA_CONF DEFAULT disk_allocation_ratio 10.0
 
 #Setup Heat
 iniset $HEAT_CONF database max_pool_size 1000
@@ -171,11 +183,7 @@ sleep 5
 squid_port="3128"
 sudo iptables-save | grep "$squid_port"
 if [ "$?" == "1" ]; then
-  if $USE_NEUTRON; then
-    sudo iptables -t nat -A PREROUTING -i br-ex -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.42:$squid_port
-  else
-    sudo iptables -t nat -A PREROUTING -i br100 -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to 172.18.168.43:$squid_port
-  fi
+  sudo iptables -t nat -A PREROUTING -i ${INTERFACE} -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to ${HOST_IP}:$squid_port
 fi
 
 # Restart OpenStack services
