@@ -109,11 +109,10 @@ run_tests() {
   local concurrency=${2:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  local templates_path=$(dirname $scenario_config)
-  local scenario_credentials="$templates_path/credentials.yaml.mako"
-  local scenario_edp="$templates_path/edp.yaml.mako"
+  local scenario_credentials="$tests_etc/credentials.yaml.mako"
+  local scenario_edp="$tests_etc/edp.yaml.mako"
   if [ ! -f $scenario_edp ]; then
-    scenario_edp="$templates_path/edp.yaml"
+    scenario_edp="$tests_etc/edp.yaml"
   fi
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   pushd $SAHARA_TESTS_PATH
