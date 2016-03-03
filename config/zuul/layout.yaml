@@ -134,6 +134,7 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
+          - ^.*unit.*$
   - name: ^tempest-sahara.*$
     branch: ^(master|stable/liberty)$
     skip-if:
