@@ -29,6 +29,14 @@ pipelines:
       gerrit:
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(sahara-ci-)?recheck
+  - name: nightly
+    manager: IndependentPipelineManager
+    source: gerrit
+    trigger:
+      timer:
+        - time: '* 3 * * *'
+
+
 
 projects:
   - name: openstack/sahara
@@ -50,7 +58,9 @@ projects:
       - gate-sahara-nova-heat-ambari_2.3-c6.6
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
-
+   nightly:
+      - sahara-nightly
+  
   - name: openstack/sahara-tests
     check:
       - gate-sahara_tests-neutron-heat-vanilla_2.6.0-u14
