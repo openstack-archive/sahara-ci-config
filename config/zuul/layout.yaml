@@ -29,6 +29,12 @@ pipelines:
       gerrit:
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(sahara-ci-)?recheck
+  - name: nightly
+    manager: IndependentPipelineManager
+    source: gerrit
+    trigger:
+      timer:
+        - time: '0 3 * * *'
 
 projects:
   - name: openstack/sahara
@@ -72,6 +78,8 @@ projects:
       - gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-liberty
       - gate-sahara_tests-neutron-direct-spark_1.3.1-u14-liberty
       - gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14-liberty
+    nightly:
+      - sahara-nightly
 
   - name: openstack/python-saharaclient
     check:
