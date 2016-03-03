@@ -45,3 +45,16 @@
                \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME\
                \nCLUSTER_HASH=$CLUSTER_HASH"
+
+- publisher:
+    name: nightly
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "sahara-nightly"
+            predefined-parameters:
+               "ZUUL_CHANGE=$ZUUL_CHANGE\
+               \nJOB_NAME=$JOB_NAME\
+               \nNODE_NAME=$NODE_NAME\
+               \nCLUSTER_HASH=$CLUSTER_HASH\
+               \nZUUL_URL=https://github.com\
+               \nZUUL_REF=master"
