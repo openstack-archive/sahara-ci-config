@@ -13,6 +13,7 @@ SAHARA_PATH="/tmp/sahara"
 SAHARA_TESTS_PATH="/tmp/sahara-tests"
 sahara_conf_file="$SAHARA_PATH/etc/sahara/sahara.conf"
 sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/defaults
+tests_etc=$sahara_templates_path
 
 engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 
