@@ -99,6 +99,11 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/mapr-5.0.0.mrv2.yaml.mako"
        template_image_prefix="mapr_500mrv2"
        ;;
+    mapr_5.1.0.mrv2)
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
+       template_image_prefix="mapr_510mrv2"
+       ;;
     fake)
        mode=distribute
        image_name=fake_image
