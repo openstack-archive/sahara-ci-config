@@ -26,6 +26,7 @@ UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
 CENTOS_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_c6.6.qcow2
 SPARK_1_0_0_IMAGE_PATH=/home/ubuntu/images/spark_1.0.0_u14.qcow2
 SPARK_1_3_1_IMAGE_PATH=/home/ubuntu/images/spark_1.3.1_u14.qcow2
+SPARK_1_6_0_IMAGE_PATH=/home/ubuntu/images/spark_1.6.0_u14.qcow2
 MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 
 
@@ -39,6 +40,7 @@ glance image-download --file $UBUNTU_CDH_5_4_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5
 glance image-download --file $CENTOS_CDH_5_4_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_4_0_IMAGE_PATH)
 glance image-download --file $SPARK_1_0_0_IMAGE_PATH $(get_id $SPARK_1_0_0_IMAGE_PATH)
 glance image-download --file $SPARK_1_3_1_IMAGE_PATH $(get_id $SPARK_1_3_1_IMAGE_PATH)
+glance image-download --file $SPARK_1_6_0_IMAGE_PATH $(get_id $SPARK_1_6_0_IMAGE_PATH)
 glance image-download --file $MAPR_5_0_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_0_0_MRV2_IMAGE_PATH)
 
 bash $TOP_DIR/unstack.sh
