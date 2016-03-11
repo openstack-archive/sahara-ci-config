@@ -45,6 +45,22 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_URL
+          default: https://github.com
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_PROJECT
+          default: openstack/sahara-tests
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
 
 - job-template:
     name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
@@ -60,6 +76,22 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_URL
+          default: https://github.com
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_PROJECT
+          default: openstack/sahara-tests
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
 
 - job-template:
     name: 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
@@ -75,6 +107,22 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_URL
+          default: https://github.com
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_PROJECT
+          default: openstack/sahara-tests
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
 
 - project:
     name: sahara
@@ -154,3 +202,40 @@
       - zeromq-event
     publishers:
       - console-log
+
+- job:
+    name: sahara-nightly
+    triggers:
+      - timed: '0 3 * * *'
+    project-type: multijob
+    wrappers:
+      - timeout:
+          timeout: 480
+          fail: true
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
+                 \n<p>This job runs all Nightly checks for sahara"
+    builders:
+      - multijob:
+          name: sahara-nightly
+          condition: SUCCESSFUL
+          projects:
+            - name: gate-sahara_tests-neutron-heat-vanilla_2.6.0-u14
+            - name: gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14
+            - name: gate-sahara_tests-neutron-direct-spark_1.0.0-u14-aio
+            - name: gate-sahara_tests-neutron-direct-spark_1.3.1-u14-aio
+            - name: gate-sahara_tests-neutron-direct-spark_1.6.0-u14-aio
+            - name: gate-sahara_tests-neutron-heat-transient-u14
+            - name: gate-sahara_tests-neutron-heat-mapr_5.0.0.mrv2-u14
+            - name: gate-sahara_tests-nova-direct-cdh_5.3.0-u12-aio
+            - name: gate-sahara_tests-nova-direct-cdh_5.3.0-c6.6-aio
+            - name: gate-sahara_tests-nova-direct-cdh_5.4.0-u12-aio
+            - name: gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-aio
+            - name: gate-sahara_tests-nova-direct-cdh_5.5.0-u12-aio
+            - name: gate-sahara_tests-nova-direct-cdh_5.5.0-c6.6-aio
+            - name: gate-sahara_tests-nova-heat-hdp_2.0.6-c6.6
+            - name: gate-sahara_tests-nova-heat-ambari_2.3-c6.6
+            - name: gate-sahara_tests-nova-direct-cdh_5.4.0-u12-liberty
+            - name: gate-sahara_tests-nova-direct-cdh_5.4.0-c6.6-liberty
+            - name: gate-sahara_tests-neutron-direct-spark_1.3.1-u14-liberty
+            - name: gate-sahara_tests-neutron-heat-vanilla_2.7.1-u14-liberty
