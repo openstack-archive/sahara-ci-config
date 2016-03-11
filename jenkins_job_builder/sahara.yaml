@@ -45,6 +45,19 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
+      - string:
+          name: CLUSTER_HASH
+          default: nightly
 
 - job-template:
     name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
@@ -60,6 +73,19 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
+      - string:
+          name: CLUSTER_HASH
+          default: nightly
 
 - job-template:
     name: 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
@@ -75,6 +101,19 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
+    parameters:
+      - string:
+          name: ZUUL_REF
+          default: master
+      - string:
+          name: ZUUL_BRANCH
+          default: master
+      - string:
+          name: ZUUL_CHANGE
+          default: master
+      - string:
+          name: CLUSTER_HASH
+          default: nightly
 
 - project:
     name: sahara
