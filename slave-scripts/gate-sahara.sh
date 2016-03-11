@@ -6,7 +6,6 @@
 . $FUNCTION_PATH/functions-common.sh
 
 CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
-cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH=${1:-$WORKSPACE}
 SAHARA_TESTS_PATH=${2:-"/tmp/sahara-tests"}
@@ -106,6 +105,9 @@ case $plugin in
        template_image_prefix="fake_plugin"
        ;;
 esac
+
+ZUUL_CHANGE=${ZUUL_CHANGE:-000000}
+cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
