@@ -147,7 +147,7 @@ jobs:
   - name: ^.*-cdh_5.3.0-.*$
     branch: stable/kilo
   - name: ^.*-cdh_5.4.0-.*$
-    branch: ^(master|stable/liberty)$
+    branch: stable/liberty
   - name: ^.*-spark_1.3.1-.*$
     branch: ^(master|stable/liberty)$
   - name: ^.*-spark_1.0.0-.*$
