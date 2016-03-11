@@ -5,7 +5,7 @@
 # source main functions
 . $FUNCTION_PATH/functions-common.sh
 
-CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
+export CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
 cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH=${1:-$WORKSPACE}
