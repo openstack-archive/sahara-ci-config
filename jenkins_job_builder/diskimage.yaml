@@ -65,7 +65,6 @@
           network: nova
           plugin:
             - ambari_2.1
-            - hdp_2.0.6
           os:
             - c6.6
      - 'dib-{network}-{engine}-{plugin}-{os}':

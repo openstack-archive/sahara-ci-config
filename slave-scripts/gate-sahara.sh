@@ -36,11 +36,6 @@ case $ZUUL_BRANCH in
 esac
 
 case $plugin in
-    hdp_2.0.6)
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml.mako"
-       template_image_prefix="hdp_two"
-       ;;
     ambari_2.3)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/ambari-2.3.yaml.mako"

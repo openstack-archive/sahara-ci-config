@@ -63,9 +63,6 @@ upload_image() {
            ambari_2.1)
              image_properties="--property _sahara_tag_2.2=True --property _sahara_tag_2.3=True --property _sahara_tag_ambari=True --property _sahara_username=${username}"
            ;;
-           hdp_2.0.6)
-             image_properties="--property _sahara_tag_2.0.6=True --property _sahara_tag_hdp=True --property _sahara_username=${username}"
-           ;;
            cdh_5.3.0)
              image_properties="--property _sahara_tag_5.3.0=True --property _sahara_tag_5=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;

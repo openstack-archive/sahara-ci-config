@@ -94,15 +94,6 @@ case $plugin in
        template_image_prefix="spark_1_6"
     ;;
 
-    hdp_2.0.6)
-       env centos_hdp_hadoop_2_image_name=${hdp_2_0_6_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p hdp -v 2
-       check_error_code $? ${hdp_2_0_6_image}.qcow2
-       upload_image "${plugin}" "${username}" ${hdp_2_0_6_image}
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/hdp-2.0.6.yaml.mako"
-       template_image_prefix="hdp_two"
-    ;;
-
     cdh_5.3.0)
        env cloudera_5_3_${os_type}_image_name=${cdh_5_3_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.3
        check_error_code $? ${cdh_5_3_0_image}.qcow2

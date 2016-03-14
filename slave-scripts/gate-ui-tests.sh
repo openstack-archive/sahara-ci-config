@@ -55,9 +55,6 @@ security_groups = default
 skip_plugin_tests = False
 skip_edp_test = False
 base_image = 'sahara-itests-ci-vanilla-image'
-[hdp]
-skip_plugin_tests = False
-hadoop_version = '1.3.2'
 " >> $DASHBOARD_PATH/saharadashboard/tests/configs/config.conf
 
 cd $DASHBOARD_PATH && tox -e uitests
