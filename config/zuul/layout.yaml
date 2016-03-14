@@ -172,6 +172,7 @@ jobs:
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: ^.*-nova-heat-hdp_2.0.6-c6.6$
+    branch: ^(stable/kilo|stable/liberty)$
     voting: false
   - name: ^.*-nova-heat-ambari_2.1-.*$
     branch: master
