@@ -82,6 +82,10 @@ fi
 export OS_TEST_TIMEOUT=5400
 tox -e $TOXENV --notest
 .tox/$TOXENV/bin/pip install $SAHARACLIENT_PATH/.
+# temporary fix for older branches, instead of bumping them to the latest tempest
+if [ "$ZUUL_BRANCH" == "stable/kilo" ] || [ "$ZUUL_BRANCH" == "stable/liberty" ]; then
+   .tox/$TOXENV/bin/pip install tempest-lib
+fi
 # Temporary use additional log file, due to wrong status code from tox scenario tests
 # tox -e $TOXENV -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
 tox -e $TOXENV -- tempest.scenario.data_processing.client_tests | tee tox.log
