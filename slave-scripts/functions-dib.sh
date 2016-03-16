@@ -84,6 +84,9 @@ upload_image() {
            mapr_5.0.0.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.0.0.mrv2=True --property _sahara_username=${username}"
            ;;
+	   mapr_5.1.0.mrv2)
+             image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.1.0.mrv2=True --property _sahara_username=${username}"
+           ;;
    esac
    register_new_image "$image" "$image_properties"
    CUR_IMAGE="$image"
