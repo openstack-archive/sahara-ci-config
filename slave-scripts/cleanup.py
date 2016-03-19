@@ -49,7 +49,7 @@ def get_cinder_client():
 def cleanup_heat():
     current_name = sys.argv[2]
     client = get_heat_client()
-    stacks = client.stacks.list()
+    stacks = client.stacks.list(show_hidden=True)
     name_regex = re.compile(current_name)
     deleted_stacks = []
 
@@ -64,7 +64,7 @@ def cleanup_heat():
         # Let Heat delete stacks
         time.sleep(60)
 
-    stacks = client.stacks.list()
+    stacks = client.stacks.list(show_hidden=True)
     for stack in stacks:
         if stack.stack_name in deleted_stacks:
             # Resource cleanup is required
