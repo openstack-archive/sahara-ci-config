@@ -11,7 +11,7 @@ cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
 SAHARA_PATH=${1:-$WORKSPACE}
 SAHARA_TESTS_PATH=${2:-"/tmp/sahara-tests"}
 sahara_conf_file=$SAHARA_PATH/etc/sahara/sahara.conf
-sahara_templates_path=$SAHARA_TESTS_PATH/etc/scenario/defaults
+sahara_templates_path=$SAHARA_TESTS_PATH/sahara_tests/scenario/defaults
 tests_etc=$sahara_templates_path
 
 # Clone Sahara Scenario tests
