@@ -32,7 +32,7 @@
     node: trusty-neutron || trusty-nova
 
 - job-template:
-    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}'
+    name: '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -45,22 +45,9 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
-    parameters:
-      - string:
-          name: ZUUL_REF
-          default: master
-      - string:
-          name: ZUUL_BRANCH
-          default: master
-      - string:
-          name: ZUUL_CHANGE
-          default: master
-      - string:
-          name: CLUSTER_HASH
-          default: nightly
 
 - job-template:
-    name: 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
+    name: '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -73,22 +60,9 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
-    parameters:
-      - string:
-          name: ZUUL_REF
-          default: master
-      - string:
-          name: ZUUL_BRANCH
-          default: master
-      - string:
-          name: ZUUL_CHANGE
-          default: master
-      - string:
-          name: CLUSTER_HASH
-          default: nightly
 
 - job-template:
-    name: 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
+    name: '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -101,22 +75,12 @@
       - console-log
       - trigger-cleanup
     node: 'trusty-{network}'
-    parameters:
-      - string:
-          name: ZUUL_REF
-          default: master
-      - string:
-          name: ZUUL_BRANCH
-          default: master
-      - string:
-          name: ZUUL_CHANGE
-          default: master
-      - string:
-          name: CLUSTER_HASH
-          default: nightly
 
 - project:
     name: sahara
+    pipeline:
+      - gate
+      - nightly
     project_name:
       - sahara
       - sahara_tests
@@ -130,8 +94,8 @@
       - u12
       - c6.6
     jobs:
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
           engine: heat
           plugin:
              - vanilla_2.6.0
@@ -141,30 +105,30 @@
              - mapr_5.1.0.mrv2
           os: u14
           network: neutron
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0
              -  spark_1.3.1
              -  spark_1.6.0
           os: u14
           network: neutron
-     - 'gate-{project_name}-{network}-{engine}-{plugin}-{os}':
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat
           plugin:
             - ambari_2.3
           os: c6.6
      - 'tempest-{name}-tests'
-     - 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
           plugin:
             - cdh_5.4.0
-     - 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
           network: neutron
           engine: heat
           plugin:
             - vanilla_2.7.1
           os: u14
-     - 'gate-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
           network: neutron
           plugin:
             - spark_1.3.1

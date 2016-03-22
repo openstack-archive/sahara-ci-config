@@ -40,3 +40,6 @@ def single_use_node(item, job, params):
 def set_params(item, job, params):
     single_use_node(item, job, params)
     params['CLUSTER_HASH'] = str(uuid.uuid4()).split('-')[0]
+    params['ZUUL_BRANCH'] = params.get('ZUUL_BRANCH', 'master')
+    params['ZUUL_REF'] = params.get('ZUUL_REF', 'master')
+    params['ZUUL_CHANGE'] = params.get('ZUUL_CHANGE', 'master')
