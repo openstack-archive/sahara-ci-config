@@ -104,7 +104,6 @@ projects:
       - nightly-sahara_tests-nova-direct-cdh_5.4.0-c6.6-aio
       - nightly-sahara_tests-nova-direct-cdh_5.5.0-u12-aio
       - nightly-sahara_tests-nova-direct-cdh_5.5.0-c6.6-aio
-      - nightly-sahara_tests-nova-heat-hdp_2.0.6-c6.6
       - nightly-sahara_tests-nova-heat-ambari_2.3-c6.6
       - nightly-sahara_tests-nova-direct-cdh_5.4.0-u12-liberty
       - nightly-sahara_tests-nova-direct-cdh_5.4.0-c6.6-liberty
