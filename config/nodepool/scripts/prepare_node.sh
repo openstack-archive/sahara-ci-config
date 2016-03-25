@@ -36,6 +36,7 @@ APT_PACKAGES+=" gettext"
 PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
 PIP_PACKAGES+=" mysql-python"
+PIP_PACKAGES+=" pip"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
