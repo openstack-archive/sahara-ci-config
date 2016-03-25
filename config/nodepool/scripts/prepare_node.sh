@@ -23,7 +23,7 @@ sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" upgrade -y
 # APT_PACKAGES variable using for installing packages via apt-get
 # PIP_PACKAGES variable using for installing packages via pip
-APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev python-tox"
+APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
 # RabbitMQ for distributed Sahara mode
 APT_PACKAGES+=" rabbitmq-server"
 # Required libraries
@@ -36,6 +36,9 @@ APT_PACKAGES+=" gettext"
 PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
 PIP_PACKAGES+=" mysql-python"
+# Requirements for Cloudera plugin
+PIP_PACKAGES+=" cm-api"
+PIP_PACKAGES+=" pip tox"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
 echo "mysql-server mysql-server/root_password_again select $MYSQL_PASS" | sudo debconf-set-selections
