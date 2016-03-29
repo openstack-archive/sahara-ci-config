@@ -109,15 +109,21 @@ run_tests() {
   local concurrency=${2:-"1"}
   echo "Integration tests are started"
   export PYTHONUNBUFFERED=1
-  local scenario_credentials="$tests_etc/credentials.yaml.mako"
   local scenario_edp="$tests_etc/edp.yaml.mako"
   if [ ! -f $scenario_edp ]; then
     scenario_edp="$tests_etc/edp.yaml"
   fi
+  if [ "$USE_NEUTRON" == "true" ]; then
+    NETWORK_TYPE="neutron"
+  else
+    NETWORK_TYPE="nova"
+  fi
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   pushd $SAHARA_TESTS_PATH
-  # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
-  tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
+  # tox -e scenario -- --verbose -V $template_vars_file $scenario_edp $scenario_config || failure "Integration tests are failed"
+  tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_edp $scenario_config \
+        --os-username $OS_USERNAME --os-password $OS_PASSWORD --os-tenant-name $OS_TENANT_NAME \
+        --os-auth-url $OS_AUTH_URL --network-type $NETWORK_TYPE | tee tox.log
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   popd
@@ -182,19 +188,7 @@ write_tests_conf() {
   local cluster_name=$1
   local image_prefix=$2
   local image_name=$3
-  if [ "$USE_NEUTRON" == "true" ]; then
-    NETWORK="neutron"
-  else
-    NETWORK="nova-network"
-  fi 
 echo "[DEFAULT]
-OS_USERNAME: $OS_USERNAME
-OS_PASSWORD: $OS_PASSWORD
-OS_TENANT_NAME: $OS_TENANT_NAME
-OS_AUTH_URL: $OS_AUTH_URL
-network_type: $NETWORK
-network_public_name: public
-network_private_name: private
 ${image_prefix}_image: $image_name
 cluster_name: $cluster_name
 ci_flavor_id: $ci_flavor_id
