@@ -33,6 +33,9 @@ case $ZUUL_BRANCH in
     stable/kilo)
        sahara_templates_path="$sahara_templates_path/kilo"
        ;;
+    stable/mitaka)
+       sahara_templates_path="$sahara_templates_path/mitaka"
+       ;;
 esac
 
 case $plugin in
