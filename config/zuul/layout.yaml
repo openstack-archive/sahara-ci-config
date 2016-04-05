@@ -180,35 +180,90 @@ jobs:
   - name: ^(?!nightly).*-mapr_5.*$
     branch: ^(master|stable/mitaka)$
     voting: false
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(mitaka|)(?!mapr_5).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-cdh_5.3.0-.*$
     branch: stable/kilo
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/kilo/.*(?!cdh_5.3.0).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-cdh_5.4.0-.*$
     branch: stable/liberty
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/liberty/.*(?!cdh_5.4.0).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-spark_1.3.1-.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(liberty|mitaka|)(?!spark_1.3.1).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-spark_1.0.0-.*$
     branch: stable/kilo
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/kilo/(?!spark_1.0.0).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-spark_1.6.0-.*$
     branch: ^(master|stable/mitaka)$
     voting: false
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(mitaka|)(?!spark_1.6.0).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-cdh_5.5.0-.*$
     branch: ^(master|stable/mitaka)$
     voting: false
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(mitaka|)(?!cdh_5.5.0).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-vanilla_2.7.1-.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(liberty|mitaka|)(?!vanilla_2.7.1).*$
+          - ^(?!sahara_tests).*$
   - name: dib-neutron-heat-vanilla_2.7.1-c6.6
     voting: false
   - name: ^.*-ambari_2.3-.*$
     branch: ^(master|stable/mitaka)$
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(mitaka|)(?!ambari_2.3).*$
+          - ^(?!sahara_tests).*$
   - name: dib-neutron-heat-vanilla_2.7.1-c7
     branch: ^(master|stable/mitaka)$
     voting: false
   - name: ^(?!nightly).*-vanilla_2.6.0-.*$
     branch: stable/kilo
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/kilo/(?!vanilla_2.6.0).*$
+          - ^(?!sahara_tests).*$
   - name: gate-sahara-pep8-trunk
     branch: ^(master|stable/kilo|stable/liberty|stable/mitaka)$
     voting: false
   - name: ^(?!nightly).*-nova-heat-ambari_2.1-.*$
     branch: ^(master|stable/mitaka)$
+    skip-if:
+      - project: ^openstack/sahara-tests$
+        all-files-match-any:
+          - ^etc/scenario/(mitaka|)(?!ambari_2.1).*$
+          - ^(?!sahara_tests).*$
   - name: ^(?!nightly).*-sahara_tests-.*$
     branch: ^(master|stable/liberty|stable/kilo|stable/mitaka)$
