@@ -76,6 +76,21 @@
       - trigger-cleanup
     node: 'trusty-{network}'
 
+- job-template:
+    name: '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara_tests.sh"
+    properties:
+      - zeromq-event
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: 'trusty-{network}'
+
 - project:
     name: sahara
     pipeline:
@@ -132,6 +147,22 @@
           plugin:
             - spark_1.3.1
           os: u14
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          plugin:
+            - cdh_5.5.0
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          network: neutron
+          engine: heat
+          plugin:
+            - vanilla_2.7.1
+            - mapr_5.0.0.mrv2
+            - spark_1.3.1
+            - spark_1.6.0
+          os: u14
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          engine: heat
+          plugin:
+            - ambari_2.3
 
 - project:
     name: sahara-nightly
