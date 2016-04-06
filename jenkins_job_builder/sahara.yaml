@@ -132,6 +132,22 @@
           plugin:
             - spark_1.3.1
           os: u14
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          plugin:
+            - cdh_5.5.0
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          network: neutron
+          engine: heat
+          plugin:
+            - vanilla_2.7.1
+            - mapr_5.0.0.mrv2
+            - spark_1.3.1
+            - spark_1.6.0
+          os: u14
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-mitaka':
+          engine: heat
+          plugin:
+            - ambari_2.3
 
 - project:
     name: sahara-nightly

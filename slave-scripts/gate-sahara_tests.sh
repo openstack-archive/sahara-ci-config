@@ -7,17 +7,21 @@ plugin=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 if [ $(echo $JOB_NAME | awk -F '-' '{ print $7 }') == 'liberty' ]; then
     ZUUL_BRANCH="stable/liberty"
 else
-    case $plugin in
-        vanilla_2.6.0)
-            ZUUL_BRANCH="stable/kilo"
-            ;;
-        cdh_5.3.0)
-            ZUUL_BRANCH="stable/kilo"
-            ;;
-        spark_1.0.0)
-            ZUUL_BRANCH="stable/kilo"
-            ;;
-    esac
+    if [ $(echo $JOB_NAME | awk -F '-' '{ print $7 }') == 'mitaka' ]; then
+        ZUUL_BRANCH="stable/mitaka"
+    else
+        case $plugin in
+	    vanilla_2.6.0)
+	        ZUUL_BRANCH="stable/kilo"
+	        ;;
+	    cdh_5.3.0)
+	        ZUUL_BRANCH="stable/kilo"
+	        ;;
+	    spark_1.0.0)
+	        ZUUL_BRANCH="stable/kilo"
+	        ;;
+        esac
+    fi
 fi
 
 sahara_path="/tmp/sahara"
