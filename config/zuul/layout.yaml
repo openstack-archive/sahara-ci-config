@@ -39,14 +39,18 @@ pipelines:
         - time: '0 3 * * *'
     success:
       smtp:
-        to: esikachev@mirantis.com
+        to:
+          - esikachev@mirantis.com
+          - vgridnev@mirantis.com
         from: zuul@sahara.mirantis.com
-        subject: '[sahara-nightly]Silent check of sahara passed'
+        subject: '[sahara-nightly][passed]Silent check of sahara passed'
     failure:
       smtp:
-        to: esikachev@mirantis.com
+        to:
+          - esikachev@mirantis.com
+          - vgridnev@mirantis.com
         from: zuul@sahara.mirantis.com
-        subject: '[sahara-nightly]Silent check of sahara failed'
+        subject: '[sahara-nightly][failed]Silent check of sahara failed'
 
 projects:
   - name: openstack/sahara
