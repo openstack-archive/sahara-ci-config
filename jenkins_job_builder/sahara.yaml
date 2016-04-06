@@ -62,7 +62,8 @@
     node: 'trusty-{network}'
 
 - job-template:
-    name: '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty'
+    name:
+      - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -118,20 +119,45 @@
             - ambari_2.3
           os: c6.6
      - 'tempest-{name}-tests'
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+          release: liberty
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           network: neutron
           engine: heat
           plugin:
             - vanilla_2.7.1
           os: u14
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+          release:
+            - liberty
+            - mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           network: neutron
           plugin:
             - spark_1.3.1
           os: u14
+          release:
+            - liberty
+            - mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          plugin:
+            - cdh_5.5.0
+          release: mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          network: neutron
+          engine: heat
+          plugin:
+            - mapr_5.0.0.mrv2
+            - spark_1.6.0
+          os: u14
+          release: mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          engine: heat
+          plugin:
+            - ambari_2.3
+          os: c6.6
+          release: mitaka
 
 - project:
     name: sahara-nightly
@@ -173,20 +199,45 @@
           plugin:
             - ambari_2.3
           os: c6.6
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+          release: liberty
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           network: neutron
           engine: heat
           plugin:
             - vanilla_2.7.1
           os: u14
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-liberty':
+          release:
+            - liberty
+            - mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
           network: neutron
           plugin:
             - spark_1.3.1
           os: u14
+          release:
+            - liberty
+            - mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          plugin:
+            - cdh_5.5.0
+          release: mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          network: neutron
+          engine: heat
+          plugin:
+            - mapr_5.0.0.mrv2
+            - spark_1.6.0
+          os: u14
+          release: mitaka
+     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+          engine: heat
+          plugin:
+            - ambari_2.3
+          os: c6.6
+          release: mitaka
 
 - project:
     name: saharaclient
