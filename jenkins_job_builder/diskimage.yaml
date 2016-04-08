@@ -47,9 +47,16 @@
           plugin:
             - cdh_5.3.0
             - cdh_5.4.0
-            - cdh_5.5.0
           os:
             - u12
+            - c6.6
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          engine: direct
+          plugin:
+            - cdh_5.5.0
+          os:
+            - u14
             - c6.6
      - 'dib-{network}-{engine}-{plugin}-{os}-aio':
           engine: direct
