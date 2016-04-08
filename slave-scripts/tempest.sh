@@ -8,6 +8,7 @@
 project=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
 image_id=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
 
+SAHARATESTS_REPO=https://git.openstack.org/openstack/sahara-tests
 if [ "$project" == "sahara" ]; then
    SAHARA_PATH="$WORKSPACE"
    SAHARACLIENT_PATH=/tmp/saharaclient
@@ -82,6 +83,7 @@ fi
 export OS_TEST_TIMEOUT=5400
 tox -e $TOXENV --notest
 .tox/$TOXENV/bin/pip install $SAHARACLIENT_PATH/.
+.tox/$TOXENV/bin/pip install git+$SAHARATESTS_REPO
 # Temporary use additional log file, due to wrong status code from tox scenario tests
 # tox -e $TOXENV -- tempest.scenario.data_processing.client_tests || failure "Tempest tests are failed"
 tox -e $TOXENV -- tempest.scenario.data_processing.client_tests | tee tox.log
