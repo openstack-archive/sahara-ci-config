@@ -88,7 +88,6 @@
     plugin:
       - cdh_5.3.0
       - cdh_5.4.0
-      - cdh_5.5.0
     os:
       - u12
       - c6.6
@@ -104,6 +103,10 @@
              - mapr_5.1.0.mrv2
           os: u14
           network: neutron
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+          plugin:
+             - cdh_5.5.0
+          os: u14
      - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0
@@ -175,7 +178,6 @@
     plugin:
       - cdh_5.3.0
       - cdh_5.4.0
-      - cdh_5.5.0
     os:
       - u12
       - c6.6
@@ -198,6 +200,10 @@
              -  spark_1.6.0
           os: u14
           network: neutron
+     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+          plugin:
+             - cdh_5.5.0
+          os: u14
      - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
           network: nova
           engine: heat
