@@ -52,6 +52,14 @@
             - u12
             - c6.6
      - 'dib-{network}-{engine}-{plugin}-{os}-aio':
+          network: nova
+          engine: direct
+          plugin:
+            - cdh_5.5.0
+          os:
+            - u14
+            - c6.6
+     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
           engine: direct
           plugin:
             - spark_1.0.0
