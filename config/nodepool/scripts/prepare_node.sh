@@ -70,21 +70,18 @@ sudo git clone https://git.openstack.org/openstack/tempest /home/jenkins/tempest
 sudo chown -R jenkins:jenkins /home/jenkins
 
 # create simple openrc file
-if [[ "$HOSTNAME" =~ neutron ]]; then
+if [[ "$HOSTNAME" =~ trusty-42 ]]; then
    OPENSTACK_HOST="172.18.168.42"
    HOST="c1"
-   USE_NEUTRON=true
 else
    OPENSTACK_HOST="172.18.168.43"
    HOST="c2"
-   USE_NEUTRON=false
 fi
 echo "export OS_USERNAME=ci-user
 export OS_TENANT_NAME=ci
 export OS_PASSWORD=nova
 export OPENSTACK_HOST=$OPENSTACK_HOST
 export HOST=$HOST
-export USE_NEUTRON=$USE_NEUTRON
 export OS_AUTH_URL=http://$OPENSTACK_HOST:5000/v2.0/
 " | sudo tee /home/jenkins/ci_openrc
 
