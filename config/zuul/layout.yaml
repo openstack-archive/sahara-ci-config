@@ -221,14 +221,12 @@ jobs:
       - 'sahara*'
   - name: ^(?!nightly).*-spark_1.6.0-.*$
     branch: ^(master|stable/mitaka)$
-    voting: false
     files:
       - 'etc/scenario/defaults/spark-1.6.0*'
       - 'etc/scenario/defaults/mitaka/spark-1.6.0*'
       - 'sahara*'
   - name: ^(?!nightly).*-cdh_5.5.0-.*$
     branch: ^(master|stable/mitaka)$
-    voting: false
     files:
       - 'etc/scenario/defaults/cdh-5.5*'
       - 'etc/scenario/defaults/mitaka/cdh-5.5*'
