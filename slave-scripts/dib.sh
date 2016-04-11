@@ -15,8 +15,6 @@ sahara_conf_file="$SAHARA_PATH/etc/sahara/sahara.conf"
 sahara_templates_path=$SAHARA_TESTS_PATH/sahara_tests/scenario/defaults
 tests_etc=$sahara_templates_path
 
-engine=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
-
 plugin="$1"
 os="$2"
 image_name=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
@@ -148,7 +146,7 @@ esac
 cd $SAHARA_PATH
 sudo pip install . --no-cache-dir
 enable_pypi
-write_sahara_main_conf "$sahara_conf_file" "$engine" "$sahara_plugin"
+write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
 start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
 print_python_env

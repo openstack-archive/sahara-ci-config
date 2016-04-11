@@ -35,27 +35,20 @@ VOLUME_BACKING_FILE_SIZE=100000M
 KEYSTONE_TOKEN_FORMAT=UUID
 
 FIXED_NETWORK_SIZE=256
-if [[ $(hostname -s) =~ neutron ]]; then
-  # Stack-ci lab with neutron network provider
-  FIXED_RANGE=10.20.0.0/24
-  NETWORK_GATEWAY=10.20.0.1
+if [[ $(hostname -s) =~ 42 ]]; then
   FLOATING_RANGE=172.18.169.0/26
   PUBLIC_NETWORK_GATEWAY=172.18.169.1
-  IP_VERSION="4"
-
-  # enable neutron and disable nova-net
-  disable_service n-net
-  enable_service q-svc q-agt q-dhcp q-l3 q-meta neutron
 else
-  # Stack-sahara lab with nova network provider
-  FIXED_RANGE=10.1.0.0/24
-  NETWORK_GATEWAY=10.1.0.1
   FLOATING_RANGE=172.16.41.0/26
   PUBLIC_NETWORK_GATEWAY=172.16.41.1
-
-  # enable nova-net
-  enable_service n-net
 fi
+NETWORK_GATEWAY=10.20.0.1
+FIXED_RANGE=10.20.0.0/24
+IP_VERSION="4"
+
+# enable neutron and disable nova-net
+disable_service n-net
+enable_service q-svc q-agt q-dhcp q-l3 q-meta neutron
 
 disable_service tempest
 
