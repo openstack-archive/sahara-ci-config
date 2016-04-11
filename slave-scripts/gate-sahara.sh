@@ -19,7 +19,6 @@ if [ "$ZUUL_PROJECT" != "openstack/sahara-tests" ]; then
     get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
 fi
 
-engine_type=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 os=$(echo $JOB_NAME | awk -F '-' '{ print $6 }')
 image_name=${plugin}_${os}
@@ -112,7 +111,7 @@ esac
 
 sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
-write_sahara_main_conf "$sahara_conf_file" "$engine_type" "$sahara_plugin"
+write_sahara_main_conf "$sahara_conf_file" "heat" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
 start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file" "$concurrency"
 print_python_env

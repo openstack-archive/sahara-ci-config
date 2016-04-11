@@ -1,5 +1,5 @@
 - job-template:
-    name: 'dib-{network}-{engine}-{plugin}-{os}-aio'
+    name: 'dib-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -14,7 +14,7 @@
     node: 'trusty-{network}'
 
 - job-template:
-    name: 'dib-{network}-{engine}-{plugin}-{os}'
+    name: 'dib-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -31,8 +31,6 @@
 - project:
     name: sahara-image-elements
     github-org: openstack
-    network: neutron
-    engine: heat
     plugin: vanilla_2.7.1
     os:
      - u14
@@ -40,43 +38,37 @@
      - c7
 
     jobs:
-     - 'dib-{network}-{engine}-{plugin}-{os}'
-     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
-          network: nova
-          engine: direct
+     - 'dib-{plugin}-{os}'
+     - 'dib-{plugin}-{os}-aio':
           plugin:
             - cdh_5.3.0
             - cdh_5.4.0
           os:
             - u12
             - c6.6
-     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
-          network: nova
-          engine: direct
+     - 'dib-{plugin}-{os}-aio':
           plugin:
             - cdh_5.5.0
           os:
             - u14
             - c6.6
-     - 'dib-{network}-{engine}-{plugin}-{os}-aio':
-          engine: direct
+     - 'dib-{plugin}-{os}-aio':
           plugin:
             - spark_1.0.0
             - spark_1.3.1
             - spark_1.6.0
           os: u14
-     - 'dib-{network}-{engine}-{plugin}-{os}':
+     - 'dib-{plugin}-{os}':
           plugin:
             - mapr_5.0.0.mrv2
             - mapr_5.1.0.mrv2
           os: u14
-     - 'dib-{network}-{engine}-{plugin}-{os}':
-          network: nova
+     - 'dib-{plugin}-{os}':
           plugin:
             - ambari_2.1
           os:
             - c6.6
-     - 'dib-{network}-{engine}-{plugin}-{os}':
+     - 'dib-{plugin}-{os}':
           plugin: vanilla_2.6.0
           os:
             - u14

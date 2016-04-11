@@ -11,13 +11,13 @@ gearman-servers:
   - host: 127.0.0.1
 
 labels:
-  - name:  trusty-neutron
-    image: trusty-neutron
+  - name:  trusty-42
+    image: trusty-42
     min-ready: 3
     providers:
       - name: cilab-1
-  - name:  trusty-nova
-    image: trusty-nova
+  - name:  trusty-43
+    image: trusty-43
     min-ready: 3
     providers:
       - name: cilab-2
@@ -32,9 +32,9 @@ providers:
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID'
+      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_42'
     images:
-      - name: trusty-neutron
+      - name: trusty-42
         base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
@@ -48,9 +48,9 @@ providers:
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'NOVA_NET_LAB_PRIVATE_NETWORK_ID'
+      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_43'
     images:
-      - name: trusty-nova
+      - name: trusty-43
         base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'

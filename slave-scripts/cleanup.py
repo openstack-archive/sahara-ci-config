@@ -105,9 +105,6 @@ def cleanup():
 def main(argv):
     load_conf()
 
-    if "cleanup" in argv:
-        cleanup()
-
     if "cleanup-heat" in argv:
         cleanup_heat()
 
