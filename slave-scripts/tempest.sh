@@ -46,12 +46,10 @@ insert_config_value etc/tempest.conf identity tenant_name $OS_TENANT_NAME
 insert_config_value etc/tempest.conf identity username $OS_USERNAME
 insert_config_value etc/tempest.conf identity uri "http://$OPENSTACK_HOST:5000/v2.0/"
 insert_config_value etc/tempest.conf identity uri_v3 "http://$OPENSTACK_HOST:5000/v3/"
-insert_config_value etc/tempest.conf service_available neutron $USE_NEUTRON
+insert_config_value etc/tempest.conf service_available neutron true
 insert_config_value etc/tempest.conf service_available sahara true
-if [ "$USE_NEUTRON" == "true" ]; then
-    public_network_id=$(neutron net-show "public" -f value -c id)
-    insert_config_value etc/tempest.conf network public_network_id $public_network_id
-fi
+public_network_id=$(neutron net-show "public" -f value -c id)
+insert_config_value etc/tempest.conf network public_network_id $public_network_id
 
 if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
    # create tests file
@@ -70,7 +68,7 @@ fi
 
 enable_pypi
 sudo pip install $SAHARA_PATH/. --no-cache-dir
-write_sahara_main_conf $sahara_conf_path "direct" "fake"
+write_sahara_main_conf $sahara_conf_path "heat" "fake"
 start_sahara $sahara_conf_path
 
 # Prepare env and install saharaclient
