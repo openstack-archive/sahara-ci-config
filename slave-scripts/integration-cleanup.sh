@@ -9,7 +9,7 @@ job_type=$(echo $PREV_JOB | awk -F '-' '{ print $1 }')
 export os_username=$os_username
 export os_password=$os_password
 export os_tenant_name=$os_tenant_name
-if [[ "$HOST_NAME" =~ neutron ]]; then
+if [[ "$HOST_NAME" =~ 42 ]]; then
     export os_auth_url="http://$OPENSTACK_HOST_NEUTRON_LAB:5000/v2.0"
     export os_image_endpoint="http://$OPENSTACK_HOST_NEUTRON_LAB:8004/v1/$NEUTRON_LAB_TENANT_ID"
     host="c1"
@@ -23,16 +23,5 @@ if [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
 elif [ "$job_type" == "tempest" ]; then
     python cleanup.py cleanup .*sahara-cluster.*
 else
-    if [ "$job_type" == "dib" ]; then
-      engine=$(echo $PREV_JOB | awk -F '-' '{ print $3 }')
-    else
-      engine=$(echo $PREV_JOB | awk -F '-' '{ print $4 }')
-    fi
-
-    if [ "$engine" == "heat" ]
-    then
-        python cleanup.py cleanup-heat .*$host-$CHANGE_NUMBER-$CLUSTER_HASH.*
-    else
-        python cleanup.py cleanup .*$host-$CHANGE_NUMBER-$CLUSTER_HASH.*
-    fi
+    python cleanup.py cleanup-heat .*$host-$CHANGE_NUMBER-$CLUSTER_HASH.*
 fi

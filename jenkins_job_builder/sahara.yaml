@@ -14,7 +14,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-neutron || trusty-nova
+    node: trusty-42 || trusty-43
 
 - job-template:
     name: 'gate-saharaclient-distributed-heat-fake'
@@ -29,10 +29,10 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-neutron || trusty-nova
+    node: trusty-42 || trusty-43
 
 - job-template:
-    name: '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}'
+    name: '{pipeline}-{project_name}-{plugin}-{os}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -44,10 +44,10 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-{network}'
+    node: trusty-42 || trusty-43
 
 - job-template:
-    name: '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
+    name: '{pipeline}-{project_name}-{plugin}-{os}-aio'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -59,10 +59,10 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-{network}'
+    node: trusty-42 || trusty-43
 
 - job-template:
-    name: '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}'
+    name: '{pipeline}-sahara_tests-{plugin}-{os}-{release}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -74,7 +74,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: 'trusty-{network}'
+    node: trusty-42 || trusty-43
 
 - project:
     name: sahara
@@ -83,8 +83,6 @@
     project_name:
       - sahara
       - sahara_tests
-    network: nova
-    engine: direct
     plugin:
       - cdh_5.3.0
       - cdh_5.4.0
@@ -92,9 +90,8 @@
       - u12
       - c6.6
     jobs:
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
-          engine: heat
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio'
+     - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.6.0
              - vanilla_2.7.1
@@ -102,66 +99,55 @@
              - mapr_5.0.0.mrv2
              - mapr_5.1.0.mrv2
           os: u14
-          network: neutron
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
           os: u14
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0
              -  spark_1.3.1
              -  spark_1.6.0
           os: u14
-          network: neutron
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
-          network: nova
-          engine: heat
+     - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
           os: c6.6
      - 'tempest-{name}-tests'
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
           release: liberty
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
           os: u14
           release:
             - liberty
             - mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - spark_1.3.1
           os: u14
           release:
             - liberty
             - mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.5.0
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - spark_1.6.0
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - mapr_5.0.0.mrv2
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
           os: c6.6
@@ -173,8 +159,6 @@
       - nightly
     project_name:
       - sahara_tests
-    network: nova
-    engine: direct
     plugin:
       - cdh_5.3.0
       - cdh_5.4.0
@@ -182,9 +166,8 @@
       - u12
       - c6.6
     jobs:
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio'
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
-          engine: heat
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio'
+     - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.6.0
              - vanilla_2.7.1
@@ -192,65 +175,54 @@
              - mapr_5.0.0.mrv2
              - mapr_5.1.0.mrv2
           os: u14
-          network: neutron
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.0.0
              -  spark_1.3.1
              -  spark_1.6.0
           os: u14
-          network: neutron
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}-aio':
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
           os: u14
-     - '{pipeline}-{project_name}-{network}-{engine}-{plugin}-{os}':
-          network: nova
-          engine: heat
+     - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
           os: c6.6
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
           release: liberty
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
           os: u14
           release:
             - liberty
             - mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - spark_1.3.1
           os: u14
           release:
             - liberty
             - mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.5.0
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - spark_1.6.0
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          network: neutron
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - mapr_5.0.0.mrv2
           os: u14
           release: mitaka
-     - '{pipeline}-sahara_tests-{network}-{engine}-{plugin}-{os}-{release}':
-          engine: heat
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
           os: c6.6
@@ -270,7 +242,7 @@
                   \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
-    node: trusty-neutron || trusty-nova
+    node: trusty-42 || trusty-43
     builders:
     - gerrit-git-prep
     - ci-config-prep
