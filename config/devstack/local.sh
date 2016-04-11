@@ -17,15 +17,12 @@ HEAT_CONF=/etc/heat/heat.conf
 MYSQL_CONF=/etc/mysql/my.cnf
 
 source $TOP_DIR/functions-common
-
-if [[ $(openstack --os-cloud=devstack-admin endpoint list | grep -w neutron) != "" ]]; then
-    USE_NEUTRON=true
+if [[ $(hostname -s) =~ 42 ]]; then
     HOST_IP='172.18.168.42'
     INTERFACE='br-ex'
 else
-    USE_NEUTRON=false
     HOST_IP='172.18.168.43'
-    INTERFACE='br100'
+    INTERFACE='br-ex'
 fi
 
 VANILLA_2_6_0_IMAGE_PATH=/home/ubuntu/images/vanilla_2.6.0_u14.qcow2
@@ -81,9 +78,7 @@ echo "  devstack-ci:
 
 # setup quota for ci tenant
 openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
-if $USE_NEUTRON; then
-  neutron quota-update --tenant_id $CI_TENANT_ID --port 64
-fi
+neutron quota-update --tenant_id $CI_TENANT_ID --port 64
 
 # add images for tests
 openstack image create $(basename -s .qcow2 $VANILLA_2_6_0_IMAGE_PATH) --file $VANILLA_2_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
@@ -103,21 +98,17 @@ openstack image create fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format
 openstack image set --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
 openstack image set --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
 
-if $USE_NEUTRON; then
-  # rename admin private network
-  neutron net-update private --name admin-private
-  # create neutron private network for ci tenant
-  PRIVATE_NET_ID=$(neutron net-create private | grep -w id | get_field 2)
-  SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep -w id | get_field 2)
-  ROUTER_ID=$(neutron router-create ci-router | grep -w id | get_field 2)
-  PUBLIC_NET_ID=$(neutron net-list | grep -w public | get_field 1)
-  FORMAT=" --request-format xml"
-  neutron router-interface-add $ROUTER_ID $SUBNET_ID
-  neutron router-gateway-set $ROUTER_ID $PUBLIC_NET_ID
-  neutron subnet-update ci-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
-else
-  PRIVATE_NET_ID=$(nova net-list | grep -w private | get_field 1)
-fi
+# rename admin private network
+neutron net-update private --name admin-private
+# create neutron private network for ci tenant
+PRIVATE_NET_ID=$(neutron net-create private | grep -w id | get_field 2)
+SUBNET_ID=$(neutron subnet-create --name ci-subnet $PRIVATE_NET_ID $PRIVATE_CIDR | grep -w id | get_field 2)
+ROUTER_ID=$(neutron router-create ci-router | grep -w id | get_field 2)
+PUBLIC_NET_ID=$(neutron net-list | grep -w public | get_field 1)
+FORMAT=" --request-format xml"
+neutron router-interface-add $ROUTER_ID $SUBNET_ID
+neutron router-gateway-set $ROUTER_ID $PUBLIC_NET_ID
+neutron subnet-update ci-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
 
 # create keypair for UI tests
 #nova --os-username ci-user --os-password nova --os-tenant-name ci keypair-add public-jenkins > /dev/null
@@ -127,20 +118,15 @@ fi
 #sudo sed -i -e "s/default_floating_pool = public/&\nauto_assign_floating_ip = True/g" /etc/nova/nova.conf
 
 # setup security groups
-if $USE_NEUTRON; then
-  #this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
-  #CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
-  CI_DEFAULT_SECURITY_GROUP_ID=$(openstack security group list | grep -w default | get_field 1)
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
-  neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
-else
-  nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
-  nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
-fi
+#this actions is workaround for bug: https://bugs.launchpad.net/neutron/+bug/1263997
+#CI_DEFAULT_SECURITY_GROUP_ID=$(neutron security-group-list --tenant_id $CI_TENANT_ID | grep ' default ' | awk '{print $2}')
+CI_DEFAULT_SECURITY_GROUP_ID=$(openstack security group list | grep -w default | get_field 1)
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol icmp --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol tcp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction egress $CI_DEFAULT_SECURITY_GROUP_ID
+neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --port-range-min 1 --port-range-max 65535 --direction ingress $CI_DEFAULT_SECURITY_GROUP_ID
 
 #create Sahara endpoint for tests
 service_id=$(openstack service create data_processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
