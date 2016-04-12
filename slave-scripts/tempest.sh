@@ -53,6 +53,7 @@ if [ "$USE_NEUTRON" == "true" ]; then
     public_network_id=$(neutron net-show "public" -f value -c id)
     insert_config_value etc/tempest.conf network public_network_id $public_network_id
 fi
+insert_config_value etc/tempest.conf data-processing-feature-enabled plugins "fake,vanilla"
 
 if [ "$TEMPESTPLUGIN_TESTS" == "0" ]; then
    # create tests file
@@ -71,7 +72,7 @@ fi
 
 enable_pypi
 sudo pip install $SAHARA_PATH/. --no-cache-dir
-write_sahara_main_conf $sahara_conf_path "direct" "fake"
+write_sahara_main_conf $sahara_conf_path "direct" "fake,vanilla"
 start_sahara $sahara_conf_path
 
 # Prepare env and install saharaclient
