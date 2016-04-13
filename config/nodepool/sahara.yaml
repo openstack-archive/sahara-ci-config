@@ -32,7 +32,7 @@ providers:
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_42'
+      - net-id: 'LAB_42_PRIVATE_NETWORK_ID'
     images:
       - name: trusty-42
         base-image: 'ubuntu-14.04'
@@ -48,7 +48,7 @@ providers:
     boot-timeout: 120
     pool: public
     networks:
-      - net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_43'
+      - net-id: 'LAB_43_PRIVATE_NETWORK_ID'
     images:
       - name: trusty-43
         base-image: 'ubuntu-14.04'
