@@ -11,11 +11,11 @@ export os_password=$os_password
 export os_tenant_name=$os_tenant_name
 if [[ "$HOST_NAME" =~ 42 ]]; then
     export os_auth_url="http://$OPENSTACK_HOST_42_LAB:5000/v2.0"
-    export os_image_endpoint="http://$OPENSTACK_42_NEUTRON_LAB:8004/v1/$LAB_42_TENANT_ID"
+    export os_image_endpoint="http://$OPENSTACK_42_LAB:8004/v1/$42_LAB_TENANT_ID"
     host="c1"
 else
     export os_auth_url="http://$OPENSTACK_HOST_43_LAB:5000/v2.0"
-    export os_image_endpoint="http://$OPENSTACK_HOST_43_LAB:8004/v1/$LAB_43_TENANT_ID"
+    export os_image_endpoint="http://$OPENSTACK_HOST_43_LAB:8004/v1/$43_LAB_TENANT_ID"
     host="c2"
 fi
 if [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then

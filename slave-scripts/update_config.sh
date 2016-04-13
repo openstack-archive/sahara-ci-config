@@ -9,8 +9,8 @@ sudo su - zuul -c "cat $WORKSPACE/config/zuul/logging.conf > /etc/zuul/logging.c
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/openstack_functions.py > /etc/zuul/openstack_functions.py"
 sudo service zuul reload
 
-sed "s%- net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_42'%- net-id: '$NEUTRON_LAB_PRIVATE_NETWORK_ID_42'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
-sed "s%- net-id: 'NEUTRON_LAB_PRIVATE_NETWORK_ID_43'%- net-id: '$NOVA_NET_LAB_PRIVATE_NETWORK_ID_43'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sed "s%- net-id: '42_NET_LAB_PRIVATE_NETWORK_ID'%- net-id: '$42_LAB_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
+sed "s%- net-id: '43_NET_LAB_PRIVATE_NETWORK_ID'%- net-id: '$43_LAB_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
 sed "s%apikey: JENKINS_API_KEY%apikey: $JENKINS_API_KEY%g" -i $WORKSPACE/config/nodepool/sahara.yaml
 sed "s%credentials-id: CREDENTIALS_ID%credentials-id: $CREDENTIALS_ID%g" -i $WORKSPACE/config/nodepool/sahara.yaml
 sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/sahara.yaml > /etc/nodepool/nodepool.yaml"
