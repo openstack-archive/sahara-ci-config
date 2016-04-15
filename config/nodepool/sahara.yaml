@@ -1,5 +1,4 @@
 script-dir: /opt/ci/files/nodepool-scripts
-dburi: 'mysql://nodepool@localhost/nodepool'
 
 cron:
   check: '*/1 * * * *'
@@ -27,10 +26,11 @@ providers:
     username: 'ci-user'
     password: 'nova'
     auth-url: 'http://172.18.168.42:5000/v2.0'
-    project-id: 'ci'
+    project-name: 'ci'
     max-servers: 6
     boot-timeout: 120
-    pool: public
+    ipv6-preferred: False
+    pool: 'public'
     networks:
       - net-id: 'LAB_42_PRIVATE_NETWORK_ID'
     images:
@@ -43,10 +43,11 @@ providers:
     username: 'ci-user'
     password: 'nova'
     auth-url: 'http://172.18.168.43:5000/v2.0'
-    project-id: 'ci'
+    project-name: 'ci'
     max-servers: 6
     boot-timeout: 120
-    pool: public
+    ipv6-preferred: False
+    pool: 'public'
     networks:
       - net-id: 'LAB_43_PRIVATE_NETWORK_ID'
     images:
@@ -58,8 +59,3 @@ providers:
 
 targets:
   - name: sahara-gate
-    jenkins:
-      url: http://127.0.0.1/jenkins
-      user: admin
-      apikey: JENKINS_API_KEY
-      credentials-id: CREDENTIALS_ID
