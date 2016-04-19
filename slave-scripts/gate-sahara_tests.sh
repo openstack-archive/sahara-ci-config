@@ -2,8 +2,8 @@
 
 . $FUNCTION_PATH/functions-common.sh
 
-plugin=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
-release=$(echo $JOB_NAME | awk -F '-' '{ print $7 }')
+plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
+release=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 
 case $release in
     liberty)
