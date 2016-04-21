@@ -190,8 +190,18 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-  - name: ^(?!nightly).*-mapr_5.*$
+  - name: ^(?!nightly).*-mapr_5.1*$
     branch: ^(master|stable/mitaka)$
+    voting: false
+    files:
+      - ^sahara_tests/scenario/defaults/mitaka/mapr-5.*$
+      - ^sahara_tests/scenario/defaults/mapr-5.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-mapr_5.0*$
+    branch: ^(master|stable/liberty|stable/mitaka)$
     voting: false
     files:
       - ^sahara_tests/scenario/defaults/mitaka/mapr-5.*$
