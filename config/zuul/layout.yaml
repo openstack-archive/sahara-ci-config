@@ -264,7 +264,7 @@ jobs:
       - ^elements/.*$
   - name: dib-vanilla_2.7.1-c6.6
     voting: false
-  - name: ^.*-ambari_2.3-.*$
+  - name: ^(?!nightly).*-ambari_2.3-.*$
     branch: ^(master|stable/mitaka)$
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.3.*$
