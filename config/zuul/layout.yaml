@@ -66,6 +66,7 @@ projects:
       - gate-sahara-cdh_5.5.0-u14-aio
       - gate-sahara-cdh_5.5.0-c6.6-aio
       - gate-sahara-ambari_2.3-c6.6
+      - gate-sahara-ambari_2.4-c6.6
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -84,6 +85,7 @@ projects:
       - gate-sahara_tests-cdh_5.5.0-u14-aio
       - gate-sahara_tests-cdh_5.5.0-c6.6-aio
       - gate-sahara_tests-ambari_2.3-c6.6
+      - gate-sahara_tests-ambari_2.4-c6.6
       - gate-sahara_tests-cdh_5.4.0-u12-liberty
       - gate-sahara_tests-cdh_5.4.0-c6.6-liberty
       - gate-sahara_tests-spark_1.3.1-u14-liberty
@@ -95,6 +97,7 @@ projects:
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-ambari_2.3-c6.6-mitaka
+      - gate-sahara_tests-ambari_2.4-c6.6-mitaka
 
     periodic:
       - nightly-sahara_tests-vanilla_2.6.0-u14
@@ -111,6 +114,7 @@ projects:
       - nightly-sahara_tests-cdh_5.5.0-u14-aio
       - nightly-sahara_tests-cdh_5.5.0-c6.6-aio
       - nightly-sahara_tests-ambari_2.3-c6.6
+      - nightly-sahara_tests-ambari_2.4-c6.6
       - nightly-sahara_tests-cdh_5.4.0-u12-liberty
       - nightly-sahara_tests-cdh_5.4.0-c6.6-liberty
       - nightly-sahara_tests-spark_1.3.1-u14-liberty
@@ -122,6 +126,7 @@ projects:
       - nightly-sahara_tests-spark_1.6.0-u14-mitaka
       - nightly-sahara_tests-vanilla_2.7.1-u14-mitaka
       - nightly-sahara_tests-ambari_2.3-c6.6-mitaka
+      - nightly-sahara_tests-ambari_2.4-c6.6-mitaka
 
   - name: openstack/python-saharaclient
     check:
@@ -269,6 +274,16 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.3.*$
       - ^sahara_tests/scenario/defaults/mitaka/ambari-2.3.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-ambari_2.4-.*$
+    branch: master
+    voting: false
+    files:
+      - ^sahara_tests/scenario/defaults/ambari-2.4.*$
+      - ^sahara_tests/scenario/defaults/mitaka/ambari-2.4.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$

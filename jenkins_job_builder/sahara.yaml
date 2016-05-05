@@ -114,6 +114,7 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
+            - ambari_2.4
           os: c6.6
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
@@ -144,6 +145,7 @@
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
+            - ambari_2.4
           os: c6.6
           release: mitaka
 
@@ -184,6 +186,7 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
+            - ambari_2.4
           os: c6.6
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -213,6 +216,7 @@
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
+            - ambari_2.4
           os: c6.6
           release: mitaka
 
