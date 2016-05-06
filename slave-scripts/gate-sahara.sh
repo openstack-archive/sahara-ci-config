@@ -44,6 +44,12 @@ case $plugin in
        template_image_prefix="ambari_2_1"
        image_name="ambari_2.1_c6.6"
        ;;
+    ambari_2.4)
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/ambari-2.4.yaml.mako"
+       template_image_prefix="ambari_2_1"
+       image_name="ambari_2.1_c6.6"
+       ;;
     vanilla_2.6.0)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
