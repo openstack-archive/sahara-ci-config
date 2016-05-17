@@ -17,7 +17,7 @@
     node: trusty-42 || trusty-43
 
 - job-template:
-    name: 'gate-saharaclient-distributed-fake'
+    name: 'gate-saharaclient-fake'
     defaults: global
     builders:
       - gerrit-git-prep
