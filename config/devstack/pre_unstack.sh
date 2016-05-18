@@ -19,6 +19,7 @@ get_id() {
 VANILLA_2_6_0_IMAGE_PATH=/home/ubuntu/images/vanilla_2.6.0_u14.qcow2
 VANILLA_2_7_1_IMAGE_PATH=/home/ubuntu/images/vanilla_2.7.1_u14.qcow2
 AMBARI_2_3_IMAGE_PATH=/home/ubuntu/images/ambari_2.1_c6.6.qcow2
+AMBARI_2_4_IMAGE_PATH=/home/ubuntu/images/ambari_2.4_c6.6.qcow2
 CENTOS_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_c6.6.qcow2
 UBUNTU_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_u12.qcow2
 UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
@@ -35,6 +36,7 @@ MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 glance image-download --file $VANILLA_2_6_0_IMAGE_PATH $(get_id $VANILLA_2_6_0_IMAGE_PATH)
 glance image-download --file $VANILLA_2_7_1_IMAGE_PATH $(get_id $VANILLA_2_7_1_IMAGE_PATH)
 glance image-download --file $AMBARI_2_3_IMAGE_PATH $(get_id $AMBARI_2_3_IMAGE_PATH)
+glance image-download --file $AMBARI_2_4_IMAGE_PATH $(get_id $AMBARI_2_4_IMAGE_PATH)
 glance image-download --file $CENTOS_CDH_5_3_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_3_0_IMAGE_PATH)
 glance image-download --file $UBUNTU_CDH_5_3_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_3_0_IMAGE_PATH)
 glance image-download --file $UBUNTU_CDH_5_4_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_4_0_IMAGE_PATH)

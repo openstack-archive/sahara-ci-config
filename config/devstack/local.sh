@@ -27,6 +27,7 @@ fi
 VANILLA_2_6_0_IMAGE_PATH=/home/ubuntu/images/vanilla_2.6.0_u14.qcow2
 VANILLA_2_7_1_IMAGE_PATH=/home/ubuntu/images/vanilla_2.7.1_u14.qcow2
 AMBARI_2_3_IMAGE_PATH=/home/ubuntu/images/ambari_2.1_c6.6.qcow2
+AMBARI_2_4_IMAGE_PATH=/home/ubuntu/images/ambari_2.4_c6.6.qcow2
 CENTOS_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_c6.6.qcow2
 UBUNTU_CDH_5_3_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.3.0_u12.qcow2
 UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
@@ -85,6 +86,7 @@ neutron quota-update --tenant_id $CI_TENANT_ID --port 64
 openstack image create $(basename -s .qcow2 $VANILLA_2_6_0_IMAGE_PATH) --file $VANILLA_2_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.6.0'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 openstack image create $(basename -s .qcow2 $VANILLA_2_7_1_IMAGE_PATH) --file $VANILLA_2_7_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.7.1'='True' --property '_sahara_tag_vanilla'='True' --property '_sahara_username'='ubuntu'
 openstack image create $(basename -s .qcow2 $AMBARI_2_3_IMAGE_PATH) --file $AMBARI_2_3_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.3'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='cloud-user'
+openstack image create $(basename -s .qcow2 $AMBARI_2_4_IMAGE_PATH) --file $AMBARI_2_4_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='cloud-user'
 openstack image create $(basename -s .qcow2 $CENTOS_CDH_5_3_0_IMAGE_PATH) --file $CENTOS_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
 openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_3_0_IMAGE_PATH) --file $UBUNTU_CDH_5_3_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.3.0'='True' --property '_sahara_tag_5'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_4_0_IMAGE_PATH) --file $UBUNTU_CDH_5_4_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.4.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
