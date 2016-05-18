@@ -29,9 +29,6 @@ case $ZUUL_BRANCH in
     stable/liberty)
        sahara_templates_path="$sahara_templates_path/liberty"
        ;;
-    stable/kilo)
-       sahara_templates_path="$sahara_templates_path/kilo"
-       ;;
     stable/mitaka)
        sahara_templates_path="$sahara_templates_path/mitaka"
        ;;
@@ -50,11 +47,6 @@ case $plugin in
        template_image_prefix="ambari_2_1"
        image_name="ambari_2.1_c6.6"
        ;;
-    vanilla_2.6.0)
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
-       template_image_prefix="vanilla_two_six"
-       ;;
     vanilla_2.7.1)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
@@ -62,11 +54,7 @@ case $plugin in
     ;;
     transient)
        # transient is using image with latest vanilla version
-       if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
-        image_name=vanilla_2.6.0_u14
-       else
-        image_name=vanilla_2.7.1_u14
-       fi
+       image_name=vanilla_2.7.1_u14
        template_image_prefix="vanilla_two_seven_one"
        sahara_plugin=vanilla
        concurrency=3
@@ -118,6 +106,5 @@ esac
 sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
-write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
 start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file" "$concurrency"
 print_python_env
