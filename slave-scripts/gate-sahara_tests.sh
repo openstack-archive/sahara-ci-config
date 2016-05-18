@@ -12,18 +12,6 @@ case $release in
     mitaka)
         ZUUL_BRANCH="stable/mitaka"
         ;;
-    *)
-        case $plugin in
-            vanilla_2.6.0)
-                ZUUL_BRANCH="stable/kilo"
-                ;;
-            cdh_5.3.0)
-                ZUUL_BRANCH="stable/kilo"
-                ;;
-            spark_1.0.0)
-                ZUUL_BRANCH="stable/kilo"
-                ;;
-        esac
 esac
 
 sahara_path="/tmp/sahara"

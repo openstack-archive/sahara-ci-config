@@ -51,14 +51,6 @@ case "${os}" in
 esac
 
 case $plugin in
-    vanilla_2.6.0)
-       env ${os_type}_vanilla_hadoop_2_6_image_name=${vanilla_2_6_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.6
-       check_error_code $? ${vanilla_2_6_0_image}.qcow2
-       upload_image "${plugin}" "${username}" ${vanilla_2_6_0_image}
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
-       template_image_prefix="vanilla_two_six"
-    ;;
     vanilla_2.7.1)
       env ${os_type}_vanilla_hadoop_2_7_1_image_name=${vanilla_2_7_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.7.1
       check_error_code $? ${vanilla_2_7_1_image}.qcow2
@@ -66,14 +58,6 @@ case $plugin in
       mode=distribute
       scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
       template_image_prefix="vanilla_two_seven_one"
-    ;;
-
-    spark_1.0.0)
-       env ubuntu_spark_image_name=${spark_1_0_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.0.2
-       check_error_code $? ${spark_1_0_0_image}.qcow2
-       upload_image "${plugin}" "${username}" ${spark_1_0_0_image}
-       scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml.mako"
-       template_image_prefix="spark"
     ;;
 
     spark_1.3.1)
@@ -90,14 +74,6 @@ case $plugin in
        upload_image "${plugin}" "${username}" ${spark_1_6_0_image}
        scenario_conf_file="$sahara_templates_path/spark-1.6.0.yaml.mako"
        template_image_prefix="spark_1_6"
-    ;;
-
-    cdh_5.3.0)
-       env cloudera_5_3_${os_type}_image_name=${cdh_5_3_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.3
-       check_error_code $? ${cdh_5_3_0_image}.qcow2
-       upload_image "${plugin}" "${username}" ${cdh_5_3_0_image}
-       scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml.mako"
-       template_image_prefix="cdh"
     ;;
 
     cdh_5.4.0)
@@ -147,7 +123,7 @@ cd $SAHARA_PATH
 sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
-write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
+write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file"
 start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
 print_python_env
 cleanup_image "$plugin" "$os"
