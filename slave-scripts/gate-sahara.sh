@@ -29,9 +29,6 @@ case $ZUUL_BRANCH in
     stable/liberty)
        sahara_templates_path="$sahara_templates_path/liberty"
        ;;
-    stable/kilo)
-       sahara_templates_path="$sahara_templates_path/kilo"
-       ;;
     stable/mitaka)
        sahara_templates_path="$sahara_templates_path/mitaka"
        ;;
@@ -50,11 +47,6 @@ case $plugin in
        template_image_prefix="ambari_2_1"
        image_name="ambari_2.1_c6.6"
        ;;
-    vanilla_2.6.0)
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/vanilla-2.6.0.yaml.mako"
-       template_image_prefix="vanilla_two_six"
-       ;;
     vanilla_2.7.1)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
@@ -62,20 +54,12 @@ case $plugin in
     ;;
     transient)
        # transient is using image with latest vanilla version
-       if [ "$ZUUL_BRANCH" == "stable/kilo" ]; then
-        image_name=vanilla_2.6.0_u14
-       else
-        image_name=vanilla_2.7.1_u14
-       fi
+       image_name=vanilla_2.7.1_u14
        template_image_prefix="vanilla_two_seven_one"
        sahara_plugin=vanilla
        concurrency=3
        mode=distribute
        scenario_conf_file="$sahara_templates_path/transient.yaml.mako"
-       ;;
-    cdh_5.3.0)
-       scenario_conf_file="$sahara_templates_path/cdh-5.3.0.yaml.mako"
-       template_image_prefix="cdh"
        ;;
     cdh_5.4.0)
        scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml.mako"
@@ -84,10 +68,6 @@ case $plugin in
     cdh_5.5.0)
        scenario_conf_file="$sahara_templates_path/cdh-5.5.0.yaml.mako"
        template_image_prefix="cdh_5_5_0"
-       ;;
-    spark_1.0.0)
-       scenario_conf_file="$sahara_templates_path/spark-1.0.0.yaml.mako"
-       template_image_prefix="spark"
        ;;
     spark_1.3.1)
        scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
@@ -118,6 +98,5 @@ esac
 sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
-write_tests_conf "$cluster_name" "$template_image_prefix" "$image_name" "$scenario_conf_file" # support kilo
 start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file" "$concurrency"
 print_python_env

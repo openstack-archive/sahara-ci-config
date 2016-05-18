@@ -176,24 +176,3 @@ write_sahara_main_conf() {
   cat $conf_path
   echo "--------------- end ---------------"
 }
-
-write_tests_conf() {
-  local cluster_name=$1
-  local image_prefix=$2
-  local image_name=$3
-  NETWORK="neutron"
-echo "[DEFAULT]
-OS_USERNAME: $OS_USERNAME
-OS_PASSWORD: $OS_PASSWORD
-OS_TENANT_NAME: $OS_TENANT_NAME
-OS_AUTH_URL: $OS_AUTH_URL
-network_type: $NETWORK
-network_public_name: public
-network_private_name: private
-${image_prefix}_image: $image_name
-cluster_name: $cluster_name
-ci_flavor_id: $ci_flavor_id
-medium_flavor_id: $medium_flavor_id
-large_flavor_id: $large_flavor_id
-" | tee ${template_vars_file}
-}
