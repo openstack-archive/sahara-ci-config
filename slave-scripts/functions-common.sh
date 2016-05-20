@@ -149,7 +149,7 @@ start_sahara() {
     screen -dmS sahara-all /bin/bash -c "PYTHONUNBUFFERED=1 sahara-all --config-dir $conf_dir -d --log-file $WORKSPACE/logs/sahara-log.txt"
   fi
 
-  api_responding_timeout=30
+  api_responding_timeout=160
   if ! timeout ${api_responding_timeout} sh -c "while ! curl -s http://127.0.0.1:8386/v1.1/ 2>/dev/null | grep -q 'Authentication required' ; do sleep 1; done"; then
     failure "Sahara API failed to respond within ${api_responding_timeout} seconds"
   fi
