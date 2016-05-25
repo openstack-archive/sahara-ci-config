@@ -150,7 +150,7 @@ start_sahara() {
   fi
 
   api_responding_timeout=30
-  if ! timeout ${api_responding_timeout} sh -c "while ! curl -s http://127.0.0.1:8386/v1.1/ 2>/dev/null | grep -q 'Authentication required' ; do sleep 1; done"; then
+  if ! timeout ${api_responding_timeout} sh -c "while ! curl -s http://127.0.0.1:8386/v1.1/ 2>/dev/null | grep -q 'requires authentication\|Authentication required' ; do sleep 1; done"; then
     failure "Sahara API failed to respond within ${api_responding_timeout} seconds"
   fi
 }
