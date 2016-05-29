@@ -93,7 +93,7 @@ case $plugin in
     ;;
 
     ambari_2.1)
-       env ambari_${os_type}_image_name=${ambari_2_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p ambari -i $os_type -v 2.1.0
+       env ambari_${os_type}_image_name=${ambari_2_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p ambari -i $os_type -v 2.2.1.0
        check_error_code $? ${ambari_2_1_image}.qcow2
        upload_image "${plugin}" "${username}" ${ambari_2_1_image}
        # we use Ambari 2.1 management console for creating HDP 2.3 stack
