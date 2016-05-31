@@ -139,6 +139,7 @@ start_sahara() {
   local conf_dir=$(dirname $1)
   local mode=$2
   mkdir $WORKSPACE/logs
+  sudo pip install amqp==1.4.9 warlock==1.3.0
   sahara-db-manage --config-file $conf_path  upgrade head || failure "Command 'sahara-db-manage' failed"
   if [ "$mode" == "distribute" ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file $WORKSPACE/logs/sahara-log-api.txt"
