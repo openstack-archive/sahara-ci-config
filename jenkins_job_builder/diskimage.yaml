@@ -52,6 +52,7 @@
           os:
             - u14
             - c6.6
+            - c7
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - spark_1.0.0
