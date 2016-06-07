@@ -49,9 +49,6 @@
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - cdh_5.5.0
-          os:
-            - u14
-            - c6.6
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - spark_1.0.0

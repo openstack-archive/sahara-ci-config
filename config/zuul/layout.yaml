@@ -134,6 +134,7 @@ projects:
       - dib-cdh_5.4.0-c6.6-aio
       - dib-cdh_5.5.0-u14-aio
       - dib-cdh_5.5.0-c6.6-aio
+      - dib-cdh_5.5.0-c7-aio
     post:
       - dib-vanilla_2.7.1-u14
       - dib-vanilla_2.7.1-c6.6
@@ -147,7 +148,7 @@ projects:
       - dib-cdh_5.4.0-c6.6-aio
       - dib-cdh_5.5.0-u14-aio
       - dib-cdh_5.5.0-c6.6-aio
-
+      - dib-cdh_5.5.0-c7-aio
   - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
@@ -260,6 +261,9 @@ jobs:
       - ^elements/.*$
   - name: dib-vanilla_2.7.1-c7
     branch: ^(master|stable/mitaka)$
+    voting: false
+  - name: dib-cdh_5.5.0-c7-aio
+    branch: master
     voting: false
   - name: gate-sahara-pep8-trunk
     branch: ^(master|stable/liberty|stable/mitaka)$
