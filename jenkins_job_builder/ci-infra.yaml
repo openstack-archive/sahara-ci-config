@@ -23,10 +23,15 @@
           description:
 
     builders:
-    - shell: |
-            rm -rf sahara-ci-config
+      - shell: |
             git clone https://git.openstack.org/openstack/sahara-ci-config
             bash $WORKSPACE/sahara-ci-config/slave-scripts/integration-cleanup.sh
+    publishers:
+      - workspace-cleanup:
+          clean-if:
+            - success: true
+            - not-built: true
+            - aborted: true
 
 - job:
     name: jobs-updater
@@ -52,6 +57,31 @@
 
     builders:
       - shell:  "jenkins-jobs update jenkins_job_builder"
+
+- job:
+    name: daily-log-publisher
+    node: master
+    project-type: freestyle
+    description: "<b>This job is managed by Jenkins Job Builder, do not edit it through WebUI.\
+                  \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
+                  \n<p><b>Title</b>: Jenkins Jobs Update job <br/>\
+                  \n<b>Description</b>: This job updates all other jobs from sahara-ci-config repo. <br/>"
+    defaults: global
+    disabled: false
+
+    triggers:
+      - timed: '50 5 * * *'
+
+    builders:
+      - shell: |
+              git clone https://git.openstack.org/openstack/sahara-ci-config
+              bash $WORKSPACE/sahara-ci-config/slave-scripts/publish-logs.sh
+    publishers:
+      - workspace-cleanup:
+          clean-if:
+            - success: true
+            - not-built: true
+            - aborted: true
 
 - job:
     name: sahara-ci-syntax-check
