@@ -171,7 +171,7 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-  - name: ^(?!nightly).*-mapr_5.1*$
+  - name: ^(?!nightly).*-mapr_5.1.*$
     branch: ^(master|stable/mitaka)$
     voting: false
     files:
@@ -181,7 +181,7 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: ^(?!nightly).*-mapr_5.0*$
+  - name: ^(?!nightly).*-mapr_5.0.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
     voting: false
     files:
