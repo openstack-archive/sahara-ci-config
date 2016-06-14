@@ -38,12 +38,12 @@ failure() {
 register_new_image() {
    local image_name=$1
    local image_properties=$2
-   glance image-create --name $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
+   openstack image create $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
 }
 
 rename_image() {
    # 1 - source image, 2 - target image
-   id=$(glance image-list | grep -w $1 | awk '{print $2}')
+   id=$(openstack image list | grep -w $1 | awk '{print $2}')
    # Use v2 API Glance version as workaround for #1173044
    glance --debug --os-image-api-version 2 image-update "$id" --name $2
 }

@@ -34,7 +34,7 @@ sudo service apache2 restart
 sleep 5
 
 TEST_IMAGE=uitests-$RANDOM
-glance image-create --name $TEST_IMAGE --disk-format qcow2 --container-format bare < /proc/uptime
+openstack image create $TEST_IMAGE --disk-format qcow2 --container-format bare < /proc/uptime
 
 echo "
 [common]
