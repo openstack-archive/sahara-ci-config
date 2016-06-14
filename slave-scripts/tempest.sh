@@ -6,7 +6,7 @@
 . $FUNCTION_PATH/functions-common.sh
 
 project=$(echo $JOB_NAME | awk -F '-' '{ print $2 }')
-image_id=$(glance image-list | grep ubuntu-test-image | awk '{print $2}')
+image_id=$(openstack image list | grep ubuntu-test-image | awk '{print $2}')
 
 SAHARATESTS_REPO=https://git.openstack.org/openstack/sahara-tests
 if [ "$project" == "sahara" ]; then

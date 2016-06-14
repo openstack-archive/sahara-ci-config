@@ -12,7 +12,7 @@ else
 fi
 
 get_id() {
-    result=$(glance image-list | grep $(basename -s .qcow2 $1) | awk '{print $2}')
+    result=$(openstack image list | grep $(basename -s .qcow2 $1) | awk '{print $2}')
     echo $result
 }
 
@@ -33,21 +33,21 @@ MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 
 
-glance image-download --file $VANILLA_2_6_0_IMAGE_PATH $(get_id $VANILLA_2_6_0_IMAGE_PATH)
-glance image-download --file $VANILLA_2_7_1_IMAGE_PATH $(get_id $VANILLA_2_7_1_IMAGE_PATH)
-glance image-download --file $AMBARI_2_3_IMAGE_PATH $(get_id $AMBARI_2_3_IMAGE_PATH)
-glance image-download --file $AMBARI_2_4_IMAGE_PATH $(get_id $AMBARI_2_4_IMAGE_PATH)
-glance image-download --file $CENTOS_CDH_5_3_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_3_0_IMAGE_PATH)
-glance image-download --file $UBUNTU_CDH_5_3_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_3_0_IMAGE_PATH)
-glance image-download --file $UBUNTU_CDH_5_4_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_4_0_IMAGE_PATH)
-glance image-download --file $CENTOS_CDH_5_4_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_4_0_IMAGE_PATH)
-glance image-download --file $UBUNTU_CDH_5_5_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_5_0_IMAGE_PATH)
-glance image-download --file $CENTOS_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_5_0_IMAGE_PATH)
-glance image-download --file $SPARK_1_0_0_IMAGE_PATH $(get_id $SPARK_1_0_0_IMAGE_PATH)
-glance image-download --file $SPARK_1_3_1_IMAGE_PATH $(get_id $SPARK_1_3_1_IMAGE_PATH)
-glance image-download --file $SPARK_1_6_0_IMAGE_PATH $(get_id $SPARK_1_6_0_IMAGE_PATH)
-glance image-download --file $MAPR_5_0_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_0_0_MRV2_IMAGE_PATH)
-glance image-download --file $MAPR_5_1_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_1_0_MRV2_IMAGE_PATH)
+openstack image save --file $VANILLA_2_6_0_IMAGE_PATH $(get_id $VANILLA_2_6_0_IMAGE_PATH)
+openstack image save --file $VANILLA_2_7_1_IMAGE_PATH $(get_id $VANILLA_2_7_1_IMAGE_PATH)
+openstack image save --file $AMBARI_2_3_IMAGE_PATH $(get_id $AMBARI_2_3_IMAGE_PATH)
+openstack image save --file $AMBARI_2_4_IMAGE_PATH $(get_id $AMBARI_2_4_IMAGE_PATH)
+openstack image save --file $CENTOS_CDH_5_3_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_3_0_IMAGE_PATH)
+openstack image save --file $UBUNTU_CDH_5_3_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_3_0_IMAGE_PATH)
+openstack image save --file $UBUNTU_CDH_5_4_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_4_0_IMAGE_PATH)
+openstack image save --file $CENTOS_CDH_5_4_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_4_0_IMAGE_PATH)
+openstack image save --file $UBUNTU_CDH_5_5_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_5_0_IMAGE_PATH)
+openstack image save --file $CENTOS_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_5_0_IMAGE_PATH)
+openstack image save --file $SPARK_1_0_0_IMAGE_PATH $(get_id $SPARK_1_0_0_IMAGE_PATH)
+openstack image save --file $SPARK_1_3_1_IMAGE_PATH $(get_id $SPARK_1_3_1_IMAGE_PATH)
+openstack image save --file $SPARK_1_6_0_IMAGE_PATH $(get_id $SPARK_1_6_0_IMAGE_PATH)
+openstack image save --file $MAPR_5_0_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_0_0_MRV2_IMAGE_PATH)
+openstack image save --file $MAPR_5_1_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_1_0_MRV2_IMAGE_PATH)
 
 bash $TOP_DIR/unstack.sh
 
