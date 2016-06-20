@@ -92,6 +92,14 @@ case $plugin in
        template_image_prefix="cdh_5_5_0"
     ;;
 
+    cdh_5.7.0)
+       env cloudera_5_7_${os_type}_image_name=${cdh_5_7_0_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.7
+       check_error_code $? ${cdh_5_7_0_image}.qcow2
+       upload_image "${plugin}" "${username}" ${cdh_5_7_0_image}
+       scenario_conf_file="$sahara_templates_path/cdh-5.7.0.yaml.mako"
+       template_image_prefix="cdh_5_7_0"
+    ;;
+
     ambari_2.1)
        env ambari_${os_type}_image_name=${ambari_2_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p ambari -i $os_type -v 2.1.0
        check_error_code $? ${ambari_2_1_image}.qcow2

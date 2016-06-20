@@ -49,6 +49,7 @@
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - cdh_5.5.0
+            - cdh_5.7.0
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - spark_1.0.0
