@@ -102,9 +102,11 @@
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
+             - cdh_5.7.0
           os:
              - u14
              - c6.6
+             - c7
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.3.1
