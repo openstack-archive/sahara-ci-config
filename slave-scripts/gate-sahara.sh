@@ -69,6 +69,10 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/cdh-5.5.0.yaml.mako"
        template_image_prefix="cdh_5_5_0"
        ;;
+    cdh_5.7.0)
+       scenario_conf_file="$sahara_templates_path/cdh-5.7.0.yaml.mako"
+       template_image_prefix="cdh_5_7_0"
+       ;;
     spark_1.3.1)
        scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
        template_image_prefix="spark_1_3"
