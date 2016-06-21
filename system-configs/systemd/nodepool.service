@@ -1,0 +1,12 @@
+[Unit]
+Description=Nodepool
+
+[Service]
+ExecStart=/opt/ci/nodepool/venv/bin/nodepoold
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=idle
+
+[Install]
+WantedBy=multi-user.target
+Alias=nodepool.service
