@@ -7,14 +7,14 @@ sudo su - zuul -c "cat $WORKSPACE/config/zuul/gearman-logging.conf > /etc/zuul/g
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/layout.yaml > /etc/zuul/layout.yaml"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/logging.conf > /etc/zuul/logging.conf"
 sudo su - zuul -c "cat $WORKSPACE/config/zuul/openstack_functions.py > /etc/zuul/openstack_functions.py"
-sudo service zuul reload
+sudo systemctl reload zuul.service
 
 sed "s%- net-id: 'LAB_42_PRIVATE_NETWORK_ID'%- net-id: '$LAB_42_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
 sed "s%- net-id: 'LAB_43_PRIVATE_NETWORK_ID'%- net-id: '$LAB_43_PRIVATE_NETWORK_ID'%g" -i $WORKSPACE/config/nodepool/sahara.yaml
 sed "s%apikey=JENKINS_API_KEY%apikey=$JENKINS_API_KEY%g" -i $WORKSPACE/config/nodepool/secure.conf
-sed "s%credentials=CREDENTIALS_ID%credentials=$CREDENTIALS_ID%g" -i $WORKSPACE/config/nodepool/secure.conf
-sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/sahara.yaml > /etc/nodepool/nodepool.yaml"
-sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/secure.conf > /etc/nodepool/secure.conf"
+sed "s%credentials=CREDENTIALS_ID%credentials=$CREDENTIALS_ID%g" -i $WORKSPACE/config/nodepool/config/secure.conf
+sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/config/sahara.yaml > /etc/nodepool/nodepool.yaml"
+sudo su - nodepool -c "cat $WORKSPACE/config/nodepool/config/secure.conf > /etc/nodepool/secure.conf"
 
 sed "s%MYSQL_PASS=MYSQL_ROOT_PASSWORD%MYSQL_PASS=$MYSQL_ROOT_PASSWORD%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh
 sed "s%JENKINS_PUBLIC_KEY%$JENKINS_PUBLIC_KEY%g" -i $WORKSPACE/config/nodepool/scripts/prepare_node.sh
