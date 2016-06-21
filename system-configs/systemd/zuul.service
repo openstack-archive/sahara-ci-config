@@ -1,0 +1,14 @@
+[Unit]
+Description=Zuul server
+
+[Service]
+ExecStart=/opt/ci/zuul/venv/bin/zuul-server -d
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=idle
+User=zuul
+Group=zuul
+
+[Install]
+WantedBy=multi-user.target
+Alias=zuul.service
