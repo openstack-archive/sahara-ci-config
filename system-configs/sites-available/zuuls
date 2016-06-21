@@ -1,0 +1,4 @@
+<VirtualHost *:80>
+  RewriteEngine on
+  RewriteRule ^/zuul/status.json$ http://127.0.0.1:8001/status.json [P]
+</VirtualHost>
