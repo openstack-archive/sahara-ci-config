@@ -1,4 +1,5 @@
 script-dir: /opt/ci/files/nodepool-scripts
+images-dir: /opt/ci/files/nodepool_dib
 
 cron:
   check: '*/1 * * * *'
@@ -58,4 +59,4 @@ providers:
         setup: prepare_node.sh
 
 targets:
-  - name: sahara-gate
+  - name: sahara-ci
