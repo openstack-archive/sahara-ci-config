@@ -1,0 +1,24 @@
+- job-template:
+    name: 'daily-log-publisher'
+    defaults: global
+    builders:
+      - shell: |
+              git clone https://git.openstack.org/openstack/sahara-ci-config
+              ./$WORKSPACE/sahara-ci-config/slave-scripts/publish-logs.sh
+    triggers:
+      - timed: '50 5 * * *'
+    publishers:
+      - workspace-cleanup:
+          clean-if:
+            - success: true
+            - not-built: true
+            - aborted: true
+    node:
+      - lab-42
+      - lab-43
+
+
+- project:
+    name: publisher
+    jobs:
+     - 'daily-log-publisher'
