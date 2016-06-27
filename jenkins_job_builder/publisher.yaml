@@ -4,7 +4,7 @@
     builders:
       - shell: |
               git clone https://git.openstack.org/openstack/sahara-ci-config
-              ./$WORKSPACE/sahara-ci-config/slave-scripts/publish-logs.sh
+              $WORKSPACE/sahara-ci-config/slave-scripts/publish-logs.sh
     triggers:
       - timed: '50 5 * * *'
     publishers:
