@@ -57,7 +57,6 @@
           os: u14
      - 'dib-{plugin}-{os}':
           plugin:
-            - mapr_5.0.0.mrv2
             - mapr_5.1.0.mrv2
           os: u14
      - 'dib-{plugin}-{os}':
