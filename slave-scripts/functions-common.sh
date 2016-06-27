@@ -117,6 +117,7 @@ run_tests() {
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   pushd $SAHARA_TESTS_PATH
   # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
+  tox -e venv -- pip install warlock==1.2.0
   tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config | tee tox.log
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
@@ -139,6 +140,7 @@ start_sahara() {
   local conf_dir=$(dirname $1)
   local mode=$2
   mkdir $WORKSPACE/logs
+  pip install warlock==1.2.0
   sahara-db-manage --config-file $conf_path  upgrade head || failure "Command 'sahara-db-manage' failed"
   if [ "$mode" == "distribute" ]; then
     screen -dmS sahara-api /bin/bash -c "PYTHONUNBUFFERED=1 sahara-api --config-dir $conf_dir -d --log-file $WORKSPACE/logs/sahara-log-api.txt"
