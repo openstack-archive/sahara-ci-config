@@ -38,7 +38,7 @@ failure() {
 register_new_image() {
    local image_name=$1
    local image_properties=$2
-   openstack dmage create $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
+   openstack image create $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
 }
 
 rename_image() {
