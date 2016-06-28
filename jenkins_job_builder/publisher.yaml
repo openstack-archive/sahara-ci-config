@@ -13,8 +13,16 @@
             - success: true
             - not-built: true
             - aborted: true
+      - trigger:
+          project: 'devstack-logs-cleanup-{lab}'
     node: 'lab-{lab}'
 
+- job-template:
+    name: 'devstack-logs-cleanup-{lab}'
+    defaults: global
+    builders:
+      - shell: rm -rf /opt/stack/logs/*
+    node: 'lab-{lab}'
 
 - project:
     name: publisher
@@ -23,3 +31,4 @@
       - 43
     jobs:
      - 'daily-log-publisher-{lab}'
+     - 'devstack-logs-cleanup-{lab}'
