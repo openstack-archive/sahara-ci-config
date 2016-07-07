@@ -122,15 +122,10 @@
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
-            - cdh_5.4.0
-          release: liberty
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
             - vanilla_2.7.1
             - spark_1.3.1
           os: u14
           release:
-            - liberty
             - mitaka
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -151,9 +146,10 @@
           release: mitaka
 
 - project:
-    name: sahara-nightly
+    name: sahara-periodic
     pipeline:
       - nightly
+      - weekly
     project_name:
       - sahara_tests
     plugin:
@@ -189,14 +185,14 @@
           plugin:
             - cdh_5.4.0
           release: liberty
+          pipeline: weekly
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
             - spark_1.3.1
           os: u14
-          release:
-            - liberty
-            - mitaka
+          release: liberty
+          pipeline: weekly
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.5.0
