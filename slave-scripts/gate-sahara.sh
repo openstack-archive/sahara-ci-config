@@ -97,6 +97,9 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/fake.yaml.mako"
        template_image_prefix="fake_plugin"
        ;;
+      storm_1.0.1)
+        scenario_conf_file="$sahara_templates_path/storm-1.0.1.yaml.mako"
+        template_image_prefix="storm_1.0.1"
 esac
 
 sudo pip install -r requirements.txt . --no-cache-dir
