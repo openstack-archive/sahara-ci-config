@@ -120,6 +120,9 @@
             - ambari_2.3
             - ambari_2.4
           os: c6.6
+     - '{pipeline}-{project_name}-{plugin}-{os}':
+          plugin: storm_1.0.1
+          os: u14
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -150,6 +153,10 @@
           plugin:
             - ambari_2.3
           os: c6.6
+          release: mitaka
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+          plugin: storm_1.0.1
+          os: u14
           release: mitaka
 
 - project:
@@ -183,6 +190,9 @@
           os:
             - u14
             - c6.6
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
+          plugin: storm_1.0.1
+          os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
@@ -211,6 +221,10 @@
           plugin:
             - spark_1.6.0
             - mapr_5.0.0.mrv2
+          os: u14
+          release: mitaka
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+          plugin: storm_1.0.1
           os: u14
           release: mitaka
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':

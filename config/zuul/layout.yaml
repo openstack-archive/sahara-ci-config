@@ -64,6 +64,7 @@ projects:
       - gate-sahara-cdh_5.7.0-c7-aio
       - gate-sahara-ambari_2.3-c6.6
       - gate-sahara-ambari_2.4-c6.6
+      - gate-sahara-storm.1.0.1-u14-aio
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -90,6 +91,7 @@ projects:
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-ambari_2.3-c6.6-mitaka
+      - gate-sahara-tests-storm.1.0.1-u14-aio
 
     periodic:
       - nightly-sahara_tests-vanilla_2.7.1-u14
@@ -114,6 +116,7 @@ projects:
       - nightly-sahara_tests-spark_1.6.0-u14-mitaka
       - nightly-sahara_tests-vanilla_2.7.1-u14-mitaka
       - nightly-sahara_tests-ambari_2.3-c6.6-mitaka
+      - nightly-sahara_tests-storm_1.0.1-u14-aio
 
   - name: openstack/python-saharaclient
     check:
@@ -137,6 +140,7 @@ projects:
       - dib-cdh_5.5.0-c6.6-aio
       - dib-cdh_5.5.0-c7-aio
       - dib-cdh_5.7.0-c7-aio
+      - dib-storm_1.0.1-u14-aio
     post:
       - dib-vanilla_2.7.1-u14
       - dib-vanilla_2.7.1-c6.6
@@ -152,6 +156,8 @@ projects:
       - dib-cdh_5.5.0-c6.6-aio
       - dib-cdh_5.5.0-c7-aio
       - dib-cdh_5.7.0-c7-aio
+      - dib-storm_1.0.1-u14-aio
+
   - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
@@ -256,6 +262,15 @@ jobs:
     voting: false
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.4.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-storm_1.0.1-.*$
+    branch: ^(master|stable/mitaka)$
+    files:
+      - ^sahara_tests/scenario/defaults/storm-1.0.1.*$
+      - ^sahara_tests/scenario/defaults/mitaka/storm-1.0.1.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$

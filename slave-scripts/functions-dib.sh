@@ -80,15 +80,17 @@ upload_image() {
            spark_1.3.1)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.3.1=True --property _sahara_username=${username}"
            ;;
-	   spark_1.6.0)
+	       spark_1.6.0)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.6.0=True --property _sahara_username=${username}"
            ;;
            mapr_5.0.0.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.0.0.mrv2=True --property _sahara_username=${username}"
            ;;
-	   mapr_5.1.0.mrv2)
+           mapr_5.1.0.mrv2)
              image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.1.0.mrv2=True --property _sahara_username=${username}"
            ;;
+           storm_1.0.1)
+             image_properties="--property _sahara_tag_storm=True --property _sahara_tag_1.0.1=True --property _sahara_username=${username}"
    esac
    register_new_image "$image" "$image_properties"
    CUR_IMAGE="$image"
