@@ -41,6 +41,7 @@ SPARK_1_6_0_IMAGE_PATH=/home/ubuntu/images/spark_1.6.0_u14.qcow2
 MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 UBUNTU_12_04_IMAGE_PATH=/home/ubuntu/images/ubuntu-12.04-server-cloudimg-amd64-disk1.img
+STORM_1_0_1_IMAGE_PATH=/home/ubuntu/images/storm_1.0.1_u14.qcow2
 
 export OS_CLOUD='devstack-admin'
 
@@ -100,6 +101,7 @@ openstack image create $(basename -s .qcow2 $SPARK_1_3_1_IMAGE_PATH) --file $SPA
 openstack image create $(basename -s .qcow2 $SPARK_1_6_0_IMAGE_PATH) --file $SPARK_1_6_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_spark'='True' --property '_sahara_tag_1.6.0'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $MAPR_5_0_0_MRV2_IMAGE_PATH) --file $MAPR_5_0_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.0.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $MAPR_5_1_0_MRV2_IMAGE_PATH) --file $MAPR_5_1_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.1.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $STORM_1_0_1_IMAGE_PATH) --file $STORM_1_0_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_storm'='True' --property '_sahara_tag_1.0.1'='True'  --property '_sahara_username'="ubuntu"
 openstack image create ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare
 openstack image create fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_fake'='True' --property '_sahara_tag_0.1'='True' --property '_sahara_username'='ubuntu'
 openstack image set --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
