@@ -153,9 +153,10 @@
           release: mitaka
 
 - project:
-    name: sahara-nightly
+    name: sahara-periodic
     pipeline:
       - nightly
+      - weekly
     project_name:
       - sahara_tests
     plugin:
