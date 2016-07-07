@@ -29,7 +29,7 @@ pipelines:
       gerrit:
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(sahara-ci-)?recheck
-  - name: periodic
+  - name: nightly
     description: Jobs in this queue are triggered on a timer.
     manager: IndependentPipelineManager
     source: gerrit
@@ -47,6 +47,24 @@ pipelines:
         to: esikachev@mirantis.com, vgridnev@mirantis.com
         from: zuul@sahara.mirantis.com
         subject: '[sahara-nightly][failed]Silent check of sahara failed'
+  - name: weekly
+    description: Jobs in this queue are triggered on a timer once at week.
+    manager: IndependentPipelineManager
+    source: gerrit
+    precedence: low
+    trigger:
+      timer:
+        - time: '* * * * 6'
+    success:
+      smtp:
+        to: esikachev@mirantis.com, vgridnev@mirantis.com
+        from: zuul@sahara.mirantis.com
+        subject: '[sahara-weekly][passed]Silent check of sahara passed'
+    failure:
+      smtp:
+        to: esikachev@mirantis.com, vgridnev@mirantis.com
+        from: zuul@sahara.mirantis.com
+        subject: '[sahara-weekly][failed]Silent check of sahara failed'
 
 projects:
   - name: openstack/sahara
@@ -84,23 +102,26 @@ projects:
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-ambari_2.3-c6.6-mitaka
 
-    periodic:
+    nightly:
       - nightly-sahara_tests-vanilla_2.7.1-u14
       - nightly-sahara_tests-spark_1.3.1-u14-aio
       - nightly-sahara_tests-spark_1.6.0-u14-aio
       - nightly-sahara_tests-transient-u14
-      - nightly-sahara_tests-cdh_5.4.0-u12-aio
-      - nightly-sahara_tests-cdh_5.4.0-c6.6-aio
       - nightly-sahara_tests-cdh_5.5.0-u14-aio
       - nightly-sahara_tests-cdh_5.5.0-c6.6-aio
       - nightly-sahara_tests-ambari_2.3-c6.6
       - nightly-sahara_tests-ambari_2.4-c6.6
       - nightly-sahara_tests-cdh_5.5.0-u14-mitaka
       - nightly-sahara_tests-cdh_5.5.0-c6.6-mitaka
-      - nightly-sahara_tests-spark_1.3.1-u14-mitaka
       - nightly-sahara_tests-spark_1.6.0-u14-mitaka
       - nightly-sahara_tests-vanilla_2.7.1-u14-mitaka
       - nightly-sahara_tests-ambari_2.3-c6.6-mitaka
+
+    weekly:
+      - weekly-sahara_tests-cdh_5.4.0-u12-liberty
+      - weekly-sahara_tests-cdh_5.4.0-c6.6-liberty
+      - weekly-sahara_tests-spark_1.3.1-u14-liberty
+      - weekly-sahara_tests-vanilla_2.7.1-u14-liberty
 
   - name: openstack/python-saharaclient
     check:
@@ -169,7 +190,7 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: ^(?!nightly).*-cdh_5.4.0-.*$
+  - name: ^(?!nightly|weekly).*-cdh_5.4.0-.*$
     branch: stable/liberty
     files:
       - ^sahara_tests/scenario/defaults/liberty/cdh-5.4.*$
@@ -177,7 +198,7 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: ^(?!nightly).*-spark_1.3.1-.*$
+  - name: ^(?!nightly|weekly).*-spark_1.3.1-.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
     files:
       - ^sahara_tests/scenario/defaults/spark-1.3.1.*$
@@ -205,7 +226,7 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: ^(?!nightly).*-vanilla_2.7.1-.*$
+  - name: ^(?!nightly|weekly).*-vanilla_2.7.1-.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
     files:
       - ^sahara_tests/scenario/defaults/vanilla-2.7.1.*$
@@ -257,5 +278,5 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: ^(?!nightly).*-sahara_tests-.*$
+  - name: ^(?!nightly|weekly).*-sahara_tests-.*$
     branch: ^(master|stable/liberty|stable/mitaka)$
