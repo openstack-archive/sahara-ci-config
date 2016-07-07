@@ -120,6 +120,9 @@
             - ambari_2.3
             - ambari_2.4
           os: c6.6
+     - '{pipeline}-{project_name}-{plugin}-{os}':
+          plugin: storm_1.0.1
+          os: u14
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -183,6 +186,9 @@
           os:
             - u14
             - c6.6
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
+          plugin: storm_1.0.1
+          os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3

@@ -125,6 +125,13 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
     ;;
+    storm_1.0.1)
+       env ubuntu_spark_image_name=${storm_1_0_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p storm -v 1.0.1
+       check_error_code $? ${storm_1_0_1_image}.qcow2
+       upload_image "${plugin}" "${username}" ${storm_1_0_1_image}
+       scenario_conf_file="$sahara_templates_path/storm-1.0.1.yaml.mako"
+       template_image_prefix="storm_1_0_1"
+    ;;
 esac
 
 cd $SAHARA_PATH
