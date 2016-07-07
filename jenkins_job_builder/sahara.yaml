@@ -111,6 +111,7 @@
           plugin:
              -  spark_1.3.1
              -  spark_1.6.0
+             -  storm_1.0.1
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
@@ -175,6 +176,7 @@
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
+             - storm_1.0.1
           os:
             - u14
             - c6.6
