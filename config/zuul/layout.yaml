@@ -171,8 +171,8 @@ jobs:
   - name: ^(?!nightly).*-mapr_5.1.*$
     branch: ^(master|stable/mitaka)$
     files:
-      - ^sahara_tests/scenario/defaults/mitaka/mapr-5.1*$
-      - ^sahara_tests/scenario/defaults/mapr-5.1*$
+      - ^sahara_tests/scenario/defaults/mitaka/mapr-5.1.*$
+      - ^sahara_tests/scenario/defaults/mapr-5.1.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
