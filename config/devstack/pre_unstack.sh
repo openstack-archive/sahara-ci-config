@@ -30,7 +30,6 @@ CENTOS7_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_c7.qcow2
 SPARK_1_0_0_IMAGE_PATH=/home/ubuntu/images/spark_1.0.0_u14.qcow2
 SPARK_1_3_1_IMAGE_PATH=/home/ubuntu/images/spark_1.3.1_u14.qcow2
 SPARK_1_6_0_IMAGE_PATH=/home/ubuntu/images/spark_1.6.0_u14.qcow2
-MAPR_5_0_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.0.0.mrv2_u14.qcow2
 MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 
 
@@ -48,7 +47,6 @@ openstack image save --file $CENTOS7_CDH_5_7_0_IMAGE_PATH $(get_id $CENTOS7_CDH_
 openstack image save --file $SPARK_1_0_0_IMAGE_PATH $(get_id $SPARK_1_0_0_IMAGE_PATH)
 openstack image save --file $SPARK_1_3_1_IMAGE_PATH $(get_id $SPARK_1_3_1_IMAGE_PATH)
 openstack image save --file $SPARK_1_6_0_IMAGE_PATH $(get_id $SPARK_1_6_0_IMAGE_PATH)
-openstack image save --file $MAPR_5_0_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_0_0_MRV2_IMAGE_PATH)
 openstack image save --file $MAPR_5_1_0_MRV2_IMAGE_PATH $(get_id $MAPR_5_1_0_MRV2_IMAGE_PATH)
 
 bash $TOP_DIR/unstack.sh
