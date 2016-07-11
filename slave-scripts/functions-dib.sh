@@ -53,17 +53,11 @@ upload_image() {
    local image=$3
    delete_image "$image"
    case "$plugin" in
-           vanilla_2.6.0)
-             image_properties="--property _sahara_tag_2.6.0=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
-           ;;
            vanilla_2.7.1)
              image_properties="--property _sahara_tag_2.7.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
            ;;
            ambari_2.1)
              image_properties="--property _sahara_tag_2.2=True --property _sahara_tag_2.3=True --property _sahara_tag_ambari=True --property _sahara_username=${username}"
-           ;;
-           cdh_5.3.0)
-             image_properties="--property _sahara_tag_5.3.0=True --property _sahara_tag_5=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
            cdh_5.4.0)
              image_properties="--property _sahara_tag_5.4.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
@@ -73,9 +67,6 @@ upload_image() {
            ;;
            cdh_5.7.0)
              image_properties="--property _sahara_tag_5.7.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
-           ;;
-           spark_1.0.0)
-             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.0.0=True --property _sahara_username=${username}"
            ;;
            spark_1.3.1)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.3.1=True --property _sahara_username=${username}"
