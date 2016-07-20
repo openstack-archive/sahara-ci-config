@@ -54,15 +54,14 @@ projects:
       - gate-sahara-vanilla_2.7.1-u14
       - gate-sahara-spark_1.3.1-u14-aio
       - gate-sahara-spark_1.6.0-u14-aio
-      - gate-sahara-transient-u14
       - gate-sahara-mapr_5.1.0.mrv2-u14
       - gate-sahara-cdh_5.4.0-u12-aio
       - gate-sahara-cdh_5.4.0-c6.6-aio
       - gate-sahara-cdh_5.5.0-u14-aio
-      - gate-sahara-cdh_5.5.0-c6.6-aio
+      - gate-sahara-cdh_5.5.0-c7-aio
       - gate-sahara-cdh_5.7.0-c7-aio
-      - gate-sahara-ambari_2.3-c6.6
-      - gate-sahara-ambari_2.4-c6.6
+      - gate-sahara-ambari_2.3-c7
+      - gate-sahara-ambari_2.4-c7
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -71,36 +70,32 @@ projects:
       - gate-sahara_tests-vanilla_2.7.1-u14
       - gate-sahara_tests-spark_1.3.1-u14-aio
       - gate-sahara_tests-spark_1.6.0-u14-aio
-      - gate-sahara_tests-transient-u14
       - gate-sahara_tests-mapr_5.1.0.mrv2-u14
       - gate-sahara_tests-cdh_5.5.0-u14-aio
-      - gate-sahara_tests-cdh_5.5.0-c6.6-aio
-      - gate-sahara_tests-ambari_2.3-c6.6
-      - gate-sahara_tests-ambari_2.4-c6.6
+      - gate-sahara_tests-cdh_5.5.0-c7-aio
+      - gate-sahara_tests-ambari_2.3-c7
+      - gate-sahara_tests-ambari_2.4-c7
       - gate-sahara_tests-cdh_5.5.0-u14-mitaka
-      - gate-sahara_tests-cdh_5.5.0-c6.6-mitaka
+      - gate-sahara_tests-cdh_5.5.0-c7-mitaka
       - gate-sahara_tests-spark_1.3.1-u14-mitaka
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
-      - gate-sahara_tests-ambari_2.3-c6.6-mitaka
+      - gate-sahara_tests-ambari_2.3-c7-mitaka
 
     periodic:
       - nightly-sahara_tests-vanilla_2.7.1-u14
       - nightly-sahara_tests-spark_1.3.1-u14-aio
       - nightly-sahara_tests-spark_1.6.0-u14-aio
-      - nightly-sahara_tests-transient-u14
-      - nightly-sahara_tests-cdh_5.4.0-u12-aio
-      - nightly-sahara_tests-cdh_5.4.0-c6.6-aio
       - nightly-sahara_tests-cdh_5.5.0-u14-aio
-      - nightly-sahara_tests-cdh_5.5.0-c6.6-aio
-      - nightly-sahara_tests-ambari_2.3-c6.6
-      - nightly-sahara_tests-ambari_2.4-c6.6
+      - nightly-sahara_tests-cdh_5.5.0-c7-aio
+      - nightly-sahara_tests-ambari_2.3-c7
+      - nightly-sahara_tests-ambari_2.4-c7
       - nightly-sahara_tests-cdh_5.5.0-u14-mitaka
-      - nightly-sahara_tests-cdh_5.5.0-c6.6-mitaka
+      - nightly-sahara_tests-cdh_5.5.0-c7-mitaka
       - nightly-sahara_tests-spark_1.3.1-u14-mitaka
       - nightly-sahara_tests-spark_1.6.0-u14-mitaka
       - nightly-sahara_tests-vanilla_2.7.1-u14-mitaka
-      - nightly-sahara_tests-ambari_2.3-c6.6-mitaka
+      - nightly-sahara_tests-ambari_2.3-c7-mitaka
 
   - name: openstack/python-saharaclient
     check:
@@ -178,7 +173,7 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly).*-spark_1.3.1-.*$
-    branch: ^(master|stable/liberty|stable/mitaka)$
+    branch: ^(stable/liberty|stable/mitaka)$
     files:
       - ^sahara_tests/scenario/defaults/spark-1.3.1.*$
       - ^sahara_tests/scenario/defaults/liberty/spark-1.3.1.*$
