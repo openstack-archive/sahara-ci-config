@@ -93,7 +93,6 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
-             - transient
              - mapr_5.1.0.mrv2
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
@@ -101,7 +100,7 @@
              - cdh_5.5.0
           os:
              - u14
-             - c6.6
+             - c7
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.7.0
@@ -116,7 +115,8 @@
           plugin:
             - ambari_2.3
             - ambari_2.4
-          os: c6.6
+          os:
+            - c7
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -135,7 +135,7 @@
             - cdh_5.5.0
           os:
             - u14
-            - c6.6
+            - c7
           release: mitaka
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -145,7 +145,7 @@
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
-          os: c6.6
+          os: c7
           release: mitaka
 
 - project:
@@ -164,7 +164,6 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
-             - transient
              - mapr_5.1.0.mrv2
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
@@ -177,12 +176,12 @@
              - cdh_5.5.0
           os:
             - u14
-            - c6.6
+            - c7
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.3
             - ambari_2.4
-          os: c6.6
+          os: c7
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
@@ -200,7 +199,7 @@
             - cdh_5.5.0
           os:
             - u14
-            - c6.6
+            - c7
           release: mitaka
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -210,7 +209,7 @@
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - ambari_2.3
-          os: c6.6
+          os: c7
           release: mitaka
 
 - project:
