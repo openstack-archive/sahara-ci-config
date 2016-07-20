@@ -38,14 +38,14 @@ case $plugin in
     ambari_2.3)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/ambari-2.3.yaml.mako"
-       template_image_prefix="ambari_2_1"
-       image_name="ambari_2.1_c6.6"
+       template_image_prefix="ambari_2_2"
+       image_name="ambari_2.2_c7"
        ;;
     ambari_2.4)
        mode=distribute
        scenario_conf_file="$sahara_templates_path/ambari-2.4.yaml.mako"
-       template_image_prefix="ambari_2_4"
-       image_name="ambari_2.4_c6.6"
+       template_image_prefix="ambari_2_2"
+       image_name="ambari_2.2_c7"
        ;;
     vanilla_2.7.1)
        mode=distribute
