@@ -34,7 +34,6 @@
     plugin: vanilla_2.7.1
     os:
      - u14
-     - c6.6
      - c7
 
     jobs:
@@ -44,7 +43,6 @@
             - cdh_5.4.0
           os:
             - u12
-            - c6.6
      - 'dib-{plugin}-{os}-aio':
           plugin:
             - cdh_5.5.0
@@ -61,6 +59,4 @@
           os: u14
      - 'dib-{plugin}-{os}':
           plugin:
-            - ambari_2.1
-          os:
-            - c6.6
+            - ambari_2.2
