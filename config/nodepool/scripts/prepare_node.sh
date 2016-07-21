@@ -36,6 +36,8 @@ APT_PACKAGES+=" gettext"
 PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
 PIP_PACKAGES+=" mysql-python"
+# Requirements for dib-jobs
+PIP_PACKAGES+=" python-openstackclient"
 PIP_PACKAGES+=" pip==8.1.1 tox"
 
 echo "mysql-server mysql-server/root_password select $MYSQL_PASS" | sudo debconf-set-selections
