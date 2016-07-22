@@ -81,7 +81,7 @@ projects:
       - gate-sahara-cdh_5.7.0-c7-aio
       - gate-sahara-ambari_2.3-c6.6
       - gate-sahara-ambari_2.4-c6.6
-      - gate-sahara-storm.1.0.1-u14-aio
+      - gate-sahara-storm_1.0.1-u14-aio
       - gate-sahara-pep8-trunk
       - tempest-sahara-tests
 
@@ -102,7 +102,7 @@ projects:
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-ambari_2.3-c6.6-mitaka
-      - gate-sahara_tests-storm.1.0.1-u14-aio
+      - gate-sahara_tests-storm_1.0.1-u14-aio
 
     nightly:
       - nightly-sahara_tests-vanilla_2.7.1-u14
