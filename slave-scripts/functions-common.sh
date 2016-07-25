@@ -194,6 +194,7 @@ ${image_prefix}_image: $image_name
 cluster_name: $cluster_name
 ci_flavor_id: $ci_flavor_id
 medium_flavor_id: $medium_flavor_id
+medium_flavor: $medium_flavor_id
 large_flavor_id: $large_flavor_id
 " | tee ${template_vars_file}
 }
