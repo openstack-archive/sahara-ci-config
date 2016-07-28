@@ -265,6 +265,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-storm_1.0.1-.*$
     branch: master
+    voting: false
     files:
       - ^sahara_tests/scenario/defaults/storm-1.0.1.*$
       - ^sahara/.*$
