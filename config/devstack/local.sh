@@ -166,13 +166,6 @@ sudo bash -c "source $TOP_DIR/functions && \
 sudo service mysql restart
 sleep 5
 
-# add squid iptables rule if not exists
-squid_port="3128"
-sudo iptables-save | grep "$squid_port"
-if [ "$?" == "1" ]; then
-  sudo iptables -t nat -A PREROUTING -i ${INTERFACE} -p tcp --dport 80 -m comment --comment "Redirect traffic to Squid" -j DNAT --to ${HOST_IP}:$squid_port
-fi
-
 # Restart OpenStack services
 screen -X -S stack quit
 killall -9 python
