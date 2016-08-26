@@ -10,8 +10,8 @@ gearman-servers:
   - host: 127.0.0.1
 
 labels:
-  - name:  trusty-42
-    image: trusty-42
+  - name:  stack-42
+    image: stack-42
     min-ready: 3
     providers:
       - name: cilab-1
@@ -34,7 +34,7 @@ providers:
     networks:
       - net-id: 'LAB_42_PRIVATE_NETWORK_ID'
     images:
-      - name: trusty-42
+      - name: stack-42
         base-image: 'ubuntu-14.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'

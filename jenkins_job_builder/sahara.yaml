@@ -14,7 +14,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
 
 - job-template:
     name: 'gate-saharaclient-fake'
@@ -29,7 +29,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
 
 - job-template:
     name: '{pipeline}-{project_name}-{plugin}-{os}'
@@ -44,7 +44,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
 
 - job-template:
     name: '{pipeline}-{project_name}-{plugin}-{os}-aio'
@@ -59,7 +59,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
 
 - job-template:
     name: '{pipeline}-sahara_tests-{plugin}-{os}-{release}'
@@ -74,7 +74,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
 
 - project:
     name: sahara
@@ -224,7 +224,7 @@
                   \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                  \n<p>This job runs pep8 check using trunk version of hacking"
     disabled: false
-    node: trusty-42 || trusty-43
+    node: stack-42 || trusty-43
     builders:
     - gerrit-git-prep
     - ci-config-prep

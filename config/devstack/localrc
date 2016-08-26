@@ -35,7 +35,7 @@ VOLUME_BACKING_FILE_SIZE=100000M
 KEYSTONE_TOKEN_FORMAT=UUID
 
 FIXED_NETWORK_SIZE=256
-if [[ $(hostname -s) =~ trusty-42 ]]; then
+if [[ $(hostname -s) =~ stack-42 ]]; then
   FLOATING_RANGE=172.18.169.0/26
   PUBLIC_NETWORK_GATEWAY=172.18.169.1
 else
