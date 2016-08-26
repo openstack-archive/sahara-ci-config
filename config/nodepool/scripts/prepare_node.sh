@@ -71,7 +71,7 @@ sudo mkdir /home/jenkins/.ssh
 sudo chown -R jenkins:jenkins /home/jenkins
 
 # create simple openrc file
-if [[ "$HOSTNAME" =~ trusty-42 ]]; then
+if [[ "$HOSTNAME" =~ stack-42 ]]; then
    OPENSTACK_HOST="172.18.168.42"
    HOST="c1"
 else

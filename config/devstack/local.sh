@@ -18,7 +18,7 @@ MYSQL_CONF=/etc/mysql/my.cnf
 INTERFACE='br-ex'
 
 source $TOP_DIR/functions-common
-if [[ $(hostname -s) =~ trusty-42 ]]; then
+if [[ $(hostname -s) =~ stack-42 ]]; then
     HOST_IP='172.18.168.42'
 else
     HOST_IP='172.18.168.43'
