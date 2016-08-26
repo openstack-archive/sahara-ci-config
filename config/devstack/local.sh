@@ -59,6 +59,9 @@ openstack flavor create --public --id 20 --ram 2048 --disk 40 --vcpus 1 qa-flavo
 openstack flavor delete m1.small
 openstack flavor create --public --id 2 --ram 1024 --disk 20 --vcpus 1 m1.small
 
+# setup quota for ci tenent in nova
+openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
+
 # switch to ci-user credentials
 source $ADMIN_RCFILE ci-user ci
 export OS_CLOUD='devstack-ci'
@@ -75,8 +78,7 @@ echo "  devstack-ci:
     region_name: RegionOne
 " >> /etc/openstack/clouds.yaml
 
-# setup quota for ci tenant
-openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
+# setup quota for ci tenant in neutron
 neutron quota-update --tenant_id $CI_TENANT_ID --port 64
 
 # add images for tests
@@ -94,7 +96,6 @@ openstack image create $(basename -s .qcow2 $MAPR_5_1_0_MRV2_IMAGE_PATH) --file 
 openstack image create $(basename -s .qcow2 $STORM_1_0_1_IMAGE_PATH) --file $STORM_1_0_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_storm'='True' --property '_sahara_tag_1.0.1'='True'  --property '_sahara_username'="ubuntu"
 openstack image create ubuntu-test-image --file $UBUNTU_12_04_IMAGE_PATH --disk-format qcow2 --container-format bare
 openstack image create fake_image --file $UBUNTU_12_04_IMAGE_PATH  --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_fake'='True' --property '_sahara_tag_0.1'='True' --property '_sahara_username'='ubuntu'
-openstack image set --name ubuntu-12.04 --property '_sahara_tag_ci'='True' ubuntu-12.04-server-cloudimg-amd64-disk1
 openstack image set --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
 
 # rename admin private network
