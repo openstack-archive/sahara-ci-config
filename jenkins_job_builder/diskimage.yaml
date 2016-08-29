@@ -60,3 +60,5 @@
      - 'dib-{plugin}-{os}':
           plugin:
             - ambari_2.2
+          os:
+            - c7

@@ -106,6 +106,7 @@
              - cdh_5.7.0
           os:
              - c7
+             - u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.3.1
@@ -114,9 +115,9 @@
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
-            - ambari_2.3
             - ambari_2.4
           os:
+<<<<<<< HEAD
             - c7
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
@@ -124,6 +125,10 @@
           os:
             - u14
             - c7
+=======
+             - c7
+             - u14
+>>>>>>> d8fa704... Added missed jobs in jjb
      - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
@@ -176,9 +181,14 @@
             - c7
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
-            - ambari_2.3
             - ambari_2.4
+<<<<<<< HEAD
           os: c7
+=======
+          os:
+            - c7
+            - u14
+>>>>>>> d8fa704... Added missed jobs in jjb
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
