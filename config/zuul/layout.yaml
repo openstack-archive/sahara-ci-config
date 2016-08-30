@@ -90,7 +90,6 @@ projects:
       - gate-sahara_tests-vanilla_2.7.1-u14
       - gate-sahara_tests-spark_1.3.1-u14-aio
       - gate-sahara_tests-spark_1.6.0-u14-aio
-      - gate-sahara_tests-transient-u14
       - gate-sahara_tests-mapr_5.1.0.mrv2-u14
       - gate-sahara_tests-cdh_5.5.0-u14-aio
       - gate-sahara_tests-cdh_5.5.0-c6.6-aio
@@ -108,7 +107,6 @@ projects:
       - nightly-sahara_tests-vanilla_2.7.1-u14
       - nightly-sahara_tests-spark_1.3.1-u14-aio
       - nightly-sahara_tests-spark_1.6.0-u14-aio
-      - nightly-sahara_tests-transient-u14
       - nightly-sahara_tests-cdh_5.5.0-u14-aio
       - nightly-sahara_tests-cdh_5.5.0-c6.6-aio
       - nightly-sahara_tests-ambari_2.3-c6.6
@@ -128,7 +126,6 @@ projects:
 
   - name: openstack/python-saharaclient
     check:
-      - gate-saharaclient-fake
       - gate-sahara-pep8-trunk
       - tempest-saharaclient-tests
 

@@ -17,21 +17,6 @@
     node: trusty-42 || trusty-43
 
 - job-template:
-    name: 'gate-saharaclient-fake'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-saharaclient.sh"
-    properties:
-      - zeromq-event
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: trusty-42 || trusty-43
-
-- job-template:
     name: '{pipeline}-{project_name}-{plugin}-{os}'
     defaults: global
     builders:
@@ -213,7 +198,6 @@
 - project:
     name: saharaclient
     jobs:
-     - 'gate-saharaclient-fake'
      - 'tempest-{name}-tests'
 
 - job:
