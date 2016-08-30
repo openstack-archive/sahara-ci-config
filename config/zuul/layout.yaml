@@ -121,7 +121,6 @@ projects:
 
   - name: openstack/python-saharaclient
     check:
-      - gate-saharaclient-fake
       - gate-sahara-pep8-trunk
       - tempest-saharaclient-tests
 

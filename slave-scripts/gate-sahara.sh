@@ -86,12 +86,6 @@ case $plugin in
        scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
        ;;
-    fake)
-       mode=distribute
-       image_name=fake_image
-       scenario_conf_file="$sahara_templates_path/fake.yaml.mako"
-       template_image_prefix="fake_plugin"
-       ;;
     storm_1.0.1)
        scenario_conf_file="$sahara_templates_path/storm-1.0.1.yaml.mako"
        template_image_prefix="storm_1_0"
