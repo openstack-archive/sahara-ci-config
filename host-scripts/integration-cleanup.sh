@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-cd sahara-ci-config/slave-scripts
+cd sahara-ci-config/host-scripts
 sleep 20
 
 source $JENKINS_HOME/credentials

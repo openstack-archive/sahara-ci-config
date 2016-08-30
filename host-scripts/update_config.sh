@@ -23,3 +23,5 @@ NODEPOOL_SCRIPTS_DIR=$(sudo su - -c "cat /etc/nodepool/nodepool.yaml | grep 'scr
 cp $WORKSPACE/config/nodepool/scripts/* $NODEPOOL_SCRIPTS_DIR
 
 cp $WORKSPACE/slave-scripts/update_pool.sh /opt/ci/files/
+
+cp $WORKSPACE/slave-scripts/sahara-ci-syntax-check.sh /opt/ci/files
