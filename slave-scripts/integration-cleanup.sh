@@ -20,8 +20,6 @@ else
 fi
 if [[ $(echo $PREV_JOB | awk -F '-' '{ print $2 }') =~ ui ]]; then
     python cleanup.py cleanup .*$PREV_BUILD-selenium.*
-elif [ "$job_type" == "tempest" ]; then
-    python cleanup.py cleanup .*sahara-cluster.*
 else
     python cleanup.py cleanup-heat .*$host-$CHANGE_NUMBER-$CLUSTER_HASH.*
 fi

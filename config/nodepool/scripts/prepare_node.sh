@@ -68,7 +68,6 @@ sudo useradd -d /home/jenkins -G sudo -s /bin/bash -m jenkins
 echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
 sudo mkdir /home/jenkins/.ssh
 
-sudo git clone https://git.openstack.org/openstack/tempest /home/jenkins/tempest
 sudo chown -R jenkins:jenkins /home/jenkins
 
 # create simple openrc file

@@ -1,22 +1,4 @@
 - job-template:
-    name: 'tempest-{name}-tests'
-    defaults: global
-    builders:
-      - gerrit-git-prep
-      - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/tempest.sh"
-    properties:
-      - zeromq-event
-      - build-blocker:
-          blocking-jobs:
-             - "tempest-.*-tests"
-    publishers:
-      - sahara-logs
-      - console-log
-      - trigger-cleanup
-    node: trusty-42 || trusty-43
-
-- job-template:
     name: '{pipeline}-{project_name}-{plugin}-{os}'
     defaults: global
     builders:
@@ -95,7 +77,6 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.4
-     - 'tempest-{name}-tests'
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
@@ -180,11 +161,6 @@
             - ambari_2.3
           os: c7
           release: mitaka
-
-- project:
-    name: saharaclient
-    jobs:
-     - 'tempest-{name}-tests'
 
 - job:
     name: gate-sahara-pep8-trunk

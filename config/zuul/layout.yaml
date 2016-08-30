@@ -83,7 +83,6 @@ projects:
       - gate-sahara-ambari_2.4-c7
       - gate-sahara-ambari_2.4-u14
       - gate-sahara-pep8-trunk
-      - tempest-sahara-tests
 
   - name: openstack/sahara-tests
     check:
@@ -122,7 +121,6 @@ projects:
   - name: openstack/python-saharaclient
     check:
       - gate-sahara-pep8-trunk
-      - tempest-saharaclient-tests
 
   - name: openstack/sahara-image-elements
     check:
@@ -165,12 +163,6 @@ jobs:
           - ^doc/.*$
           - ^.*\.rst$
           - ^.*unit/.*
-  - name: ^tempest-sahara.*$
-    branch: ^(master|stable/liberty|stable/mitaka)$
-    skip-if:
-      - all-files-match-any:
-          - ^doc/.*$
-          - ^.*\.rst$
   - name: ^(?!nightly).*-mapr_5.1.*$
     branch: ^(master|stable/mitaka)$
     files:
