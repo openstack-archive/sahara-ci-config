@@ -110,13 +110,23 @@ case $plugin in
     ;;
 
     mapr_5.1.0.mrv2)
-       env mapr_ubuntu_image_name=${mapr_5_1_0_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu
+       env mapr_ubuntu_image_name=${mapr_5_1_0_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu -r 5.1.0
        check_error_code $? ${mapr_5_1_0_mrv2_image}.qcow2
        upload_image "${plugin}" "${username}" ${mapr_5_1_0_mrv2_image}
        mode=distribute
        scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
     ;;
+
+    mapr_5.2.0.mrv2)
+       env mapr_ubuntu_image_name=${mapr_5_2_0_mrv2_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu -r 5.2.0
+       check_error_code $? ${mapr_5_2_0_mrv2_image}.qcow2
+       upload_image "${plugin}" "${username}" ${mapr_5_2_0_mrv2_image}
+       mode=distribute
+       scenario_conf_file="$sahara_templates_path/mapr-5.2.0.mrv2.yaml.mako"
+       template_image_prefix="mapr_520mrv2"
+    ;;
+
     storm_1.0.1)
        env ubuntu_storm_image_name=${storm_1_0_1_image} SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p storm -t 1.0.1
        check_error_code $? ${storm_1_0_1_image}.qcow2
