@@ -23,6 +23,7 @@ UBUNTU_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_u12.qcow2
 CENTOS_CDH_5_4_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.4.0_c6.6.qcow2
 UBUNTU_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_u14.qcow2
 CENTOS_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c6.6.qcow2
+CENTOS7_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c7.qcow2
 CENTOS7_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_c7.qcow2
 UBUNTU_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_u14.qcow2
 SPARK_1_3_1_IMAGE_PATH=/home/ubuntu/images/spark_1.3.1_u14.qcow2
@@ -38,6 +39,7 @@ openstack image save --file $UBUNTU_CDH_5_4_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_
 openstack image save --file $CENTOS_CDH_5_4_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_4_0_IMAGE_PATH)
 openstack image save --file $UBUNTU_CDH_5_5_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_5_0_IMAGE_PATH)
 openstack image save --file $CENTOS_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_5_0_IMAGE_PATH)
+openstack image save --file $CENTOS7_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS7_CDH_5_5_0_IMAGE_PATH)
 openstack image save --file $CENTOS7_CDH_5_7_0_IMAGE_PATH $(get_id $CENTOS7_CDH_5_7_0_IMAGE_PATH)
 openstack image save --file $UBUNTU_CDH_5_7_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_7_0_IMAGE_PATH)
 openstack image save --file $SPARK_1_3_1_IMAGE_PATH $(get_id $SPARK_1_3_1_IMAGE_PATH)
