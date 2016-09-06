@@ -54,7 +54,7 @@ pipelines:
     precedence: low
     trigger:
       timer:
-        - time: '* * * * 6'
+        - time: '*0 0 * * 6'
     success:
       smtp:
         to: esikachev@mirantis.com, vgridnev@mirantis.com
