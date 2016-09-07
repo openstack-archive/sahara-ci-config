@@ -145,10 +145,11 @@ projects:
       - dib-storm_1.0.1-u14-aio
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
-  
+ 
   - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
+      - sahara-ci-layout
 
   - name: openstack/heat
     noop:
