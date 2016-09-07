@@ -149,6 +149,7 @@ projects:
   - name: openstack/sahara-ci-config
     check:
       - sahara-ci-syntax-check
+      - sahara-ci-layout
 
   - name: openstack/heat
     noop:
