@@ -50,13 +50,20 @@
     project_name:
       - sahara
       - sahara_tests
-    plugin:
-      - cdh_5.4.0
     os:
       - c7
       - u14
     jobs:
-     - '{pipeline}-{project_name}-{plugin}-{os}-aio'
+     - '{pipeline}-{project_name}-{plugin}-{os}':
+          plugin:
+             - ambari_2.3
+          os:
+             - c7
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
+          plugin:
+             - cdh_5.4.0
+          os:
+             - c6.6
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
