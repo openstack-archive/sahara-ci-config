@@ -79,11 +79,14 @@
                   \n<p>Please use this repository to make changes: <a href=\"https://git.openstack.org/openstack/sahara-ci-config\">https://git.openstack.org/openstack/sahara-ci-config</a></b>\
                  \n<p>This job check compatibility zuul layout and jobs from jjb"
     disabled: false
-    concurrent: false
-    node: master
+    concurrent: true
+    properties:
+      - zeromq-event
+    node: trusty-42 || trusty-43
 
     builders:
       - gerrit-git-prep
+      - ci-config-prep
       - shell: "$WORKSPACE/host-scripts/check_layout.sh"
 
     publishers:
