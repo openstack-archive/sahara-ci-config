@@ -33,7 +33,7 @@ def set_log_url(item, job, params):
 
 def single_use_node(item, job, params):
     set_log_url(item, job, params)
-    if job.name != "sahara-ci-syntax-check":
+    if job.name not in ["sahara-ci-syntax-check", "sahara-ci-layout"]:
         params['OFFLINE_NODE_WHEN_COMPLETE'] = '1'
 
 
