@@ -61,6 +61,9 @@ openstack flavor create --public --id 20 --ram 2048 --disk 40 --vcpus 1 qa-flavo
 openstack flavor delete m1.small
 openstack flavor create --public --id 2 --ram 1024 --disk 20 --vcpus 1 m1.small
 
+# setup quota for ci tenent in nova
+openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
+
 # switch to ci-user credentials
 source $ADMIN_RCFILE ci-user ci
 export OS_CLOUD='devstack-ci'
@@ -77,8 +80,7 @@ echo "  devstack-ci:
     region_name: RegionOne
 " >> /etc/openstack/clouds.yaml
 
-# setup quota for ci tenant
-openstack quota set --ram 200000 --instances 64 --cores 150 --volumes 100 --gigabytes 2000 --floating-ips 64 --secgroup-rules 10000 --secgroups 1000 $CI_TENANT_ID
+# setup quota for ci tenant in neutron
 neutron quota-update --tenant_id $CI_TENANT_ID --port 64
 
 # add images for tests
