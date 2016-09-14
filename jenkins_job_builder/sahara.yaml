@@ -68,6 +68,7 @@
           plugin:
              - vanilla_2.7.1
              - mapr_5.1.0.mrv2
+             - mapr_5.2.0.mrv2
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
@@ -117,6 +118,7 @@
           plugin:
              - vanilla_2.7.1
              - mapr_5.1.0.mrv2
+             - mapr_5.2.0.mrv2
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:

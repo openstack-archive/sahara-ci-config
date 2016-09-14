@@ -73,6 +73,7 @@ projects:
       - gate-sahara-spark_1.3.1-u14-aio
       - gate-sahara-spark_1.6.0-u14-aio
       - gate-sahara-mapr_5.1.0.mrv2-u14
+      - gate-sahara-mapr_5.2.0.mrv2-u14
       - gate-sahara-cdh_5.4.0-c6.6-aio
       - gate-sahara-cdh_5.5.0-u14-aio
       - gate-sahara-cdh_5.5.0-c7-aio
@@ -90,6 +91,7 @@ projects:
       - gate-sahara_tests-spark_1.3.1-u14-aio
       - gate-sahara_tests-spark_1.6.0-u14-aio
       - gate-sahara_tests-mapr_5.1.0.mrv2-u14
+      - gate-sahara_tests-mapr_5.2.0.mrv2-u14
       - gate-sahara_tests-cdh_5.5.0-u14-aio
       - gate-sahara_tests-cdh_5.5.0-c7-aio
       - gate-sahara_tests-ambari_2.3-c7
@@ -127,6 +129,7 @@ projects:
       - dib-vanilla_2.7.1-u14
       - dib-vanilla_2.7.1-c7
       - dib-mapr_5.1.0.mrv2-u14
+      - dib-mapr_5.2.0.mrv2-u14
       - dib-spark_1.6.0-u14-aio
       - dib-cdh_5.5.0-u14-aio
       - dib-cdh_5.5.0-c7-aio
@@ -138,6 +141,7 @@ projects:
       - dib-vanilla_2.7.1-u14
       - dib-vanilla_2.7.1-c7
       - dib-mapr_5.1.0.mrv2-u14
+      - dib-mapr_5.2.0.mrv2-u14
       - dib-spark_1.6.0-u14-aio
       - dib-cdh_5.5.0-u14-aio
       - dib-cdh_5.5.0-c7-aio
@@ -169,6 +173,14 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/mitaka/mapr-5.1.*$
       - ^sahara_tests/scenario/defaults/mapr-5.1.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-mapr_5.2.*$
+    branch: master
+    files:
+      - ^sahara_tests/scenario/defaults/mapr-5.2.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
