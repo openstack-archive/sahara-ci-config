@@ -51,7 +51,7 @@
       - pollscm: "* * * * * "
 
     builders:
-      - shell:  "jenkins-jobs update jenkins_job_builder"
+      - shell:  "jenkins-jobs update --delete-old jenkins_job_builder"
 
 - job:
     name: sahara-ci-syntax-check
