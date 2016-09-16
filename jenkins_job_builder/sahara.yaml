@@ -59,17 +59,19 @@
              - ambari_2.3
           os:
              - c7
-     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
-          plugin:
-             - cdh_5.4.0
-          os:
-             - c6.6
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
              - mapr_5.1.0.mrv2
              - mapr_5.2.0.mrv2
           os: u14
+     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
+          plugin:
+             - cdh_5.4.0
+          os:
+             - c6.6
+          project_name:
+             - sahara
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
@@ -117,27 +119,24 @@
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
-             - mapr_5.1.0.mrv2
-             - mapr_5.2.0.mrv2
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              -  spark_1.3.1
              -  spark_1.6.0
-             -  storm_1.0.1
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
              - cdh_5.5.0
           os:
-            - u14
             - c7
+            - u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
             - ambari_2.4
+            - ambari_2.3
           os:
             - c7
-            - u14
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.4.0
@@ -158,17 +157,6 @@
             - cdh_5.5.0
           os:
             - u14
-            - c7
-          release: mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - spark_1.6.0
-          os: u14
-          release: mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - ambari_2.3
-          os: c7
           release: mitaka
 
 - job:
