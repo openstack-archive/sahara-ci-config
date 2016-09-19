@@ -173,6 +173,8 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/mitaka/mapr-5.1.*$
       - ^sahara_tests/scenario/defaults/mapr-5.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -181,6 +183,8 @@ jobs:
     branch: master
     files:
       - ^sahara_tests/scenario/defaults/mapr-5.2.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -189,6 +193,8 @@ jobs:
     branch: stable/liberty
     files:
       - ^sahara_tests/scenario/defaults/liberty/cdh-5.4.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -199,6 +205,8 @@ jobs:
       - ^sahara_tests/scenario/defaults/spark-1.3.1.*$
       - ^sahara_tests/scenario/defaults/liberty/spark-1.3.1.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.3.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -208,6 +216,8 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/spark-1.6.0.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.6.0.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -217,6 +227,8 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/cdh-5.5.*$
       - ^sahara_tests/scenario/defaults/mitaka/cdh-5.5.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -227,6 +239,8 @@ jobs:
       - ^sahara_tests/scenario/defaults/vanilla-2.7.1.*$
       - ^sahara_tests/scenario/defaults/liberty/vanilla-2.7.1.*$
       - ^sahara_tests/scenario/defaults/mitaka/vanilla-2.7.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -237,6 +251,8 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.3.*$
       - ^sahara_tests/scenario/defaults/mitaka/ambari-2.3.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -246,6 +262,8 @@ jobs:
     voting: false
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.4.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -254,6 +272,8 @@ jobs:
     branch: master
     files:
       - ^sahara_tests/scenario/defaults/storm-1.0.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
@@ -275,6 +295,8 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.1.*$
       - ^sahara_tests/scenario/defaults/mitaka/ambari-2.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
