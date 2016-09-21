@@ -94,8 +94,11 @@ projects:
       - gate-sahara_tests-mapr_5.2.0.mrv2-u14
       - gate-sahara_tests-cdh_5.5.0-u14-aio
       - gate-sahara_tests-cdh_5.5.0-c7-aio
+      - gate-sahara_tests-cdh_5.7.0-c7-aio
+      - gate-sahara_tests-cdh_5.7.0-u14-aio
       - gate-sahara_tests-ambari_2.3-c7
       - gate-sahara_tests-ambari_2.4-c7
+      - gate-sahara_tests-ambari_2.4-u14
       - gate-sahara_tests-cdh_5.5.0-u14-mitaka
       - gate-sahara_tests-cdh_5.5.0-c7-mitaka
       - gate-sahara_tests-spark_1.3.1-u14-mitaka
@@ -134,6 +137,7 @@ projects:
       - dib-cdh_5.5.0-u14-aio
       - dib-cdh_5.5.0-c7-aio
       - dib-cdh_5.7.0-c7-aio
+      - dib-cdh_5.7.0-u14-aio
       - dib-storm_1.0.1-u14-aio
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
