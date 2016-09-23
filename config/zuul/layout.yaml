@@ -230,6 +230,15 @@ jobs:
       - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
+  - name: ^(?!nightly).*-cdh_5.7.0-.*$
+    skip-if:
+      - branch: ^(stable/liberty|stable/mitaka)$
+    files:
+      - ^sahara_tests/scenario/defaults/cdh-5.7.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
   - name: ^(?!nightly|weekly).*-vanilla_2.7.1-.*$
     files:
       - ^sahara_tests/scenario/defaults/vanilla-2.7.1.*$
