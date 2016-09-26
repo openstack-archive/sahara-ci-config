@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -xe
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ADMIN_RCFILE=$TOP_DIR/openrc
 
