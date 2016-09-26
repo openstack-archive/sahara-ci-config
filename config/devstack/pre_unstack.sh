@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -xe
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ADMIN_RCFILE=$TOP_DIR/openrc
 
@@ -32,7 +32,6 @@ SPARK_1_6_0_IMAGE_PATH=/home/ubuntu/images/spark_1.6.0_u14.qcow2
 MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 MAPR_5_2_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.2.0.mrv2_u14.qcow2
 STORM_1_0_1_IMAGE_PATH=/home/ubuntu/images/storm_1.0.1_u14.qcow2
-
 
 openstack image save --file $VANILLA_2_7_1_IMAGE_PATH $(get_id $VANILLA_2_7_1_IMAGE_PATH)
 openstack image save --file $AMBARI_2_3_IMAGE_PATH $(get_id $AMBARI_2_3_IMAGE_PATH)
