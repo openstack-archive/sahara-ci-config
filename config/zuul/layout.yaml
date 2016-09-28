@@ -170,7 +170,8 @@ jobs:
       - all-files-match-any:
           - ^doc/.*$
           - ^.*\.rst$
-          - ^.*unit/.*
+          - ^.*\.unit/.*
+          - ^tools/.*$
   - name: ^(?!nightly).*-mapr_5.1.*$
     skip-if:
       - branch: stable/liberty
