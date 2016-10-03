@@ -130,24 +130,13 @@ openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(
 service_id=$(openstack service create data-processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
 openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
-# Setup Ceph
-echo "R" | bash $TOP_DIR/micro-osd.sh /home/ubuntu/ceph
-
 #setup expiration time for keystone
 iniset $KEYSTONE_CONF token expiration 86400
 sudo service apache2 restart
 
-# Setup Ceph backend for Cinder
-inidelete $CINDER_CONF DEFAULT default_volume_type
-inidelete $CINDER_CONF DEFAULT enabled_backends
-inidelete $CINDER_CONF lvmdriver-1 volume_clear
-inidelete $CINDER_CONF lvmdriver-1 volume_group
-inidelete $CINDER_CONF lvmdriver-1 volume_driver
-inidelete $CINDER_CONF lvmdriver-1 volume_backend_name
-iniset $CINDER_CONF DEFAULT volume_driver cinder.volume.drivers.rbd.RBDDriver
-iniset $CINDER_CONF DEFAULT rbd_pool data
 iniset $GLANCE_CACHE_CONF DEFAULT image_cache_stall_time 43200
 iniset $NOVA_CONF DEFAULT disk_allocation_ratio 10.0
+iniset $NOVA_CONF DEFAULT ram_allocation_ratio 10.0
 
 #Setup Heat
 iniset $HEAT_CONF database max_pool_size 1000
