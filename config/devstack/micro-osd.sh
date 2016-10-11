@@ -1,3 +1,4 @@
+#!/bin/bash -xe
 #
 #    Copyright (C) 2013,2014 Loic Dachary <loic@dachary.org>
 #
@@ -36,7 +37,7 @@ DIR=$1
 
 if ! dpkg -l ceph ; then
  wget -q -O- 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc' | sudo apt-key add -
- echo deb http://ceph.com/debian-dumpling/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
+ echo deb http://ceph.com/debian-dumpling/ "$(lsb_release -sc)" main | sudo tee /etc/apt/sources.list.d/ceph.list
 fi
 sudo apt-get update
 sudo apt-get --yes install ceph ceph-common
@@ -45,7 +46,7 @@ sudo apt-get --yes install ceph ceph-common
 pkill ceph-mon || true
 pkill ceph-osd || true
 if $old; then
-   rm -rf $DIR/*
+   rm -rf "${DIR:?}/"*
 else
    rm -rf $DIR
 fi
