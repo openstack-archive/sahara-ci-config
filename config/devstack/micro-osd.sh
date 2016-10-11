@@ -45,6 +45,7 @@ sudo apt-get --yes install ceph ceph-common
 pkill ceph-mon || true
 pkill ceph-osd || true
 if $old; then
+   DIR=""
    rm -rf $DIR/*
 else
    rm -rf $DIR

@@ -74,7 +74,8 @@ insert_config_value() {
 $option = $value
 " "$file"
   else
-      local sep=$(echo -ne "\x01")
+      local sep
+      sep=$(echo -ne "\x01")
       # Replace it
       sed -i -e '/^\['${section}'\]/,/^\[.*\]/ s'${sep}'^\('${option}'[ \t]*=[ \t]*\).*$'${sep}'\1'"${value}"${sep} "$file"
   fi
@@ -93,7 +94,8 @@ insert_scenario_value() {
   if ! scenario_has_option "$file" "$main_key" "$stop_key" "$sub_key"; then
       echo "No such keys: $main_key -> $sub_key in scenario $file file. Skip setting value $value"
   else
-      local sep=$(echo -ne "\x01")
+      local sep
+      sep=$(echo -ne "\x01")
       sed -i -e '/'${main_key}':/,/'${stop_key}'/ s'${sep}'\([ \t]'${sub_key}':[ \t]\).*'${old_value}'.*$'${sep}'\1'${value}${sep} $file
   fi
 }
@@ -135,7 +137,8 @@ scenario_has_option() {
 
 start_sahara() {
   local conf_path=$1
-  local conf_dir=$(dirname $1)
+  local conf_dir
+  conf_dir=$(dirname $1)
   local mode=$2
   mkdir $WORKSPACE/logs
   sahara-db-manage --config-file $conf_path  upgrade head || failure "Command 'sahara-db-manage' failed"
@@ -180,12 +183,12 @@ write_tests_conf() {
   local cluster_name=$1
   local image_prefix=$2
   local image_name=$3
-  NETWORK="neutron"
+  export NETWORK="neutron"
 echo "[DEFAULT]
 ${image_prefix}_image: $image_name
 cluster_name: $cluster_name
-ci_flavor_id: $ci_flavor_id
-medium_flavor_id: $medium_flavor_id
-large_flavor_id: $large_flavor_id
+ci_flavor_id: $(ci_flavor_id)
+medium_flavor_id: $(medium_flavor_id)
+large_flavor_id: $(large_flavor_id)
 " | tee ${template_vars_file}
 }
