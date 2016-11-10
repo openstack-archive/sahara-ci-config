@@ -1,12 +1,3 @@
-#CINDER_BRANCH=milestone-proposed
-#GLANCE_BRANCH=milestone-proposed
-#HORIZON_BRANCH=milestone-proposed
-#KEYSTONE_BRANCH=milestone-proposed
-#NOVA_BRANCH=milestone-proposed
-#NEUTRON_BRANCH=milestone-proposed
-#SWIFT_BRANCH=milestone-proposed
-#HEAT_BRANCH=milestone-proposed
-
 EXTRA_OPTS=(force_config_drive=true libvirt_images_type=qcow2 force_raw_images=false)
 
 ADMIN_PASSWORD=nova
@@ -52,7 +43,8 @@ enable_service q-svc q-agt q-dhcp q-l3 q-meta neutron
 
 disable_service tempest
 
-# Enable logging
-#SCREEN_LOGDIR=/var/log/devstack
+# Setup logging
+LOGDAYS=1
+LOG_COLOR=False
 
 IMAGE_URLS=https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
