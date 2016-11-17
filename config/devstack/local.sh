@@ -170,8 +170,11 @@ fi
 
 # Restart OpenStack services
 screen -X -S stack quit
+echo "Kill all python processes"
 killall -9 python
 killall -9 "/usr/bin/python"
+pgrep aux | grep python | grep -v "grep python" | awk '{print $2}' | xargs kill -9
+pgrep aux | grep python
 screen -dm -c $TOP_DIR/stack-screenrc
 sleep 10
 
