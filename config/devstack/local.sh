@@ -162,8 +162,9 @@ fi
 
 # Restart OpenStack services
 screen -X -S stack quit
-killall -9 python
-killall -9 "/usr/bin/python"
+echo "Kill all python processes"
+# shellcheck disable=SC2009
+ps aux | pgrep -f python | sudo xargs kill -9
 screen -dm -c $TOP_DIR/stack-screenrc
 sleep 10
 
