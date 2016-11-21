@@ -22,7 +22,8 @@ fi
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 os=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 image_name=${plugin}_${os}
-mode="aio"
+mode="distribute"
+concurrency=1
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 case $ZUUL_BRANCH in
@@ -36,13 +37,11 @@ esac
 
 case $plugin in
     ambari_2.3)
-       mode=distribute
        scenario_conf_file="$sahara_templates_path/ambari-2.3.yaml.mako"
        template_image_prefix="ambari_2_2"
        image_name="ambari_2.2_c7"
        ;;
     ambari_2.4)
-       mode=distribute
        scenario_conf_file="$sahara_templates_path/ambari-2.4.yaml.mako"
        template_image_prefix="ambari_2_2"
        image_name="ambari_2.2_c7"
@@ -51,19 +50,11 @@ case $plugin in
        fi
        ;;
     vanilla_2.7.1)
-       mode=distribute
+       # the only job to test aio approach
+       mode="aio"
        scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
        template_image_prefix="vanilla_two_seven_one"
     ;;
-    transient)
-       # transient is using image with latest vanilla version
-       image_name=vanilla_2.7.1_u14
-       template_image_prefix="vanilla_two_seven_one"
-       sahara_plugin=vanilla
-       concurrency=3
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/transient.yaml.mako"
-       ;;
     cdh_5.4.0)
        scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml.mako"
        template_image_prefix="cdh_5_4_0"
@@ -85,12 +76,10 @@ case $plugin in
        template_image_prefix="spark_1_6"
        ;;
     mapr_5.1.0.mrv2)
-       mode=distribute
        scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
        ;;
     mapr_5.2.0.mrv2)
-       mode=distribute
        scenario_conf_file="$sahara_templates_path/mapr-5.2.0.mrv2.yaml.mako"
        template_image_prefix="mapr_520mrv2"
        ;;
