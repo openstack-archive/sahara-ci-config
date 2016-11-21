@@ -55,4 +55,4 @@ disable_service tempest
 # Enable logging
 #SCREEN_LOGDIR=/var/log/devstack
 
-IMAGE_URLS=https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
+IMAGE_URLS=https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
