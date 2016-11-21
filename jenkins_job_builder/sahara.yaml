@@ -67,13 +67,6 @@
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
-             - cdh_5.4.0
-          os:
-             - c6.6
-          project_name:
-             - sahara
-     - '{pipeline}-{project_name}-{plugin}-{os}-aio':
-          plugin:
              - cdh_5.5.0
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
@@ -137,14 +130,6 @@
             - ambari_2.3
           os:
             - c7
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - cdh_5.4.0
-          os:
-            - u12
-            - c6.6
-          release: liberty
-          pipeline: weekly
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
