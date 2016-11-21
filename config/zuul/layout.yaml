@@ -123,12 +123,12 @@ projects:
       - dib-vanilla_2.7.1-c7
       - dib-mapr_5.1.0.mrv2-u14
       - dib-mapr_5.2.0.mrv2-u14
-      - dib-spark_1.6.0-u14-aio
-      - dib-cdh_5.5.0-u14-aio
-      - dib-cdh_5.5.0-c7-aio
-      - dib-cdh_5.7.0-c7-aio
-      - dib-cdh_5.7.0-u14-aio
-      - dib-storm_1.0.1-u14-aio
+      - dib-spark_1.6.0-u14
+      - dib-cdh_5.5.0-u14
+      - dib-cdh_5.5.0-c7
+      - dib-cdh_5.7.0-c7
+      - dib-cdh_5.7.0-u14
+      - dib-storm_1.0.1-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
     post:
@@ -136,11 +136,11 @@ projects:
       - dib-vanilla_2.7.1-c7
       - dib-mapr_5.1.0.mrv2-u14
       - dib-mapr_5.2.0.mrv2-u14
-      - dib-spark_1.6.0-u14-aio
-      - dib-cdh_5.5.0-u14-aio
-      - dib-cdh_5.5.0-c7-aio
-      - dib-cdh_5.7.0-c7-aio
-      - dib-storm_1.0.1-u14-aio
+      - dib-spark_1.6.0-u14
+      - dib-cdh_5.5.0-u14
+      - dib-cdh_5.5.0-c7
+      - dib-cdh_5.7.0-c7
+      - dib-storm_1.0.1-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
 
