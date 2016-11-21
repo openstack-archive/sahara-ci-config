@@ -36,7 +36,7 @@ providers:
       - net-id: 'LAB_42_PRIVATE_NETWORK_ID'
     images:
       - name: stack-42
-        base-image: 'ubuntu-14.04'
+        base-image: 'ubuntu-16.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node.sh
@@ -53,7 +53,7 @@ providers:
       - net-id: 'LAB_43_PRIVATE_NETWORK_ID'
     images:
       - name: stack-43
-        base-image: 'ubuntu-14.04'
+        base-image: 'ubuntu-16.04'
         min-ram: 2048
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node.sh
