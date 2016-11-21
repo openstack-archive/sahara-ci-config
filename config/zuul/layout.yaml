@@ -70,7 +70,6 @@ projects:
   - name: openstack/sahara
     check:
       - gate-sahara-vanilla_2.7.1-u14
-      - gate-sahara-spark_1.3.1-u14-aio
       - gate-sahara-spark_1.6.0-u14-aio
       - gate-sahara-mapr_5.1.0.mrv2-u14
       - gate-sahara-mapr_5.2.0.mrv2-u14
@@ -87,7 +86,6 @@ projects:
   - name: openstack/sahara-tests
     check:
       - gate-sahara_tests-vanilla_2.7.1-u14
-      - gate-sahara_tests-spark_1.3.1-u14-aio
       - gate-sahara_tests-spark_1.6.0-u14-aio
       - gate-sahara_tests-mapr_5.1.0.mrv2-u14
       - gate-sahara_tests-mapr_5.2.0.mrv2-u14
@@ -100,7 +98,6 @@ projects:
       - gate-sahara_tests-ambari_2.4-u14
       - gate-sahara_tests-cdh_5.5.0-u14-mitaka
       - gate-sahara_tests-cdh_5.5.0-c7-mitaka
-      - gate-sahara_tests-spark_1.3.1-u14-mitaka
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-storm_1.0.1-u14-aio
@@ -115,10 +112,6 @@ projects:
       - nightly-sahara_tests-ambari_2.3-c7
       - nightly-sahara_tests-ambari_2.4-c7
       - nightly-sahara_tests-cdh_5.5.0-u14-mitaka
-
-    weekly:
-      - weekly-sahara_tests-spark_1.3.1-u14-liberty
-      - weekly-sahara_tests-vanilla_2.7.1-u14-liberty
 
   - name: openstack/python-saharaclient
     check:
@@ -188,17 +181,6 @@ jobs:
       - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
-  - name: ^(?!nightly|weekly).*-spark_1.3.1-.*$
-    skip-if:
-      - branch: ^(stable/mitaka|stable/newton|master)$
-    files:
-      - ^sahara_tests/scenario/defaults/spark-1.3.1.*$
-      - ^sahara_tests/scenario/defaults/liberty/spark-1.3.1.*$
-      - ^sahara_tests/scenario/defaults/mitaka/spark-1.3.1.*$
-      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
-      - ^sahara_tests/scenario/defaults/edp-examples/.*$
-      - ^sahara/.*$
-      - ^sahara_tests/.*.py$
   - name: ^(?!nightly).*-spark_1.6.0-.*$
     skip-if:
       - branch: stable/liberty
@@ -229,6 +211,8 @@ jobs:
       - ^sahara/.*$
       - ^sahara_tests/.*.py$
   - name: ^(?!nightly|weekly).*-vanilla_2.7.1-.*$
+    skip-if:
+       - branch: stable/liberty
     files:
       - ^sahara_tests/scenario/defaults/vanilla-2.7.1.*$
       - ^sahara_tests/scenario/defaults/liberty/vanilla-2.7.1.*$

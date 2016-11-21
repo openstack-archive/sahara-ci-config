@@ -73,7 +73,6 @@
              - cdh_5.7.0
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
-             -  spark_1.3.1
              -  spark_1.6.0
              -  storm_1.0.1
           os: u14
@@ -83,7 +82,6 @@
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - vanilla_2.7.1
-            - spark_1.3.1
           os: u14
           release:
             - mitaka
@@ -115,7 +113,6 @@
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
           plugin:
-             -  spark_1.3.1
              -  spark_1.6.0
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}-aio':
@@ -130,13 +127,6 @@
             - ambari_2.3
           os:
             - c7
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - vanilla_2.7.1
-            - spark_1.3.1
-          os: u14
-          release: liberty
-          pipeline: weekly
      - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
           plugin:
             - cdh_5.5.0
