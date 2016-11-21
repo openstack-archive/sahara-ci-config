@@ -23,7 +23,7 @@ sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o DPkg::Options::="--force-confold" upgrade -y
 # APT_PACKAGES variable using for installing packages via apt-get
 # PIP_PACKAGES variable using for installing packages via pip
-APT_PACKAGES="git python-dev gcc make openjdk-7-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
+APT_PACKAGES="git python-dev gcc make openjdk-8-jre-headless python-pip mysql-server libpq-dev libmysqlclient-dev"
 # RabbitMQ for distributed Sahara mode
 APT_PACKAGES+=" rabbitmq-server"
 # Required libraries

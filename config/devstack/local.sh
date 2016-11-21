@@ -93,7 +93,7 @@ openstack image create $(basename -s .qcow2 $SPARK_1_6_0_IMAGE_PATH) --file $SPA
 openstack image create $(basename -s .qcow2 $MAPR_5_1_0_MRV2_IMAGE_PATH) --file $MAPR_5_1_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.1.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $MAPR_5_2_0_MRV2_IMAGE_PATH) --file $MAPR_5_2_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.2.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $STORM_1_0_1_IMAGE_PATH) --file $STORM_1_0_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_storm'='True' --property '_sahara_tag_1.0.1'='True'  --property '_sahara_username'="ubuntu"
-openstack image set --name ubuntu-14.04 trusty-server-cloudimg-amd64-disk1
+openstack image set --name ubuntu-16.04 xenial-server-cloudimg-amd64-disk1
 
 # rename admin private network
 neutron net-update private --name admin-private
