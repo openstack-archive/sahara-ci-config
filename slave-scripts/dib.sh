@@ -19,7 +19,7 @@ plugin="$1"
 os="$2"
 image_name=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
 eval ${plugin//./_}_image=$image_name
-mode="aio"
+mode="distribute"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
@@ -60,28 +60,12 @@ case $plugin in
       template_image_prefix="vanilla_two_seven_one"
     ;;
 
-    spark_1.3.1)
-       env ubuntu_spark_image_name="${spark_1_3_1_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.3.1
-       check_error_code $? "${spark_1_3_1_image:?}".qcow2
-       upload_image "${plugin}" "${username}" "${spark_1_3_1_image:?}"
-       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
-       template_image_prefix="spark_1_3"
-    ;;
-
     spark_1.6.0)
        env ubuntu_spark_image_name="${spark_1_6_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.6.0
        check_error_code $? "${spark_1_6_0_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${spark_1_6_0_image:?}"
        scenario_conf_file="$sahara_templates_path/spark-1.6.0.yaml.mako"
        template_image_prefix="spark_1_6"
-    ;;
-
-    cdh_5.4.0)
-       env cloudera_5_4_${os_type}_image_name="${cdh_5_4_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.4
-       check_error_code $? "${cdh_5_4_0_image:?}".qcow2
-       upload_image "${plugin}" "${username}" "${cdh_5_4_0_image:?}"
-       scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml.mako"
-       template_image_prefix="cdh_5_4_0"
     ;;
 
     cdh_5.5.0)

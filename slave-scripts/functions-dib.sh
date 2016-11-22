@@ -62,17 +62,11 @@ upload_image() {
            ambari_2.2)
              image_properties="--property _sahara_tag_2.4=True --property _sahara_tag_2.3=True --property _sahara_tag_ambari=True --property _sahara_username=${username}"
            ;;
-           cdh_5.4.0)
-             image_properties="--property _sahara_tag_5.4.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
-           ;;
            cdh_5.5.0)
              image_properties="--property _sahara_tag_5.5.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
            cdh_5.7.0)
              image_properties="--property _sahara_tag_5.7.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
-           ;;
-           spark_1.3.1)
-             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.3.1=True --property _sahara_username=${username}"
            ;;
            spark_1.6.0)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.6.0=True --property _sahara_username=${username}"
