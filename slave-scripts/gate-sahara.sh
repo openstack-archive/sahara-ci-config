@@ -22,8 +22,6 @@ fi
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 os=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 image_name=${plugin}_${os}
-mode="distribute"
-concurrency=1
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 scenario_conf_file=$(get_template_path $ZUUL_BRANCH $plugin $sahara_templates_path)
 image_variable_name=$(get_image_variable_name $scenario_conf_file)
@@ -48,5 +46,5 @@ sudo pip install -r requirements.txt . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$image_variable_name" "$image_name" "$scenario_conf_file"
-start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file" "$concurrency"
+start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
 print_python_env
