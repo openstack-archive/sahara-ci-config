@@ -35,10 +35,10 @@ failure() {
   exit 1
 }
 
-register_new_image() {
+create_new_image() {
    local image_name=$1
    local image_properties=$2
-   openstack image create $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True' $image_properties
+   openstack image create $image_name --file $image_name.qcow2 --disk-format qcow2 --container-format bare --property '_sahara_tag_ci'='True'
 }
 
 rename_image() {
@@ -51,36 +51,20 @@ upload_image() {
    local plugin=$1
    local username=$2
    local image=$3
+   local plugin_name
+   plugin_name=$(echo ${plugin//_/ } | awk '{ print $1 }')
+   plugin_version=$(echo ${plugin//_/ } | awk '{ print $2 }')
    delete_image "$image"
    case "$plugin" in
-           vanilla_2.7.1)
-             image_properties="--property _sahara_tag_2.7.1=True --property _sahara_tag_vanilla=True --property _sahara_username=${username}"
-           ;;
            ambari_2.1)
-             image_properties="--property _sahara_tag_2.2=True --property _sahara_tag_2.3=True --property _sahara_tag_ambari=True --property _sahara_username=${username}"
+             additional_tags="2.2 2.3"
            ;;
            ambari_2.2)
-             image_properties="--property _sahara_tag_2.4=True --property _sahara_tag_2.3=True --property _sahara_tag_ambari=True --property _sahara_username=${username}"
-           ;;
-           cdh_5.5.0)
-             image_properties="--property _sahara_tag_5.5.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
-           ;;
-           cdh_5.7.0)
-             image_properties="--property _sahara_tag_5.7.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
-           ;;
-           spark_1.6.0)
-             image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.6.0=True --property _sahara_username=${username}"
-           ;;
-           mapr_5.1.0.mrv2)
-             image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.1.0.mrv2=True --property _sahara_username=${username}"
-           ;;
-           mapr_5.2.0.mrv2)
-             image_properties="--property _sahara_tag_mapr=True --property _sahara_tag_5.2.0.mrv2=True --property _sahara_username=${username}"
-           ;;
-           storm_1.0.1)
-             image_properties="--property _sahara_tag_storm=True --property _sahara_tag_1.0.1=True --property _sahara_username=${username}"
+             additional_tags="2.4 2.3"
            ;;
    esac
-   register_new_image "$image" "$image_properties"
+   create_new_image "$image"
+   openstack dataprocessing image register $image --username $username
+   openstack dataprocessing image tags add $image --tags $plugin_name $plugin_version $additional_tags
    CUR_IMAGE="$image"
 }
