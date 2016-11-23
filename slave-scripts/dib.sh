@@ -50,13 +50,14 @@ case "${os}" in
         ;;
 esac
 
+scenario_conf_file=$(get_template_path $ZUUL_BRANCH $plugin $sahara_templates_path)
+
 case $plugin in
     vanilla_2.7.1)
       env ${os_type}_vanilla_hadoop_2_7_1_image_name="${vanilla_2_7_1_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p vanilla -i $os_type -v 2.7.1
       check_error_code $? "${vanilla_2_7_1_image:?}".qcow2
       upload_image "${plugin}" "${username}" "${vanilla_2_7_1_image:?}"
       mode=distribute
-      scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
       template_image_prefix="vanilla_two_seven_one"
     ;;
 
@@ -64,7 +65,6 @@ case $plugin in
        env ubuntu_spark_image_name="${spark_1_6_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 1.6.0
        check_error_code $? "${spark_1_6_0_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${spark_1_6_0_image:?}"
-       scenario_conf_file="$sahara_templates_path/spark-1.6.0.yaml.mako"
        template_image_prefix="spark_1_6"
     ;;
 
@@ -72,7 +72,6 @@ case $plugin in
        env cloudera_5_5_${os_type}_image_name="${cdh_5_5_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.5
        check_error_code $? "${cdh_5_5_0_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${cdh_5_5_0_image:?}"
-       scenario_conf_file="$sahara_templates_path/cdh-5.5.0.yaml.mako"
        template_image_prefix="cdh_5_5_0"
     ;;
 
@@ -80,7 +79,6 @@ case $plugin in
        env cloudera_5_7_${os_type}_image_name="${cdh_5_7_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.7
        check_error_code $? "${cdh_5_7_0_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${cdh_5_7_0_image:?}"
-       scenario_conf_file="$sahara_templates_path/cdh-5.7.0.yaml.mako"
        template_image_prefix="cdh_5_7_0"
     ;;
 
@@ -97,8 +95,6 @@ case $plugin in
        env mapr_ubuntu_image_name="${mapr_5_1_0_mrv2_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu -r 5.1.0
        check_error_code $? "${mapr_5_1_0_mrv2_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${mapr_5_1_0_mrv2_image:?}"
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
     ;;
 
@@ -106,8 +102,6 @@ case $plugin in
        env mapr_ubuntu_image_name="${mapr_5_2_0_mrv2_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p mapr -i ubuntu -r 5.2.0
        check_error_code $? "${mapr_5_2_0_mrv2_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${mapr_5_2_0_mrv2_image:?}"
-       mode=distribute
-       scenario_conf_file="$sahara_templates_path/mapr-5.2.0.mrv2.yaml.mako"
        template_image_prefix="mapr_520mrv2"
     ;;
 
@@ -115,7 +109,6 @@ case $plugin in
        env ubuntu_storm_image_name="${storm_1_0_1_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p storm -t 1.0.1
        check_error_code $? "${storm_1_0_1_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${storm_1_0_1_image:?}"
-       scenario_conf_file="$sahara_templates_path/storm-1.0.1.yaml.mako"
        template_image_prefix="storm_1_0"
     ;;
 esac
