@@ -194,3 +194,18 @@ medium_flavor_id: ${medium_flavor_id:?}
 large_flavor_id: ${large_flavor_id:?}
 " | tee ${template_vars_file}
 }
+
+get_template_path() {
+  local branch=$1
+  local plugin=$2
+  local base_path=$3
+
+  if [[ $branch == *"stable"* ]]; then
+      local release
+      release=$(echo $branch | sed "s/stable\///g")
+      base_path="$base_path/$release"
+  fi
+  local suffix
+  suffix=$(echo $plugin | sed "s/_/-/g")
+  echo "$base_path/$suffix.yaml.mako"
+}

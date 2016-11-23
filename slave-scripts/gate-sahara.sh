@@ -34,15 +34,14 @@ case $ZUUL_BRANCH in
        sahara_templates_path="$sahara_templates_path/mitaka"
        ;;
 esac
+scenario_conf_file=$(get_template_path $ZUUL_BRANCH $plugin $sahara_templates_path)
 
 case $plugin in
     ambari_2.3)
-       scenario_conf_file="$sahara_templates_path/ambari-2.3.yaml.mako"
        template_image_prefix="ambari_2_2"
        image_name="ambari_2.2_c7"
        ;;
     ambari_2.4)
-       scenario_conf_file="$sahara_templates_path/ambari-2.4.yaml.mako"
        template_image_prefix="ambari_2_2"
        image_name="ambari_2.2_c7"
        if [ $os == "u14" ]; then
@@ -52,39 +51,30 @@ case $plugin in
     vanilla_2.7.1)
        # the only job to test aio approach
        mode="aio"
-       scenario_conf_file="$sahara_templates_path/vanilla-2.7.1.yaml.mako"
        template_image_prefix="vanilla_two_seven_one"
     ;;
     cdh_5.4.0)
-       scenario_conf_file="$sahara_templates_path/cdh-5.4.0.yaml.mako"
        template_image_prefix="cdh_5_4_0"
        ;;
     cdh_5.5.0)
-       scenario_conf_file="$sahara_templates_path/cdh-5.5.0.yaml.mako"
        template_image_prefix="cdh_5_5_0"
        ;;
     cdh_5.7.0)
-       scenario_conf_file="$sahara_templates_path/cdh-5.7.0.yaml.mako"
        template_image_prefix="cdh_5_7_0"
        ;;
     spark_1.3.1)
-       scenario_conf_file="$sahara_templates_path/spark-1.3.1.yaml.mako"
        template_image_prefix="spark_1_3"
        ;;
     spark_1.6.0)
-       scenario_conf_file="$sahara_templates_path/spark-1.6.0.yaml.mako"
        template_image_prefix="spark_1_6"
        ;;
     mapr_5.1.0.mrv2)
-       scenario_conf_file="$sahara_templates_path/mapr-5.1.0.mrv2.yaml.mako"
        template_image_prefix="mapr_510mrv2"
        ;;
     mapr_5.2.0.mrv2)
-       scenario_conf_file="$sahara_templates_path/mapr-5.2.0.mrv2.yaml.mako"
        template_image_prefix="mapr_520mrv2"
        ;;
     storm_1.0.1)
-       scenario_conf_file="$sahara_templates_path/storm-1.0.1.yaml.mako"
        template_image_prefix="storm_1_0"
        ;;
 esac
