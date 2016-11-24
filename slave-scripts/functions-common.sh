@@ -81,25 +81,6 @@ $option = $value
   fi
 }
 
-insert_scenario_value() {
-  local file=$1
-  local main_key=$2
-  local stop_key=$3
-  local sub_key=$4
-  local value=$5
-  local old_value=$6
-
-  [[ -z $main_key || -z $sub_key ]] && return
-
-  if ! scenario_has_option "$file" "$main_key" "$stop_key" "$sub_key"; then
-      echo "No such keys: $main_key -> $sub_key in scenario $file file. Skip setting value $value"
-  else
-      local sep
-      sep=$(echo -ne "\x01")
-      sed -i -e '/'${main_key}':/,/'${stop_key}'/ s'${sep}'\([ \t]'${sub_key}':[ \t]\).*'${old_value}'.*$'${sep}'\1'${value}${sep} $file
-  fi
-}
-
 print_python_env() {
   [ -f $SAHARA_PATH/.tox/integration/bin/pip ] && $SAHARA_PATH/.tox/integration/bin/pip freeze > $WORKSPACE/logs/python-integration-env.txt
   [ -f $SAHARA_PATH/.tox/scenario/bin/pip ] && $SAHARA_PATH/.tox/scenario/bin/pip freeze > $WORKSPACE/logs/python-scenario-env.txt
