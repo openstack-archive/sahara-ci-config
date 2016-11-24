@@ -183,11 +183,11 @@ write_sahara_main_conf() {
 
 write_tests_conf() {
   local cluster_name=$1
-  local image_prefix=$2
+  local image_variable_name=$2
   local image_name=$3
   export NETWORK="neutron"
 echo "[DEFAULT]
-${image_prefix}_image: $image_name
+$image_variable_name: $image_name
 cluster_name: $cluster_name
 ci_flavor_id: ${ci_flavor_id:?}
 medium_flavor_id: ${medium_flavor_id:?}
@@ -208,4 +208,10 @@ get_template_path() {
   local suffix
   suffix=${plugin//_/-}
   echo "$base_path/$suffix.yaml.mako"
+}
+
+get_image_variable_name() {
+   local scenario
+   scenario=$1
+   grep image < $scenario | awk '{ print $2 }' | sed "s/[{}$]//g"
 }
