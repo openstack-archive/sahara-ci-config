@@ -122,7 +122,7 @@ start_sahara() {
   local conf_path=$1
   local conf_dir
   conf_dir=$(dirname $1)
-  local mode=$2
+  local mode=${2:-"distribute"}
   mkdir $WORKSPACE/logs
   sahara-db-manage --config-file $conf_path  upgrade head || failure "Command 'sahara-db-manage' failed"
   if [ "$mode" == "distribute" ]; then

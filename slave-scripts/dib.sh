@@ -19,7 +19,6 @@ plugin="$1"
 os="$2"
 image_name=${HOST}_${plugin}_${os}_${ZUUL_CHANGE}
 eval ${plugin//./_}_image=$image_name
-mode="distribute"
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 
 # Clone Sahara
@@ -111,6 +110,6 @@ sudo pip install . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$image_variable_name" "$image_name" "$scenario_conf_file"
-start_sahara "$sahara_conf_file" "$mode" && run_tests "$scenario_conf_file"
+start_sahara "$sahara_conf_file" && run_tests "$scenario_conf_file"
 print_python_env
 cleanup_image "$plugin" "$os"
