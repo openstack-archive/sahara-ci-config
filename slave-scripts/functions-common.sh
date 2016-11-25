@@ -1,5 +1,18 @@
 #!/bin/bash -xe
 
+case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
+    python3)
+       sudo apt autoremove python2.7 -y
+       sudo apt install python3-dev python3-pip -y
+       if [ ! -f /usr/bin/python ]
+       then
+           sudo ln -s /usr/bin/python3 /usr/bin/python
+           sudo ln -s /usr/bin/pip3 /usr/bin/pip
+       fi
+       pip install tox
+       ;;
+esac
+
 configs_path=$WORKSPACE/sahara-ci-config/config
 template_vars_file=/tmp/template_vars.ini
 
@@ -150,7 +163,7 @@ write_sahara_main_conf() {
   insert_config_value $conf_path DEFAULT min_transient_cluster_active_time 30
   insert_config_value $conf_path DEFAULT node_domain ci
   insert_config_value $conf_path DEFAULT plugins $plugin
-  insert_config_value $conf_path database connection mysql://sahara-citest:sahara-citest@localhost/sahara?charset=utf8
+  insert_config_value $conf_path database connection mysql+pymysql://sahara-citest:sahara-citest@localhost/sahara?charset=utf8
   insert_config_value $conf_path keystone_authtoken auth_uri http://$OPENSTACK_HOST:5000/v2.0/
   insert_config_value $conf_path keystone_authtoken identity_uri http://$OPENSTACK_HOST:35357/
   insert_config_value $conf_path keystone_authtoken admin_user $OS_USERNAME
