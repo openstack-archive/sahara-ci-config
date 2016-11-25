@@ -13,10 +13,12 @@ SAHARA_TESTS_PATH=${2:-"/tmp/sahara-tests"}
 sahara_conf_file=$SAHARA_PATH/etc/sahara/sahara.conf
 sahara_templates_path=$SAHARA_TESTS_PATH/sahara_tests/scenario/defaults
 tests_etc=$sahara_templates_path
+feature=$3
 
 # Clone Sahara Scenario tests
 if [ "$ZUUL_PROJECT" != "openstack/sahara-tests" ]; then
     get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
+    feature=$(echo $JOB_NAME | awk -F '-' '{ print $5 }')
 fi
 
 plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
@@ -39,6 +41,12 @@ case $plugin in
     vanilla_2.7.1)
        # the only job to test aio approach
        mode="aio"
+       ;;
+esac
+
+case $feature in
+    python3)
+       alias python=python3
        ;;
 esac
 
