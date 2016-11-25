@@ -1,5 +1,18 @@
 #!/bin/bash -xe
 
+case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
+    python3)
+       sudo apt autoremove python2.7 -y
+       sudo apt install python3-dev python3-pip -y
+       if [ ! -f /usr/bin/python3 ]
+       then
+           sudo ln -s /usr/bin/python3 /usr/bin/python
+           sudo ln -s /usr/bin/pip3 /usr/bin/pip
+       fi
+       pip install tox
+       ;;
+esac
+
 configs_path=$WORKSPACE/sahara-ci-config/config
 template_vars_file=/tmp/template_vars.ini
 
