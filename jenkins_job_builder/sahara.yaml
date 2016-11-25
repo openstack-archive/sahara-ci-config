@@ -14,12 +14,12 @@
     node: stack-42 || stack-43
 
 - job-template:
-    name: '{pipeline}-sahara_tests-{plugin}-{os}-{release}'
+    name: '{pipeline}-{project_name}-{plugin}-{os}-{param}'
     defaults: global
     builders:
       - gerrit-git-prep
       - ci-config-prep
-      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-sahara_tests.sh"
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
     properties:
       - zeromq-event
     publishers:
@@ -30,8 +30,7 @@
 
 - project:
     name: sahara
-    pipeline:
-      - gate
+    pipeline: gate
     project_name:
       - sahara
       - sahara_tests
@@ -40,10 +39,8 @@
       - u14
     jobs:
      - '{pipeline}-{project_name}-{plugin}-{os}':
-          plugin:
-             - ambari_2.3
-          os:
-             - c7
+          plugin: ambari_2.3
+          os: c7
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
@@ -57,38 +54,40 @@
              - cdh_5.5.0
              - cdh_5.7.0
              - ambari_2.4
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          project_name: sahara_tests
           plugin:
             - vanilla_2.7.1
             - spark_1.6.0
           os: u14
-          release:
-            - mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - cdh_5.5.0
-          release: mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - ambari_2.3
+          param: mitaka
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          project_name: sahara_tests
+          plugin: cdh_5.5.0
+          param: mitaka
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          project_name: sahara_tests
+          plugin: ambari_2.3
           os: c7
-          release: mitaka
+          param: mitaka
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          project_name: sahara_tests
+          plugin: spark_1.6.0
+          os: u14
+          param: python3
 
 - project:
     name: sahara-periodic
-    pipeline:
-      - nightly
-    project_name:
-      - sahara_tests
+    pipeline: nightly
+    project_name: sahara_tests
     jobs:
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
              - vanilla_2.7.1
-             -  spark_1.6.0
+             - spark_1.6.0
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
-          plugin:
-             - cdh_5.5.0
+          plugin: cdh_5.5.0
           os:
             - c7
             - u14
@@ -97,11 +96,10 @@
             - ambari_2.4
             - ambari_2.3
           os: c7
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
-          plugin:
-            - cdh_5.5.0
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          plugin: cdh_5.5.0
           os: u14
-          release: mitaka
+          param: mitaka
 
 - job:
     name: gate-sahara-pep8-trunk
