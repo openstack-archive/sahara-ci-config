@@ -14,7 +14,22 @@
     node: stack-42 || stack-43
 
 - job-template:
-    name: '{pipeline}-sahara_tests-{plugin}-{os}-{release}'
+    name: '{pipeline}-{project_name}-{plugin}-{os}-{feature}'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
+    properties:
+      - zeromq-event
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: stack-42 || stack-43
+
+- job-template:
+    name: '{pipeline}-sahara_tests-{plugin}-{os}-{param}'
     defaults: global
     builders:
       - gerrit-git-prep
@@ -57,22 +72,29 @@
              - cdh_5.5.0
              - cdh_5.7.0
              - ambari_2.4
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{param}':
           plugin:
             - vanilla_2.7.1
             - spark_1.6.0
           os: u14
-          release:
+          param:
             - mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{param}':
           plugin:
             - cdh_5.5.0
-          release: mitaka
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+          param: mitaka
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{param}':
           plugin:
             - ambari_2.3
           os: c7
-          release: mitaka
+          param: mitaka
+     - '{pipeline}-{project_name}-{plugin}-{os}-{feature}':
+          plugin:
+            - spark_1.6.0
+          os:
+            - u14
+          feature:
+            - python3
 
 - project:
     name: sahara-periodic
@@ -97,11 +119,11 @@
             - ambari_2.4
             - ambari_2.3
           os: c7
-     - '{pipeline}-sahara_tests-{plugin}-{os}-{release}':
+     - '{pipeline}-sahara_tests-{plugin}-{os}-{param}':
           plugin:
             - cdh_5.5.0
           os: u14
-          release: mitaka
+          param: mitaka
 
 - job:
     name: gate-sahara-pep8-trunk
