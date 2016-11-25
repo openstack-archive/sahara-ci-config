@@ -14,6 +14,21 @@
     node: stack-42 || stack-43
 
 - job-template:
+    name: '{pipeline}-{project_name}-{plugin}-{os}-{feature}'
+    defaults: global
+    builders:
+      - gerrit-git-prep
+      - ci-config-prep
+      - shell: "FUNCTION_PATH=$WORKSPACE/sahara-ci-config/slave-scripts $WORKSPACE/sahara-ci-config/slave-scripts/gate-{project_name}.sh"
+    properties:
+      - zeromq-event
+    publishers:
+      - sahara-logs
+      - console-log
+      - trigger-cleanup
+    node: stack-42 || stack-43
+
+- job-template:
     name: '{pipeline}-sahara_tests-{plugin}-{os}-{release}'
     defaults: global
     builders:
@@ -73,6 +88,15 @@
             - ambari_2.3
           os: c7
           release: mitaka
+     - '{pipeline}-{project_name}-{plugin}-{os}-{feature}':
+          project_name:
+            - sahara
+          plugin:
+            - spark_1.6.0
+          os:
+            - u14
+          feature:
+            - python3
 
 - project:
     name: sahara-periodic

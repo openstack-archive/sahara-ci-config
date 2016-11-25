@@ -19,8 +19,9 @@ if [ "$ZUUL_PROJECT" != "openstack/sahara-tests" ]; then
     get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
 fi
 
-plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
-os=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
+plugin=split_job_name 3
+os=split_job_name 4
+feature=split_job_name 5
 image_name=${plugin}_${os}
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 scenario_conf_file=$(get_template_path $ZUUL_BRANCH $plugin $sahara_templates_path)
@@ -39,6 +40,12 @@ case $plugin in
     vanilla_2.7.1)
        # the only job to test aio approach
        mode="aio"
+       ;;
+esac
+
+case $feature in
+    python3)
+       alias python=python3
        ;;
 esac
 
