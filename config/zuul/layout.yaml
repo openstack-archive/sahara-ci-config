@@ -105,7 +105,6 @@ projects:
 
     nightly:
       - nightly-sahara_tests-vanilla_2.7.1-u14
-      - nightly-sahara_tests-spark_1.3.1-u14
       - nightly-sahara_tests-spark_1.6.0-u14
       - nightly-sahara_tests-cdh_5.5.0-u14
       - nightly-sahara_tests-cdh_5.5.0-c7
@@ -162,6 +161,10 @@ jobs:
           - ^.*\.rst$
           - ^.*\.unit/.*
           - ^tools/.*$
+  - name: ^dib-.*$
+    files:
+      - ^diskimage-create/.*$
+      - ^elements/.*$
   - name: ^(?!nightly).*-mapr_5.1.*$
     skip-if:
       - branch: ^(stable/liberty|master)$
