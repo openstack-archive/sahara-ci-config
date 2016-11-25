@@ -196,3 +196,7 @@ get_image_variable_name() {
    scenario=$1
    grep image < $scenario | awk '{ print $2 }' | sed "s/[{}$]//g"
 }
+
+split_job_name() {
+    echo $(echo $JOB_NAME | awk -F '-' '{ print \$$1 }')
+}
