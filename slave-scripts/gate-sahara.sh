@@ -42,7 +42,16 @@ case $plugin in
        ;;
 esac
 
-sudo pip install -r requirements.txt . --no-cache-dir
+case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
+    python3)
+       sudo apt install python3-pip python3-dev -y
+       sudo pip3 install -r requirements.txt . --no-cache-dir
+       ;;
+    *)
+       sudo pip install -r requirements.txt . --no-cache-dir
+       ;;
+esac
+
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$image_variable_name" "$image_name" "$scenario_conf_file"
