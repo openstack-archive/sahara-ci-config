@@ -71,6 +71,7 @@ projects:
     check:
       - gate-sahara-vanilla_2.7.1-u14
       - gate-sahara-spark_1.6.0-u14
+      - gate-sahara-spark_1.6.0-u14-python3
       - gate-sahara-mapr_5.1.0.mrv2-u14
       - gate-sahara-mapr_5.2.0.mrv2-u14
       - gate-sahara-cdh_5.5.0-u14
@@ -99,6 +100,7 @@ projects:
       - gate-sahara_tests-cdh_5.5.0-u14-mitaka
       - gate-sahara_tests-cdh_5.5.0-c7-mitaka
       - gate-sahara_tests-spark_1.6.0-u14-mitaka
+      - gate-sahara_tests-spark_1.6.0-u14-python3
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-storm_1.0.1-u14
       - gate-sahara_tests-ambari_2.3-c7-mitaka
@@ -268,6 +270,8 @@ jobs:
       - ^sahara_tests/.*.py$
     skip-if:
       - branch: ^(stable/liberty|stable/mitaka)$
+    voting: false
+  - name: gate-.*-spark_1.6.0-u14-python3
     voting: false
   - name: gate-sahara-pep8-trunk
     voting: false

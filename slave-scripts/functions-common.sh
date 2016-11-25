@@ -1,5 +1,11 @@
 #!/bin/bash -xe
 
+case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
+    python3)
+       alias python=python3
+       ;;
+esac
+
 configs_path=$WORKSPACE/sahara-ci-config/config
 template_vars_file=/tmp/template_vars.ini
 
