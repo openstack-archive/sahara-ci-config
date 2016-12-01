@@ -25,7 +25,7 @@ SWIFT_REPLICAS=1
 SWIFT_LOOPBACK_DISK_SIZE=50G
 
 # Enable Heat API
-enable_service heat h-api h-eng
+enable_plugin heat git://git.openstack.org/openstack/heat
 
 CINDER_SECURE_DELETE=False
 VOLUME_BACKING_FILE_SIZE=100000M
@@ -45,10 +45,6 @@ fi
 NETWORK_GATEWAY=10.20.0.1
 FIXED_RANGE=10.20.0.0/24
 IP_VERSION="4"
-
-# enable neutron and disable nova-net
-disable_service n-net
-enable_service q-svc q-agt q-dhcp q-l3 q-meta neutron
 
 disable_service tempest
 
