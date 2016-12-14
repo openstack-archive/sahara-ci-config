@@ -57,7 +57,7 @@ sudo service mysql stop
 sudo pip install -U $PIP_PACKAGES
 git clone https://git.openstack.org/openstack/sahara /tmp/sahara
 git clone https://git.openstack.org/openstack/sahara-tests /tmp/sahara-tests
-sudo pip install -U -r /tmp/sahara/requirements.txt
+sudo pip install -U -r /tmp/sahara/requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
 git clone https://git.openstack.org/openstack-infra/project-config /tmp/project-config
 sudo mkdir -p /usr/local/jenkins/
 sudo mv /tmp/project-config/jenkins/scripts /usr/local/jenkins/slave_scripts
