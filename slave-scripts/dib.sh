@@ -29,6 +29,7 @@ get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
 
 # make verbose the scripts execution of disk-image-create
 export DIB_DEBUG_TRACE=1
+echo "127.0.0.1 $HOSTNAME"|  sudo tee -a /etc/hosts
 
 case "${os}" in
     c6.6)
