@@ -12,6 +12,9 @@ case $release in
     mitaka)
         ZUUL_BRANCH="stable/mitaka"
         ;;
+    newton)
+        ZUUL_BRANCH="stable/newton"
+        ;;
 esac
 
 sahara_path="/tmp/sahara"
