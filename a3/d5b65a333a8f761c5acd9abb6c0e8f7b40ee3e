@@ -1,0 +1,11 @@
+Verified+1: Sahara Hadoop Cluster CI <elastic-hadoop-ci@mirantis.com>
+Code-Review+1: Luigi Toscano <ltoscano@redhat.com>
+Code-Review+2: Denis Egorenko <degorenko@mirantis.com>
+Code-Review+2: Evgeny Sikachev <esikachev@mirantis.com>
+Workflow+1: Evgeny Sikachev <esikachev@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 16 Dec 2016 13:32:57 +0000
+Reviewed-on: https://review.openstack.org/403551
+Project: openstack/sahara-ci-config
+Branch: refs/heads/master
