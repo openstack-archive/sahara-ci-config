@@ -25,6 +25,7 @@
     publishers:
       - sahara-logs
       - console-log
+      - nightly-log
       - trigger-cleanup
     node: stack-42 || stack-43
 

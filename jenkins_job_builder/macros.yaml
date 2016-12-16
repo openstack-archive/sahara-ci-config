@@ -45,3 +45,14 @@
                \nPREV_JOB=$JOB_NAME\
                \nHOST_NAME=$NODE_NAME\
                \nCLUSTER_HASH=$CLUSTER_HASH"
+
+- publisher:
+    name: nightly-log
+    publishers:
+      - postbuildscript:
+          builders:
+            - shell: |
+                  pipeline=$(echo $JOB_NAME | awk -F '-' '{print $1}')
+                  if [ "$pipeline" == "nightly" ]; then
+                  rsync -e "ssh -i /home/jenkins/.ssh/rsync_key" -avz /opt/ci/logs/nightly/ ubuntu@172.18.180.78:/var/www/html/devstack/nightly/;
+                  fi;
