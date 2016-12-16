@@ -13,6 +13,7 @@
 # under the License.
 
 import uuid
+from time import gmtime, strftime
 
 
 def set_log_url(item, job, params):
@@ -27,8 +28,9 @@ def set_log_url(item, job, params):
     else:
         path = params['ZUUL_PIPELINE']
     params['BASE_LOG_PATH'] = path
-    params['LOG_PATH'] = path + '/%s/%s' % (job.name,
-                                            params['ZUUL_UUID'][:7])
+    params['LOG_PATH'] = path + '/%s/%s/%s' % (job.name,
+                                               strftime("%Y-%m-%d", gmtime()),
+                                               params['ZUUL_UUID'][:7])
 
 
 def single_use_node(item, job, params):
