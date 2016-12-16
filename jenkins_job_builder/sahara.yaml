@@ -26,6 +26,7 @@
       - sahara-logs
       - console-log
       - trigger-cleanup
+      - nightly-log
     node: stack-42 || stack-43
 
 - project:

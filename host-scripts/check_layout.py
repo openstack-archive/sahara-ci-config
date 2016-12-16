@@ -10,6 +10,9 @@ layout = yaml.load(open(sys.argv[1]))
 
 JENKINS_JOBS = [
     'update-pool',
+    'nightly-log',
+    'nightly-log-publisher-42',
+    'nightly-log-publisher-43',
     'daily-log-publisher-43',
     'integration-cleanup',
     'jobs-updater',
