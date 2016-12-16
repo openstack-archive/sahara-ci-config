@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import time
 import uuid
 
 
@@ -27,8 +28,10 @@ def set_log_url(item, job, params):
     else:
         path = params['ZUUL_PIPELINE']
     params['BASE_LOG_PATH'] = path
-    params['LOG_PATH'] = path + '/%s/%s' % (job.name,
-                                            params['ZUUL_UUID'][:7])
+    params['LOG_PATH'] = path + '/%s/%s/%s' % (time.strftime("%Y-%m-%d",
+                                                             time.gmtime()),
+                                               job.name,
+                                               params['ZUUL_UUID'][:7])
 
 
 def single_use_node(item, job, params):
