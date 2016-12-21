@@ -42,7 +42,7 @@ case $plugin in
        ;;
 esac
 
-sudo pip install -r requirements.txt . --no-cache-dir
+sudo pip install -U -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt -r requirements.txt . --no-cache-dir
 enable_pypi
 write_sahara_main_conf "$sahara_conf_file" "$sahara_plugin"
 write_tests_conf "$cluster_name" "$image_variable_name" "$image_name" "$scenario_conf_file"
