@@ -35,7 +35,7 @@ APT_PACKAGES+=" gettext"
 # Glance-client is required for diskimage-integration jobs
 PIP_PACKAGES="python-glanceclient"
 # Requirements for Sahara
-PIP_PACKAGES+=" mysql-python"
+PIP_PACKAGES+=" mysql-python pymysql"
 # Requirements for dib-jobs
 PIP_PACKAGES+=" python-openstackclient"
 PIP_PACKAGES+=" pip==8.1.1 tox"
