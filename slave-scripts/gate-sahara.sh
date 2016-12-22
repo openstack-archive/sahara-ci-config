@@ -43,12 +43,12 @@ case $plugin in
 esac
 
 pip_cmd="install -U -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt -r requirements.txt . --no-cache-dir"
+sudo pip3 install pymysql
 
 case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
     python3)
        sudo apt install python3-pip python3-dev -y
        sudo pip3 $pip_cmd
-       sudo pip3 install pymysql
        ;;
     *)
        sudo pip $pip_cmd
