@@ -20,6 +20,7 @@
       - vanilla_2.7.1
       - cdh_5.5.0
       - cdh_5.7.0
+      - cdh_5.9.0
       - ambari_2.2
     os:
       - u14
