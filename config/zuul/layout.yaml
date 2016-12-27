@@ -165,7 +165,7 @@ jobs:
           - ^tools/.*$
   - name: ^(?!nightly).*-mapr_5.1.*$
     skip-if:
-      - branch: ^(stable/liberty|master)$
+      - branch: ^(stable/newton|master)$
     files:
       - ^sahara_tests/scenario/defaults/mitaka/mapr-5.1.*$
       - ^sahara_tests/scenario/defaults/mapr-5.1.*$
@@ -177,7 +177,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-mapr_5.2.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/mitaka)$
+      - branch: stable/mitaka
     files:
       - ^sahara_tests/scenario/defaults/mapr-5.2.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
@@ -187,8 +187,6 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly).*-spark_1.6.0-.*$
-    skip-if:
-      - branch: stable/liberty
     files:
       - ^sahara_tests/scenario/defaults/spark-1.6.0.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.6.0.*$
@@ -200,7 +198,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-cdh_5.5.0-.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/newton|master)$
+      - branch: ^(stable/newton|master)$
     files:
       - ^sahara_tests/scenario/defaults/cdh-5.5.*$
       - ^sahara_tests/scenario/defaults/mitaka/cdh-5.5.*$
@@ -212,7 +210,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-cdh_5.7.0-.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/mitaka)$
+      - branch: stable/mitaka
     files:
       - ^sahara_tests/scenario/defaults/cdh-5.7.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
@@ -222,8 +220,6 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly|weekly).*-vanilla_2.7.1-.*$
-    skip-if:
-       - branch: stable/liberty
     files:
       - ^sahara_tests/scenario/defaults/vanilla-2.7.1.*$
       - ^sahara_tests/scenario/defaults/liberty/vanilla-2.7.1.*$
@@ -236,7 +232,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-ambari_2.3-.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/newton|master)$
+      - branch: ^(stable/newton|master)$
     voting: false
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.3.*$
@@ -249,7 +245,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-ambari_2.4-.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/mitaka)$
+      - branch: stable/mitaka
     voting: false
     files:
       - ^sahara_tests/scenario/defaults/ambari-2.4.*$
@@ -261,7 +257,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-storm_1.0.1-.*$
     skip-if:
-      - branch: ^(stable/liberty|stable/mitaka)$
+      - branch: stable/mitaka
     files:
       - ^sahara_tests/scenario/defaults/storm-1.0.1.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
@@ -273,7 +269,7 @@ jobs:
   - name: gate-.*-spark_1.6.0-u14-python3
     voting: false
     skip-if:
-      - branch: ^(stable/liberty|stable/mitaka)$
+      - branch: stable/mitaka
   - name: gate-sahara-pep8-trunk
     voting: false
   - name: ^(?!nightly|weekly).*-sahara_tests-.*$
