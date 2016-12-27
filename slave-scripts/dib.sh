@@ -78,6 +78,12 @@ case $plugin in
        upload_image "${plugin}" "${username}" "${cdh_5_7_0_image:?}"
     ;;
 
+    cdh_5.9.0)
+       env cloudera_5_9_${os_type}_image_name="${cdh_5_9_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.9
+       check_error_code $? "${cdh_5_9_0_image:?}".qcow2
+       upload_image "${plugin}" "${username}" "${cdh_5_9_0_image:?}"
+    ;;
+
     ambari_2.2)
        env ambari_${os_type}_image_name="${ambari_2_2_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p ambari -i $os_type
        check_error_code $? "${ambari_2_2_image:?}".qcow2
