@@ -1,0 +1,10 @@
+Code-Review+2: Evgeny Sikachev <esikachev@mirantis.com>
+Code-Review+1: Telles Mota Vidal Nóbrega <tenobreg@redhat.com>
+Code-Review+2: Denis Egorenko <degorenko@mirantis.com>
+Workflow+1: Denis Egorenko <degorenko@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 13 Jan 2017 09:30:22 +0000
+Reviewed-on: https://review.openstack.org/415195
+Project: openstack/sahara-ci-config
+Branch: refs/heads/master
