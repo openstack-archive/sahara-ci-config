@@ -78,6 +78,8 @@ projects:
       - gate-sahara-cdh_5.5.0-c7
       - gate-sahara-cdh_5.7.0-c7
       - gate-sahara-cdh_5.7.0-u14
+      - gate-sahara-cdh_5.9.0-c7
+      - gate-sahara-cdh_5.9.0-u14
       - gate-sahara-storm_1.0.1-u14
       - gate-sahara-ambari_2.3-c7
       - gate-sahara-ambari_2.4-c7
@@ -94,6 +96,8 @@ projects:
       - gate-sahara_tests-cdh_5.5.0-c7
       - gate-sahara_tests-cdh_5.7.0-c7
       - gate-sahara_tests-cdh_5.7.0-u14
+      - gate-sahara_tests-cdh_5.9.0-c7
+      - gate-sahara_tests-cdh_5.9.0-u14
       - gate-sahara_tests-ambari_2.3-c7
       - gate-sahara_tests-ambari_2.4-c7
       - gate-sahara_tests-ambari_2.4-u14
@@ -129,6 +133,8 @@ projects:
       - dib-cdh_5.5.0-c7
       - dib-cdh_5.7.0-c7
       - dib-cdh_5.7.0-u14
+      - dib-cdh_5.9.0-c7
+      - dib-cdh_5.9.0-u14
       - dib-storm_1.0.1-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
@@ -141,6 +147,8 @@ projects:
       - dib-cdh_5.5.0-u14
       - dib-cdh_5.5.0-c7
       - dib-cdh_5.7.0-c7
+      - dib-cdh_5.9.0-c7
+      - dib-cdh_5.9.0-u14
       - dib-storm_1.0.1-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
@@ -213,6 +221,18 @@ jobs:
       - branch: stable/mitaka
     files:
       - ^sahara_tests/scenario/defaults/cdh-5.7.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-cdh_5.9.0-.*$
+    skip-if:
+      - branch: ^(stable/liberty|stable/mitaka|stable/newton)$
+    voting: false
+    files:
+      - ^sahara_tests/scenario/defaults/cdh-5.9.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
       - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$

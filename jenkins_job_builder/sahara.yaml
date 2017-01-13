@@ -53,6 +53,7 @@
           plugin:
              - cdh_5.5.0
              - cdh_5.7.0
+             - cdh_5.9.0
              - ambari_2.4
      - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
           project_name: sahara_tests

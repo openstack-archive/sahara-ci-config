@@ -68,6 +68,9 @@ upload_image() {
            cdh_5.7.0)
              image_properties="--property _sahara_tag_5.7.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
            ;;
+           cdh_5.9.0)
+             image_properties="--property _sahara_tag_5.9.0=True --property _sahara_tag_cdh=True --property _sahara_username=${username}"
+           ;;
            spark_1.6.0)
              image_properties="--property _sahara_tag_spark=True --property _sahara_tag_1.6.0=True --property _sahara_username=${username}"
            ;;
