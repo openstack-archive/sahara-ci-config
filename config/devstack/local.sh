@@ -131,10 +131,14 @@ neutron security-group-rule-create --tenant_id $CI_TENANT_ID --protocol udp --po
 
 #create Sahara endpoint for tests
 service_id=$(openstack service create data_processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
-openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id public 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id admin 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id internal 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 # create second endpoint due to bug: #1356053
 service_id=$(openstack service create data-processing --name sahara --description "Data Processing Service" | grep -w id | get_field 2)
-openstack endpoint create $service_id --publicurl 'http://localhost:8386/v1.1/$(tenant_id)s' --adminurl 'http://localhost:8386/v1.1/$(tenant_id)s' --internalurl 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id public 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id admin 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
+openstack endpoint create $service_id internal 'http://localhost:8386/v1.1/$(tenant_id)s' --region RegionOne
 
 #setup expiration time for keystone
 iniset $KEYSTONE_CONF token expiration 86400
