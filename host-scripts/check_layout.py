@@ -58,7 +58,7 @@ def check_jobs():
                 zuul_jobs.append(job)
                 found = grep(job_list, job)
                 if not found:
-                    print ("Regex %s has no matches in job list" % job)
+                    print("Regex %s has no matches in job list" % job)
                     errors = True
 
     for job in JENKINS_JOBS:
@@ -66,7 +66,7 @@ def check_jobs():
 
     for job in job_list[1:]:
         if job not in zuul_jobs:
-            print ("Job %s has no matches in zuul layout" % job)
+            print("Job %s has no matches in zuul layout" % job)
             errors = True
 
     return errors
