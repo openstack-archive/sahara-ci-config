@@ -72,7 +72,6 @@
           os: c7
           param: mitaka
      - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
-          project_name: sahara_tests
           plugin: spark_1.6.0
           os: u14
           param: python3
