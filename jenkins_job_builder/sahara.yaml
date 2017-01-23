@@ -56,6 +56,10 @@
              - cdh_5.9.0
              - ambari_2.4
      - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
+          plugin: spark_1.6.0
+          os: u14
+          param: python3
+     - '{pipeline}-{project_name}-{plugin}-{os}-{param}':
           project_name: sahara_tests
           plugin:
             - vanilla_2.7.1
