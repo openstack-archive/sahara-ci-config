@@ -3,7 +3,10 @@
 configs_path=$WORKSPACE/sahara-ci-config/config
 template_vars_file=/tmp/template_vars.ini
 
-eval ci_flavor_id="\'20\'"
+eval ci_flavor_id="\'dc6214d2-8d5c-41f9-b1eb-ba0f7b763313\'"
+if [[ "$HOST_NAME" =~ stack-43 ]]; then
+    eval ci_flavor_id="\'2814644a-6217-4867-9b95-c6623a1d6d3e\'"
+fi
 eval medium_flavor_id="\'3\'"
 eval large_flavor_id="\'4\'"
 
