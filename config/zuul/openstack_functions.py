@@ -12,9 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import uuid
-
-
+from oslo_utils import uuidutils
 def set_log_url(item, job, params):
     if hasattr(item.change, 'refspec'):
         path = "%s/%s/%s/%s" % (
@@ -39,7 +37,7 @@ def single_use_node(item, job, params):
 
 def set_params(item, job, params):
     single_use_node(item, job, params)
-    params['CLUSTER_HASH'] = str(uuid.uuid4()).split('-')[0]
+    params['CLUSTER_HASH'] = str(uuidutils.generate_uuid()).split('-')[0]
     params['ZUUL_BRANCH'] = params.get('ZUUL_BRANCH', 'master')
     params['ZUUL_REF'] = params.get('ZUUL_REF', 'master')
     params['ZUUL_CHANGE'] = params.get('ZUUL_CHANGE', 'master')
