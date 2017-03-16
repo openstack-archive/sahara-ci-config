@@ -156,6 +156,14 @@ write_sahara_main_conf() {
   insert_config_value $conf_path keystone_authtoken admin_user $OS_USERNAME
   insert_config_value $conf_path keystone_authtoken admin_password $OS_PASSWORD
   insert_config_value $conf_path keystone_authtoken admin_tenant_name $OS_TENANT_NAME
+  insert_config_value $conf_path keystone_authtoken admin_tenant_name $OS_TENANT_NAME
+  insert_config_value $conf_path glance endpoint_type publicURL
+  insert_config_value $conf_path cinder endpoint_type publicURL
+  insert_config_value $conf_path heat endpoint_type publicURL
+  insert_config_value $conf_path keystone endpoint_type publicURL
+  insert_config_value $conf_path swift endpoint_type publicURL
+  insert_config_value $conf_path neutron endpoint_type publicURL
+  insert_config_value $conf_path nova endpoint_type publicURL
 
   echo "----------- sahara.conf -----------"
   cat $conf_path
