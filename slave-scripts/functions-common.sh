@@ -101,6 +101,7 @@ run_tests() {
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   pushd $SAHARA_TESTS_PATH
   # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
+  sleep 1h
   tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_edp $scenario_config | tee tox.log
   STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
