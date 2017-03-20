@@ -41,7 +41,13 @@ case $plugin in
        ;;
 esac
 
-pip_cmd="install -U -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt -r requirements.txt . --no-cache-dir"
+upper_constraints="https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt"
+
+if [ "$ZUUL_BRANCH" != "master" ]; then
+    upper_constraints+="?h=$ZUUL_BRANCH"
+fi
+
+pip_cmd="install -U -c $upper_constraints -r requirements.txt . --no-cache-dir"
 pip_packages="pymysql"
 
 case $(echo $JOB_NAME | awk -F '-' '{ print $NF }') in
