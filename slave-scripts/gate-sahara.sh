@@ -19,7 +19,7 @@ if [ "$ZUUL_PROJECT" != "openstack/sahara-tests" ]; then
     get_dependency "$SAHARA_TESTS_PATH" "openstack/sahara-tests" "master"
 fi
 
-plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
+export plugin=$(echo $JOB_NAME | awk -F '-' '{ print $3 }')
 os=$(echo $JOB_NAME | awk -F '-' '{ print $4 }')
 image_name=${plugin}_${os}
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
