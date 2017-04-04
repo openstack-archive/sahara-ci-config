@@ -109,6 +109,11 @@ case $plugin in
        check_error_code $? "${storm_1_0_1_image:?}".qcow2
        upload_image "${plugin}" "${username}" "${storm_1_0_1_image:?}"
     ;;
+    storm_1.1.0)
+       env ubuntu_storm_image_name="${storm_1_1_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p storm -t 1.1.0
+       check_error_code $? "${storm_1_1_0_image:?}".qcow2
+       upload_image "${plugin}" "${username}" "${storm_1_1_0_image:?}"
+    ;;
 esac
 
 cd $SAHARA_PATH
