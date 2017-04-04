@@ -101,8 +101,8 @@ run_tests() {
   # Temporary use additional log file, due to wrong status code from tox scenario tests
   pushd $SAHARA_TESTS_PATH
   # tox -e scenario -- --verbose -V $template_vars_file $scenario_credentials $scenario_edp $scenario_config || failure "Integration tests are failed"
-  tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_edp $scenario_config | tee tox.log
-  STATUS=$(grep "\ -\ Failed" tox.log | awk '{print $3}')
+  tox -e venv -- sahara-scenario --verbose -V $template_vars_file $scenario_edp $scenario_config --report
+  STATUS=$(grep -ic "Fail" $plugin*)
   if [ "$STATUS" != "0" ]; then failure "Integration tests have failed"; fi
   popd
 }
@@ -200,4 +200,3 @@ get_template_path() {
   suffix=${plugin//_/-}
   echo "$base_path/$suffix.yaml.mako"
 }
-
