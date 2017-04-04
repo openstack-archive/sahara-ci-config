@@ -81,6 +81,7 @@ projects:
       - gate-sahara-cdh_5.9.0-c7
       - gate-sahara-cdh_5.9.0-u14
       - gate-sahara-storm_1.0.1-u14
+      - gate-sahara-storm_1.1.0-u14
       - gate-sahara-ambari_2.3-c7
       - gate-sahara-ambari_2.4-c7
       - gate-sahara-ambari_2.4-u14
@@ -107,6 +108,7 @@ projects:
       - gate-sahara_tests-spark_1.6.0-u14-python3
       - gate-sahara_tests-vanilla_2.7.1-u14-mitaka
       - gate-sahara_tests-storm_1.0.1-u14
+      - gate-sahara_tests-storm_1.1.0-u14
       - gate-sahara_tests-ambari_2.3-c7-mitaka
 
     nightly:
@@ -136,6 +138,7 @@ projects:
       - dib-cdh_5.9.0-c7
       - dib-cdh_5.9.0-u14
       - dib-storm_1.0.1-u14
+      - dib-storm_1.1.0-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
     post:
@@ -150,6 +153,7 @@ projects:
       - dib-cdh_5.9.0-c7
       - dib-cdh_5.9.0-u14
       - dib-storm_1.0.1-u14
+      - dib-storm_1.1.0-u14
       - dib-ambari_2.2-c7
       - dib-ambari_2.2-u14
 
@@ -280,6 +284,18 @@ jobs:
       - branch: stable/mitaka
     files:
       - ^sahara_tests/scenario/defaults/storm-1.0.1.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-storm_1.1.0-.*$
+    voting: false
+    skip-if:
+      - branch: stable/mitaka
+    files:
+      - ^sahara_tests/scenario/defaults/storm-1.1.0.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
       - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
