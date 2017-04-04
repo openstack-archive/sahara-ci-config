@@ -25,6 +25,8 @@ image_name=${plugin}_${os}
 sahara_plugin=$(echo $plugin | awk -F '_' '{ print $1 } ')
 scenario_conf_file=$(get_template_path $ZUUL_BRANCH $plugin $sahara_templates_path)
 
+export plugin
+
 case $plugin in
     ambari_2.3)
        image_name="ambari_2.2_c7"
