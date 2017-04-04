@@ -13,12 +13,12 @@ gearman-servers:
 labels:
   - name:  stack-42
     image: stack-42
-    min-ready: 3
+    min-ready: 1
     providers:
       - name: cilab-1
   - name:  stack-43
     image: stack-43
-    min-ready: 3
+    min-ready: 1
     providers:
       - name: cilab-2
 
@@ -28,7 +28,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.42:5000/v2.0'
     project-name: 'ci'
-    max-servers: 6
+    max-servers: 3
     boot-timeout: 120
     ipv6-preferred: False
     pool: 'public'
@@ -37,7 +37,7 @@ providers:
     images:
       - name: stack-42
         base-image: 'ubuntu-16.04'
-        min-ram: 2048
+        min-ram: 4192
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node.sh
   - name: cilab-2
@@ -45,7 +45,7 @@ providers:
     password: 'nova'
     auth-url: 'http://172.18.168.43:5000/v2.0'
     project-name: 'ci'
-    max-servers: 6
+    max-servers: 3
     boot-timeout: 120
     ipv6-preferred: False
     pool: 'public'
@@ -54,7 +54,7 @@ providers:
     images:
       - name: stack-43
         base-image: 'ubuntu-16.04'
-        min-ram: 2048
+        min-ram: 4192
         private-key: '/etc/nodepool/id_dsa'
         setup: prepare_node.sh
 
