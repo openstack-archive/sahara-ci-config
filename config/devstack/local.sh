@@ -38,6 +38,7 @@ SPARK_1_6_0_IMAGE_PATH=/home/ubuntu/images/spark_1.6.0_u14.qcow2
 MAPR_5_1_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.1.0.mrv2_u14.qcow2
 MAPR_5_2_0_MRV2_IMAGE_PATH=/home/ubuntu/images/mapr_5.2.0.mrv2_u14.qcow2
 STORM_1_0_1_IMAGE_PATH=/home/ubuntu/images/storm_1.0.1_u14.qcow2
+STORM_1_1_0_IMAGE_PATH=/home/ubuntu/images/storm_1.1.0_u14.qcow2
 
 export OS_CLOUD='devstack-admin'
 
@@ -97,6 +98,7 @@ openstack image create $(basename -s .qcow2 $SPARK_1_6_0_IMAGE_PATH) --file $SPA
 openstack image create $(basename -s .qcow2 $MAPR_5_1_0_MRV2_IMAGE_PATH) --file $MAPR_5_1_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.1.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $MAPR_5_2_0_MRV2_IMAGE_PATH) --file $MAPR_5_2_0_MRV2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_mapr'='True' --property '_sahara_tag_5.2.0.mrv2'='True'  --property '_sahara_username'="ubuntu"
 openstack image create $(basename -s .qcow2 $STORM_1_0_1_IMAGE_PATH) --file $STORM_1_0_1_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_storm'='True' --property '_sahara_tag_1.0.1'='True'  --property '_sahara_username'="ubuntu"
+openstack image create $(basename -s .qcow2 $STORM_1_1_0_IMAGE_PATH) --file $STORM_1_1_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_storm'='True' --property '_sahara_tag_1.1.0'='True'  --property '_sahara_username'="ubuntu"
 openstack image set --name ubuntu-16.04 xenial-server-cloudimg-amd64-disk1
 
 # rename admin private network

@@ -48,6 +48,7 @@
              - mapr_5.2.0.mrv2
              - spark_1.6.0
              - storm_1.0.1
+             - storm_1.1.0
           os: u14
      - '{pipeline}-{project_name}-{plugin}-{os}':
           plugin:
