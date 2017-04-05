@@ -16,7 +16,7 @@
 - project:
     name: sahara-image-elements
     github-org: openstack
-    plugin: 
+    plugin:
       - vanilla_2.7.1
       - cdh_5.5.0
       - cdh_5.7.0
@@ -30,6 +30,7 @@
       - 'dib-{plugin}-{os}':
           plugin:
             - spark_1.6.0
+            - spark_2.1.0
             - storm_1.0.1
             - mapr_5.1.0.mrv2
             - mapr_5.2.0.mrv2

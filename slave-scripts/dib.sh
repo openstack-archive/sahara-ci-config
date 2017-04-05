@@ -66,6 +66,12 @@ case $plugin in
        upload_image "${plugin}" "${username}" "${spark_1_6_0_image:?}"
     ;;
 
+    spark_2.1.0)
+       env ubuntu_spark_image_name="${spark_2_1_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p spark -s 2.1.0
+       check_error_code $? "${spark_2_1_0_image:?}".qcow2
+       upload_image "${plugin}" "${username}" "${spark_2_1_0_image:?}"
+    ;;
+
     cdh_5.5.0)
        env cloudera_5_5_${os_type}_image_name="${cdh_5_5_0_image:?}" SIM_REPO_PATH=$WORKSPACE tox -e venv -- sahara-image-create -p cloudera -i $os_type -v 5.5
        check_error_code $? "${cdh_5_5_0_image:?}".qcow2

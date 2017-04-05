@@ -72,6 +72,7 @@ projects:
       - gate-sahara-vanilla_2.7.1-u14
       - gate-sahara-spark_1.6.0-u14
       - gate-sahara-spark_1.6.0-u14-python3
+      - gate-sahara-spark_2.1.0-u14
       - gate-sahara-mapr_5.1.0.mrv2-u14
       - gate-sahara-mapr_5.2.0.mrv2-u14
       - gate-sahara-cdh_5.5.0-u14
@@ -90,6 +91,7 @@ projects:
     check:
       - gate-sahara_tests-vanilla_2.7.1-u14
       - gate-sahara_tests-spark_1.6.0-u14
+      - gate-sahara_tests-spark_2.1.0-u14
       - gate-sahara_tests-mapr_5.1.0.mrv2-u14
       - gate-sahara_tests-mapr_5.2.0.mrv2-u14
       - gate-sahara_tests-cdh_5.5.0-u14
@@ -198,6 +200,17 @@ jobs:
     files:
       - ^sahara_tests/scenario/defaults/spark-1.6.0.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.6.0.*$
+      - ^sahara_tests/scenario/defaults/edp.yaml.mako$
+      - ^sahara_tests/scenario/defaults/edp-examples/.*$
+      - ^sahara/.*$
+      - ^sahara_tests/.*.py$
+      - ^diskimage-create/.*$
+      - ^elements/.*$
+  - name: ^(?!nightly).*-spark_2.1.0-.*$
+    skip-if:
+      - branch: ^(stable/newton|stable/mitaka)$
+    files:
+      - ^sahara_tests/scenario/defaults/spark-2.1.0.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
       - ^sahara_tests/scenario/defaults/edp-examples/.*$
       - ^sahara/.*$
