@@ -30,6 +30,7 @@
       - 'dib-{plugin}-{os}':
           plugin:
             - spark_1.6.0
+            - spark_2.1.0
             - storm_1.0.1
             - storm_1.1.0
             - mapr_5.1.0.mrv2
