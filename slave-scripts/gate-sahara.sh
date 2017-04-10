@@ -39,6 +39,11 @@ case $plugin in
        # the only job to test aio approach
        mode="aio"
        ;;
+    spark_1.6.0)
+       if [ "$ZUUL_BRANCH" == "stable/mitaka" ]; then
+           image_name="spark_1.6.0_u14_mitaka"
+       fi
+       ;;
 esac
 
 upper_constraints="https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt"

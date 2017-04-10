@@ -198,7 +198,6 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly).*-spark_1.6.0-.*$
-    voting: false
     files:
       - ^sahara_tests/scenario/defaults/spark-1.6.0.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.6.0.*$
