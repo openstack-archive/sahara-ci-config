@@ -57,11 +57,13 @@ sudo service mysql stop
 sudo pip install -U $PIP_PACKAGES
 git clone https://git.openstack.org/openstack/sahara /tmp/sahara
 git clone https://git.openstack.org/openstack/sahara-tests /tmp/sahara-tests
+git clone https://git.openstack.org/openstack/sahara-ci-config /tmp/sahara-ci-config
 sudo pip install -U -r /tmp/sahara/requirements.txt -c https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt
 git clone https://git.openstack.org/openstack-infra/project-config /tmp/project-config
 sudo mkdir -p /usr/local/jenkins/
 sudo mv /tmp/project-config/jenkins/scripts /usr/local/jenkins/slave_scripts
-rm -rf /tmp/sahara /tmp/sahara-tests /tmp/project-config
+sudo mv /tmp/sahara-ci-config/config/nodepool/scripts/gerrit-git-prep.sh /usr/local/jenkins/slave_scripts
+rm -rf /tmp/sahara /tmp/sahara-tests /tmp/project-config /tmp/sahara-ci-config
 
 # create jenkins user
 sudo useradd -d /home/jenkins -G sudo -s /bin/bash -m jenkins
