@@ -116,9 +116,6 @@ projects:
     nightly:
       - nightly-sahara_tests-vanilla_2.7.1-u14
       - nightly-sahara_tests-spark_1.6.0-u14
-      - nightly-sahara_tests-cdh_5.5.0-u14
-      - nightly-sahara_tests-cdh_5.5.0-c7
-      - nightly-sahara_tests-ambari_2.3-c7
       - nightly-sahara_tests-ambari_2.4-c7
       - nightly-sahara_tests-cdh_5.5.0-u14-mitaka
 
@@ -201,6 +198,7 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly).*-spark_1.6.0-.*$
+    voting: false
     files:
       - ^sahara_tests/scenario/defaults/spark-1.6.0.*$
       - ^sahara_tests/scenario/defaults/mitaka/spark-1.6.0.*$
@@ -235,7 +233,7 @@ jobs:
       - ^elements/.*$
   - name: ^(?!nightly).*-cdh_5.7.0-.*$
     skip-if:
-      - branch: stable/mitaka
+      - branch: ^(stable/mitaka|master)$
     files:
       - ^sahara_tests/scenario/defaults/cdh-5.7.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
@@ -306,7 +304,7 @@ jobs:
   - name: ^(?!nightly).*-storm_1.1.0-.*$
     voting: false
     skip-if:
-      - branch: stable/mitaka
+      - branch: ^(stable/mitaka|stable/neutron|stable/ocata)
     files:
       - ^sahara_tests/scenario/defaults/storm-1.1.0.*$
       - ^sahara_tests/scenario/defaults/edp.yaml.mako$
@@ -315,7 +313,7 @@ jobs:
       - ^sahara_tests/.*.py$
       - ^diskimage-create/.*$
       - ^elements/.*$
-  - name: gate-.*-spark_1.6.0-u14-python3
+  - name: gate-(sahara|sahara_tests)-spark_1.6.0-u14-python3
     voting: false
     skip-if:
       - branch: stable/mitaka
