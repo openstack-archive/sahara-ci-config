@@ -208,6 +208,7 @@ jobs:
       - ^diskimage-create/.*$
       - ^elements/.*$
   - name: ^(?!nightly).*-spark_2.1.0-.*$
+    voting: false
     skip-if:
       - branch: ^(stable/newton|stable/mitaka)$
     files:
