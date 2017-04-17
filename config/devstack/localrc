@@ -13,7 +13,7 @@ API_RATE_LIMIT=False
 enable_service s-proxy s-object s-container s-account
 SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
 SWIFT_REPLICAS=1
-SWIFT_LOOPBACK_DISK_SIZE=50G
+SWIFT_LOOPBACK_DISK_SIZE=80G
 
 # Enable Heat API
 enable_plugin heat git://git.openstack.org/openstack/heat
