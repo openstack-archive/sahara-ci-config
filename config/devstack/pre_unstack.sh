@@ -20,7 +20,6 @@ VANILLA_2_7_1_IMAGE_PATH=/home/ubuntu/images/vanilla_2.7.1_u14.qcow2
 CENTOS7_AMBARI_2_2_IMAGE_PATH=/home/ubuntu/images/ambari_2.2_c7.qcow2
 UBUNTU_AMBARI_2_2_IMAGE_PATH=/home/ubuntu/images/ambari_2.2_u14.qcow2
 UBUNTU_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_u14.qcow2
-CENTOS_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c6.6.qcow2
 CENTOS7_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c7.qcow2
 UBUNTU_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_u14.qcow2
 CENTOS7_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_c7.qcow2
@@ -39,7 +38,6 @@ openstack image save --file $VANILLA_2_7_1_IMAGE_PATH $(get_id $VANILLA_2_7_1_IM
 openstack image save --file $CENTOS7_AMBARI_2_2_IMAGE_PATH $(get_id $CENTOS7_AMBARI_2_2_IMAGE_PATH)
 openstack image save --file $UBUNTU_AMBARI_2_2_IMAGE_PATH $(get_id $UBUNTU_AMBARI_2_2_IMAGE_PATH)
 openstack image save --file $UBUNTU_CDH_5_5_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_5_0_IMAGE_PATH)
-openstack image save --file $CENTOS_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS_CDH_5_5_0_IMAGE_PATH)
 openstack image save --file $CENTOS7_CDH_5_5_0_IMAGE_PATH $(get_id $CENTOS7_CDH_5_5_0_IMAGE_PATH)
 openstack image save --file $CENTOS7_CDH_5_7_0_IMAGE_PATH $(get_id $CENTOS7_CDH_5_7_0_IMAGE_PATH)
 openstack image save --file $UBUNTU_CDH_5_7_0_IMAGE_PATH $(get_id $UBUNTU_CDH_5_7_0_IMAGE_PATH)

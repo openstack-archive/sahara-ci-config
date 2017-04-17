@@ -28,7 +28,6 @@ VANILLA_2_7_1_IMAGE_PATH=/home/ubuntu/images/vanilla_2.7.1_u14.qcow2
 CENTOS7_AMBARI_2_2_IMAGE_PATH=/home/ubuntu/images/ambari_2.2_c7.qcow2
 UBUNTU_AMBARI_2_2_IMAGE_PATH=/home/ubuntu/images/ambari_2.2_u14.qcow2
 UBUNTU_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_u14.qcow2
-CENTOS_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c6.6.qcow2
 CENTOS7_CDH_5_5_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.5.0_c7.qcow2
 UBUNTU_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_u14.qcow2
 CENTOS7_CDH_5_7_0_IMAGE_PATH=/home/ubuntu/images/cdh_5.7.0_c7.qcow2
@@ -90,7 +89,6 @@ openstack image create $(basename -s .qcow2 $VANILLA_2_7_1_IMAGE_PATH) --file $V
 openstack image create $(basename -s .qcow2 $CENTOS7_AMBARI_2_2_IMAGE_PATH) --file $CENTOS7_AMBARI_2_2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4'='True' --property '_sahara_tag_2.3'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='centos'
 openstack image create $(basename -s .qcow2 $UBUNTU_AMBARI_2_2_IMAGE_PATH) --file $UBUNTU_AMBARI_2_2_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_2.4'='True' --property '_sahara_tag_2.3'='True' --property '_sahara_tag_ambari'='True' --property '_sahara_username'='ubuntu'
 openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_5_0_IMAGE_PATH) --file $UBUNTU_CDH_5_5_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.5.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
-openstack image create $(basename -s .qcow2 $CENTOS_CDH_5_5_0_IMAGE_PATH) --file $CENTOS_CDH_5_5_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.5.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="cloud-user"
 openstack image create $(basename -s .qcow2 $CENTOS7_CDH_5_5_0_IMAGE_PATH) --file $CENTOS7_CDH_5_5_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.5.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="centos"
 openstack image create $(basename -s .qcow2 $CENTOS7_CDH_5_7_0_IMAGE_PATH) --file $CENTOS7_CDH_5_7_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.7.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="centos"
 openstack image create $(basename -s .qcow2 $UBUNTU_CDH_5_7_0_IMAGE_PATH) --file $UBUNTU_CDH_5_7_0_IMAGE_PATH --disk-format qcow2 --container-format bare  --property '_sahara_tag_ci'='True' --property '_sahara_tag_5.7.0'='True' --property '_sahara_tag_cdh'='True' --property '_sahara_username'="ubuntu"
