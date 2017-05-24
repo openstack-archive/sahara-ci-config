@@ -1,6 +1,7 @@
 from cinderclient import client as cc
 from heatclient import client as hc
 from keystoneclient.v2_0 import client as kc
+from neutronclient.v2_0 import client as nec
 from novaclient.v1_1 import client as nc
 import os
 import re
@@ -46,6 +47,13 @@ def get_cinder_client():
                      CONF["os_auth_url"])
 
 
+def get_neutron_client():
+    return nec.Client(username=CONF["os_username"],
+                      password=CONF["os_password"],
+                      tenant_name=CONF["os_tenant_name"],
+                      auth_url=CONF["os_auth_url"])
+
+
 def cleanup_heat():
     current_name = sys.argv[2]
     client = get_heat_client()
@@ -74,21 +82,27 @@ def cleanup_heat():
 
 
 def cleanup():
-    client = get_nova_client()
+    nova_client = get_nova_client()
+    neutron_client = get_neutron_client()
     cinder_client = get_cinder_client()
-    servers = client.servers.list()
+    servers = nova_client.servers.list()
     volumes = cinder_client.volumes.list()
-    secgroups = client.security_groups.list()
+    secgroups = neutron_client.list_security_groups()
     current_name = sys.argv[2]
     name_regex = re.compile(current_name)
+
+    ports = neutron_client.list_ports()['ports']
+    fl_ips = neutron_client.list_floatingips()['floatingips']
 
     for server in servers:
         if name_regex.match(server.name):
             print(server.name)
-            fl_ips = client.floating_ips.findall(instance_id=server.id)
+            instance_ports = [p['id'] for p in ports
+                              if p['device_id'] == server.id]
             for fl_ip in fl_ips:
-                    client.floating_ips.delete(fl_ip.id)
-            client.servers.delete(server.id)
+                if fl_ip['port_id'] in instance_ports:
+                    neutron_client.delete_floatingip(fl_ip['id'])
+            nova_client.servers.delete(server.id)
 
     time.sleep(20)
     for volume in volumes:
@@ -96,10 +110,10 @@ def cleanup():
             print(volume.display_name)
             volume.delete()
 
-    for group in secgroups:
-        if name_regex.match(group.name):
-            print(group.name)
-            group.delete()
+    for group in secgroups['security_groups']:
+        if name_regex.match(group['name']):
+            print(group['name'])
+            neutron_client.delete_security_group(group['id'])
 
 
 def main(argv):
