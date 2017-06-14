@@ -39,12 +39,12 @@ pipelines:
         - time: '0 3 * * *'
     success:
       smtp:
-        to: esikachev@mirantis.com, vgridnev@mirantis.com, anesterova@mirantis.com
+        to: anesterova@mirantis.com, esikachov@gmail.com
         from: zuul@sahara.mirantis.com
         subject: '[sahara-nightly][passed]Silent check of sahara passed'
     failure:
       smtp:
-        to: esikachev@mirantis.com, vgridnev@mirantis.com, anesterova@mirantis.com
+        to: anesterova@mirantis.com, esikachov@gmail.com
         from: zuul@sahara.mirantis.com
         subject: '[sahara-nightly][failed]Silent check of sahara failed'
   - name: weekly
@@ -57,12 +57,12 @@ pipelines:
         - time: '0 0 * * 6'
     success:
       smtp:
-        to: esikachev@mirantis.com, vgridnev@mirantis.com, anesterova@mirantis.com
+        to: anesterova@mirantis.com, esikachov@gmail.com
         from: zuul@sahara.mirantis.com
         subject: '[sahara-weekly][passed]Silent check of sahara passed'
     failure:
       smtp:
-        to: esikachev@mirantis.com, vgridnev@mirantis.com, anesterova@mirantis.com
+        to: anesterova@mirantis.com, esikachov@gmail.com
         from: zuul@sahara.mirantis.com
         subject: '[sahara-weekly][failed]Silent check of sahara failed'
 
