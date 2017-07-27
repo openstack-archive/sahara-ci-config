@@ -1,0 +1,16 @@
+---
+- name: Installing of basic packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - git
+    - python-dev
+    - vim
+    - gcc
+    - make
+    - python-pip
+    - apache2
+    - unzip
+    - mysql-server
+    - libssl-dev

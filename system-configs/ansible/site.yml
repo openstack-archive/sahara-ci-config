@@ -1,0 +1,5 @@
+---
+- name: Install common packages
+  hosts: localhost
+  roles:
+    - common
