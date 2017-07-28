@@ -1,5 +1,10 @@
 ---
+- name: Install Jenkins
+  hosts: localhost
+  roles:
+    - geerlingguy.jenkins
 - name: Prepare host
   hosts: localhost
   roles:
     - common
+
