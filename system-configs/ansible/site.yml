@@ -1,0 +1,5 @@
+---
+- name: Prepare host
+  hosts: localhost
+  roles:
+    - common
