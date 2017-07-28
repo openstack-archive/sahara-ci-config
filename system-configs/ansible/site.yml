@@ -3,3 +3,18 @@
   hosts: localhost
   roles:
     - common
+
+- name: Install Jenkins
+  hosts: localhost
+  roles:
+    - geerlingguy.jenkins
+
+- hosts: localhost
+  tasks:
+    - name: Create Jenkins CI directory
+      file:
+        path: /opt/ci/files
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+        state: directory

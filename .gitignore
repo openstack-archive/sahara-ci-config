@@ -12,3 +12,6 @@ tags
 .*.swp
 .*.swo
 .ropeproject
+
+# Ansible stuff
+*.retry
