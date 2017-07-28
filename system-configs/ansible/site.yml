@@ -1,0 +1,55 @@
+- name: Prepare host
+  hosts: localhost
+  roles:
+    - common
+
+- name: Install Jenkins
+  hosts: localhost
+  roles:
+    - geerlingguy.jenkins
+
+- hosts: localhost
+  tasks:
+    - name: Create Jenkins CI directory
+      file:
+        path: /opt/ci/files
+        owner: jenkins
+        group: jenkins
+        mode: 0755
+        state: directory
+
+- name: Prepare Apache
+  hosts: localhost
+  roles:
+    - common
+
+- hosts: localhost
+  tasks: 
+      - name: Copy files
+        copy: 
+          src: /home/ubuntu/sahara-ci-config/system-configs/sites-available/*
+          dest: /etc/apache2/sites-available/
+          owner: common
+          group: common
+          mode: 0755 
+    - name: Connection of modules
+      apache2_module:
+        name: "{{ item }}"
+      with_items:
+        - proxy
+        - proxy_http
+        - proxy_connect
+        - rewrite
+        - dav
+        - dav_fs
+        - cgi
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+  #    - name: Connect apache2 sites
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+

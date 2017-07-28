@@ -1,0 +1,11 @@
+jenkins_version: 1.651
+jenkins_plugins: [ansicolor, antisamy-markup-formatter, ant, bazaar, build-blocker-plugin,
+build-timeout, conditional-buildstep, copyartifact, credentials, cvs, dashboard-view,
+envinject, extended-read-permission, external-monitor-job, gearman-plugin, git-client,
+github-api, github, github-oauth, git, global-build-stats, greenballs, htmlpublisher,
+javadoc, jenkins-multijob-plugin, jobConfigHistory, junit, ldap, mailer, mapdb-api,
+matrix-auth, matrix-project, maven-plugin, openid4java, openid, pam-auth,
+parameterized-trigger, pathignore, postbuild-task, project-stats-plugin, publish-over-ftp,
+publish-over-ssh, rebuild, ruby-runtime, run-condition, scm-api, scp, simple-theme-plugin,
+ssh-agent, ssh-credentials, ssh-slaves, subversion, timestamper, token-macro,
+translation, windows-slaves, ws-cleanup, zmq-event-publisher]

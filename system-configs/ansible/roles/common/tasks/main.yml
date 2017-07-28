@@ -1,0 +1,46 @@
+---
+- name: Install password for mysql-server
+  command: |
+      debconf-set-selections <<< 'mysql-server mysql-server/root_password password '
+      debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password '
+  become: true
+
+- name: Installing of basic packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - git
+    - python-dev
+    - vim
+    - gcc
+    - make
+    - python-pip
+    - apache2
+    - unzip
+    - mysql-server
+    - libssl-dev
+
+- name: Install pip packages
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - virtualenv
+
+- name: Create groups for users
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nodepool
+    - zuul
+
+- name: Create users
+  user:
+    name: "{{ item }}"
+    generate_ssh_key: yes
+    group: "{{ item }}"
+  with_items:
+    - nodepool
+    - zuul
