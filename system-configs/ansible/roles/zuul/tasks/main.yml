@@ -1,0 +1,54 @@
+---
+- name: Install zuul to virtualenv
+  command: "cd {{ ci_dir }}/zuul && tox -e venv --notest"
+  become: true
+  become_user: "{{ zuul_user }}" 
+- name: Create zuul directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ zuul_user }}"
+    group: "{{ zuul_user }}"
+    mode: 0755
+    state: directory
+  with_items:
+    - "{{ ci_dir }}/zuul"
+    - /var/www/zuul
+    - /etc/zuul
+    - /var/log/zuul
+    - /var/lib/zuul
+
+- name: Create zuul files
+  file:
+    path: "{{ item }}"
+    owner: "{{ zuul_user }}"
+    group: "{{ zuul_user }}"
+    mode: 0755
+    state: touch
+  with_items:
+    - /etc/zuul/layout.yaml
+    - /var/lib/zuul/times
+    - /var/log/zuul/gearman-server
+
+- name: Clone zuul repo
+  git:
+    repo: "{{ zuul_git_url }}"
+    dest: "{{ ci_dir}}/zuul"
+  become: true
+  become_user: "{{ zuul_user }}"
+
+- name: Install zuul to virtualenv
+  command: |
+      cd "{{ ci_dir }}/zuul"
+      tox -e venv --notest
+  become: true
+  become_user: "{{ zuul_user }}" 
+
+- name: Run fetch-dependencies
+  command: bash /opt/ci/zuul/etc/status/fetch-dependencies.sh
+  become: true
+  become_user: "{{ zuul_user }}"
+
+- name: Install zuul-ui
+  command: cp -r /opt/ci/zuul/etc/status/public_html/* /var/www/zuul
+  become: true
+  become_user: "{{ zuul_user }}"
