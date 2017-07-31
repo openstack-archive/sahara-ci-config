@@ -27,6 +27,7 @@
     state: latest
   with_items:
     - virtualenv
+    - tox
 
 - name: Create groups for users
   group:
@@ -34,7 +35,7 @@
     state: present
   with_items:
     - nodepool
-    - zuul
+    - "{{ zuul_user }}"
 
 - name: Create users
   user:
@@ -43,4 +44,4 @@
     group: "{{ item }}"
   with_items:
     - nodepool
-    - zuul
+    - "{{ zuul_user }}"

@@ -13,8 +13,13 @@
   tasks:
     - name: Create Jenkins CI directory
       file:
-        path: /opt/ci/files
-        owner: jenkins
-        group: jenkins
+        path: "{{ ci_dir }}/files"
+        owner: "{{ jenkins_user }}"
+        group: "{{ jenkins_user }}"
         mode: 0755
         state: directory
+
+- name: Install zuul
+  hosts: localhost
+  roles:
+    - zuul
