@@ -1,8 +1,8 @@
 [Unit]
-Description=Zuul server
+Description=Zuul merger
 
 [Service]
-ExecStart=/opt/ci/zuul/venv/bin/zuul-server -d
+ExecStart=/opt/ci/zuul/.tox/venv/bin/zuul-merger -d
 Restart=on-failure
 RestartPreventExitStatus=255
 Type=idle
@@ -11,4 +11,4 @@ Group=zuul
 
 [Install]
 WantedBy=multi-user.target
-Alias=zuul.service
+Alias=zuul-merger.service
