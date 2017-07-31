@@ -2,7 +2,7 @@
 Description=Zuul merger
 
 [Service]
-ExecStart=/opt/ci/zuul/venv/bin/zuul-merger -d
+ExecStart=/opt/ci/zuul/.venv/bin/zuul-merger -d
 Restart=on-failure
 RestartPreventExitStatus=255
 Type=idle

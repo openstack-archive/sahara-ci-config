@@ -27,6 +27,7 @@
     state: latest
   with_items:
     - virtualenv
+    - tox
 
 - name: Create groups for users
   group:
