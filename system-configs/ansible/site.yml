@@ -19,6 +19,11 @@
         mode: 0755
         state: directory
 
+- name: Install jjb
+  hosts: localhost
+  roles:
+    - jjb
+
 - name: Install zuul
   hosts: localhost
   roles:

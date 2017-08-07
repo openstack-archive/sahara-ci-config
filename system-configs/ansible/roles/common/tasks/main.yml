@@ -36,6 +36,7 @@
   with_items:
     - nodepool
     - "{{ zuul_user }}"
+    - "{{ jenkins_user }}"
 
 - name: Create users
   user:
@@ -45,3 +46,4 @@
   with_items:
     - nodepool
     - "{{ zuul_user }}"
+    - "{{ jenkins_user }}"
