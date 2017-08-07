@@ -1,0 +1,49 @@
+---
+- name: Copy files
+  copy: 
+    src: /root/sahara-ci-config/system-configs/ansible/roles/apache/templates 
+    dest: /etc/apache2/sites-available
+    mode: 0755
+  become: true
+
+- name: Connection of modules
+  apache2_module:
+    name: "{{ item }}"
+  with_items:
+    - proxy
+    - proxy_http
+    - proxy_connect
+    - rewrite
+    - dav
+    - dav_fs
+    - mpm_prefork
+  become: true
+
+- name: Disconnection of modules
+  apache2_module:
+    state: absent
+    name: mpm_event
+  become: true
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+
+- name: Connection of cgi module
+  apache2_module:
+    name: cgi
+  become: true
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+
+- name: Connection of hosts modules
+  shell: for host in $(/etc/apache2/sites-available/*); do sudo a2ensite $(basename $host); done
+
+- name: Reload Apache
+  service:
+    name: apache2
+    state: reloaded
