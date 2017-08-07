@@ -1,7 +1,3 @@
-# Common params
-ci_dir: /opt/ci
-
-# Jenkins params
 jenkins_version: 1.651
 jenkins_plugins: [ansicolor, antisamy-markup-formatter, ant, bazaar, build-blocker-plugin,
 build-timeout, conditional-buildstep, copyartifact, credentials, cvs, dashboard-view,
@@ -13,13 +9,3 @@ parameterized-trigger, pathignore, postbuild-task, project-stats-plugin, publish
 publish-over-ssh, rebuild, ruby-runtime, run-condition, scm-api, scp, simple-theme-plugin,
 ssh-agent, ssh-credentials, ssh-slaves, subversion, timestamper, token-macro,
 translation, windows-slaves, ws-cleanup, zmq-event-publisher]
-jenkins_user: jenkins
-
-# Zuul params
-zuul_user: zuul
-zuul_git_url: git://git.openstack.org/openstack-infra/zuul
-
-# jjb params
-jjb_git_url: git://git.openstack.org/openstack-infra/jenkins-job-builder
-jjb_auth_username: admin
-jjb_auth_password: admin

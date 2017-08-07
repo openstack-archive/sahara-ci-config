@@ -1,0 +1,32 @@
+---
+- name: Copy files
+  command: cp -r /root/sahara-ci-config/system-configs/sites-available /etc/apache2/sites-available
+  become: true 
+
+- name: Connection of modules
+  apache2_module:
+    name: "{{ item }}"
+  with_items:
+    - proxy
+    - proxy_http
+    - proxy_connect
+    - rewrite
+    - dav
+    - dav_fs
+  become: true
+
+- name: Connection of cgi modules
+  shell: a2dismod mpm_event | a2enmod mpm_prefork | service apache2 restart | a2enmod cgi
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+
+- name: Connection of hosts modules
+  shell: for host in $(/etc/apache2/sites-available/*); do sudo a2ensite $(basename $host); done
+
+- name: Reload Apache
+  service:
+    name: apache2
+    state: reloaded
