@@ -4,6 +4,11 @@
   roles:
     - common
 
+- name: Prepare Apache
+  hosts: localhost
+  roles:
+    - apache
+
 - name: Install Jenkins
   hosts: localhost
   roles:
