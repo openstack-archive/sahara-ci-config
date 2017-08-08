@@ -1,0 +1,11 @@
+Code-Review+1: Luigi Toscano <ltoscano@redhat.com>
+Code-Review+2: Evgeny Sikachev <esikachov@gmail.com>
+Code-Review+1: Kien Nguyen <KienNT@vn.fujitsu.com>
+Code-Review+1: zhuli <zhuli27@huawei.com>
+Workflow+1: Evgeny Sikachev <esikachov@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 08 Aug 2017 13:17:45 +0000
+Reviewed-on: https://review.openstack.org/488420
+Project: openstack/sahara-ci-config
+Branch: refs/heads/master
