@@ -49,9 +49,9 @@
   become_user: "{{ zuul_user }}"
 
 - name: Copy zuul units
-  template:
+  copy:
     src: "{{ item }}"
-    dest: /lib/systemd/system/
+    dest: "/lib/systemd/system/{{ item }}"
   become: true
   with_items:
     - zuul.service

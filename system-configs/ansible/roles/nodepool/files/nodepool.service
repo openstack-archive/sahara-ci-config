@@ -1,0 +1,14 @@
+[Unit]
+Description=Nodepool
+
+[Service]
+ExecStart=/opt/ci/nodepool/.tox/venv/bin/nodepoold -c /etc/nodepool/nodepool.yaml -l /etc/nodepool/logging.conf
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=idle
+User=nodepool
+Group=nodepool
+
+[Install]
+WantedBy=multi-user.target
+Alias=nodepool.service

@@ -13,11 +13,15 @@
   tasks:
     - name: Create Jenkins CI directory
       file:
-        path: "{{ ci_dir }}/files"
+        path: "{{ ci_dir }}/{{ item }}"
         owner: "{{ jenkins_user }}"
         group: "{{ jenkins_user }}"
         mode: 0755
         state: directory
+      with_items:
+        - files/nodepool-scripts
+        - files/ext-files
+        - logs
 
 - name: Install jjb
   hosts: localhost
@@ -28,3 +32,8 @@
   hosts: localhost
   roles:
     - zuul
+
+- name: Install nodepool
+  hosts: localhost
+  roles:
+    - nodepool
