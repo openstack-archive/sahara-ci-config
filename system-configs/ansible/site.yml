@@ -28,3 +28,8 @@
   hosts: localhost
   roles:
     - zuul
+
+- name: Install nodepool
+  hosts: localhost
+  roles:
+    - nodepool
