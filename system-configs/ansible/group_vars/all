@@ -23,3 +23,7 @@ zuul_git_url: git://git.openstack.org/openstack-infra/zuul
 jjb_git_url: git://git.openstack.org/openstack-infra/jenkins-job-builder
 jjb_auth_username: admin
 jjb_auth_password: admin
+
+# Nodepool params
+nodepool_user: nodepool
+nodepool_git_url: git://git.openstack.org/openstack-infra/nodepool

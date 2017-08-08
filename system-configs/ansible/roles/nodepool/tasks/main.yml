@@ -1,0 +1,65 @@
+---
+- name: Create nodepool directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ nodepool_user }}"
+    group: "{{ nodepool_user }}"
+    mode: 0755
+    state: directory
+  with_items:
+    - "{{ ci_dir }}/files/nodepool_dib"
+    - "{{ ci_dir }}/nodepool"
+    - /etc/nodepool
+    - /var/log/nodepool
+    - /var/lib/nodepool
+    - /var/run/nodepool
+
+- name: Clone nodepool repo
+  git:
+    repo: "{{ nodepool_git_url }}"
+    dest: "{{ ci_dir}}/nodepool"
+  become: true
+  become_user: "{{ nodepool_user }}"
+
+- name: Install nodepool to virtualenv
+  command: tox -e venv --notest
+  args:
+    chdir: "{{ ci_dir }}/nodepool"
+  become: true
+  become_user: "{{ nodepool_user }}"
+
+- name: Copy configs
+  template:
+    src: "{{ item }}"
+    dest: "/etc/nodepool/{{ item }}"
+  become: true
+  with_items:
+    - secure.conf
+    - logging.conf
+
+- name: Copy nodepool-scripts
+  command: cp -r /home/ubuntu/sahara-ci-config/config/nodepool/scripts /opt/ci/files/nodepool-scripts
+  become: true
+
+- name: Copy nodepool-scripts
+  command: "cp -r /home/ubuntu/sahara-ci-config/slave-scripts/update_pool.sh {{ ci_dir }}/files"
+  become: true
+  become_user: "{{ jenkins_user }}"
+
+- name: Create db user for nodepool
+  mysql_user:
+    name: nodepool
+    password: ''
+    priv: '*.*:ALL'
+    state: present
+
+- name: Create db for nodepool
+  mysql_db:
+    name: nodepool
+    state: present
+
+- name: Create nodepool symlink
+  file:
+    src:  "{{ ci_dir }}/nodepool/.tox/venv/bin/nodepool"
+    dest: /usr/sbin/nodepool-client
+    state: link
