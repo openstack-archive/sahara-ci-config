@@ -57,6 +57,15 @@
     - zuul.service
     - zuul-merger.service
 
+- name: Copy zuul key
+  template:
+    src: "{{ item }}"
+    dest: "/etc/zuul/{{ item }}"
+  become: true
+  become_user: "{{ zuul_user }}"
+  with_items:
+    - gerrit
+
 - name: Create zuul symlink
   file:
     src: "{{ ci_dir }}/zuul/.tox/venv/bin/zuul"

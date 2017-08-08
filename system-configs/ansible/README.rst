@@ -9,6 +9,9 @@ Preparing
     $ ansible-galaxy install geerlingguy.jenkins
 ..
 
+3. Put private key for nodepool to `roles/nodepool/templates/id_rsa`
+4. Put private key for zuul to `roles/zuul/templates/gerrit`
+
 How to use
 ==========
 

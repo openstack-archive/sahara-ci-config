@@ -33,7 +33,9 @@
     src: "{{ item }}"
     dest: "/etc/nodepool/{{ item }}"
   become: true
+  become_user: "{{ nodepool_user }}"
   with_items:
+    - id_rsa
     - secure.conf
     - logging.conf
 
