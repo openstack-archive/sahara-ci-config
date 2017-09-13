@@ -3,7 +3,7 @@
 configs_path=$WORKSPACE/sahara-ci-config/config
 template_vars_file=/tmp/template_vars.ini
 
-eval ci_flavor_id="\'20\'"
+eval ci_flavor_id="\'2\'"
 eval medium_flavor_id="\'3\'"
 eval large_flavor_id="\'4\'"
 

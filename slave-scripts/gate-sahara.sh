@@ -6,7 +6,7 @@
 . $FUNCTION_PATH/functions-common.sh
 
 CLUSTER_HASH=${CLUSTER_HASH:-$RANDOM}
-cluster_name="$HOST-$ZUUL_CHANGE-$CLUSTER_HASH"
+cluster_name="$ZUUL_CHANGE-$CLUSTER_HASH"
 
 SAHARA_PATH=${1:-$WORKSPACE}
 SAHARA_TESTS_PATH=${2:-"/tmp/sahara-tests"}
