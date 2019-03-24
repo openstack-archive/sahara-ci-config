@@ -16,7 +16,7 @@ SWIFT_REPLICAS=1
 SWIFT_LOOPBACK_DISK_SIZE=80G
 
 # Enable Heat API
-enable_plugin heat git://git.openstack.org/openstack/heat
+enable_plugin heat https://git.openstack.org/openstack/heat
 
 CINDER_SECURE_DELETE=False
 VOLUME_BACKING_FILE_SIZE=100000M

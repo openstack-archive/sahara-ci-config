@@ -42,7 +42,7 @@ fi
 
 if [ -z "$GIT_ORIGIN" ] || [ -n "$ZUUL_NEWREV" ]; then
     GIT_ORIGIN="$GERRIT_SITE/p"
-    # git://git.openstack.org/
+    # https://git.openstack.org/
     # https://review.openstack.org/p
 fi
 
